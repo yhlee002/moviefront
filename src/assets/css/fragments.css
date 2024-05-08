@@ -1,0 +1,168 @@
+@import url('@/assets/css/common.css');
+
+#header {
+    display: flex;
+    width: 100%;
+    height: 4em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: #a6a6a6;
+    cursor: default;
+    line-height: 3.25em;
+    text-align: right;
+    /*z-index: 9;*/
+}
+
+#header .toggle span {
+    display: none;
+}
+
+#header > .logo {
+    font-family: 'Roboto Condensed', sans-serif;
+    display: inline-block;
+    margin-left: 1em;
+}
+
+#header > .logo a {
+    color: #bfbfbf;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#header > .logo #siteName {
+    /*font-family: 'Do Hyeon', sans-serif;*/
+    font-family: 'TTHakgyoansimYeohaengR';
+    font-weight: 300;
+    font-size: 2em;
+    vertical-align: middle;
+}
+
+#header > a {
+    -moz-transition: color 0.2s ease-in-out;
+    -webkit-transition: color 0.2s ease-in-out;
+    -ms-transition: color 0.2s ease-in-out;
+    transition: color 0.2s ease-in-out;
+    display: inline-block;
+    padding: 0 0.75em;
+    color: inherit;
+    text-decoration: none;
+    color: #FFF;
+}
+
+#header > a[href="#menu"] {
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#header > a[href="#menu"]:before {
+    content: "";
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-transform: none !important;
+}
+
+#header > a[href="#menu"]:before {
+    margin: 0 0.5em 0 0;
+}
+
+#header > a + a[href="#menu"]:last-child {
+    border-left: solid 1px rgba(0, 0, 0, 0.15);
+    padding-left: 1.25em;
+    margin-left: 0.5em;
+}
+
+#header > a:last-child {
+    padding-right: 1.25em;
+}
+
+/* nav */
+.nav {
+    display: flex;
+    height: 4em;
+    line-height: 1.5em;
+    position: fixed;
+    justify-content: end;
+    right: 0;
+}
+
+/* Menu */
+.nav > .menus {
+    display: flex;
+    flex-direction: row;
+    padding: 0 2em;
+    justify-content: space-around;
+}
+
+.nav > .menus > li {
+    font-size: 1em;
+    padding-left: 1em;
+    padding-right: 1em;
+    align-content: center;
+}
+
+/* User Profile */
+.nav > .user-box {
+    width: fit-content;
+    align-content: center;
+}
+
+.nav > .user-box a {
+    color: #bfbfbf;
+    text-decoration: none;
+}
+
+.nav > .user-box > .user-image-box {
+    display: flex;
+    width: 7em;
+    margin-right: 1em;
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+}
+
+.nav > .user-box > .user-image-box > img.profile_image {
+    width: 3em;
+    height: 3em;
+    line-height: 1.5em;
+}
+
+.nav > .user-box .userbox-text {
+    color: white;
+}
+
+/* Footer */
+
+#footer {
+    /*position: absolute;*/
+    /*bottom: 0px;*/
+    width: 100%;
+    padding: 2rem 0 2rem 0;
+    background: #f2f2f2;
+}
+
+#footer .copyright {
+    color: #959595;
+    font-size: 0.9rem;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #f2f2f2;
+}
+
+#footer a {
+    color: #959595
+}
+
+@media screen and (max-width: 736px) {
+
+    #footer {
+        padding: 3rem 0 1rem 0;
+    }
+
+}
