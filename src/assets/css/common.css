@@ -20,6 +20,15 @@ a {
     font-size: 15px
 }
 
+button {
+    cursor: pointer;
+}
+
+select {
+    height: 2rem;
+    padding: 0 1rem;
+}
+
 /*nav {*/
 /*    width: 80%;*/
 /*    overflow: hidden;*/

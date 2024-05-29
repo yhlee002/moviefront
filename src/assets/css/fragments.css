@@ -2,17 +2,19 @@
 
 #header {
     display: flex;
+    justify-content: space-between;
     width: 100%;
     height: 4em;
     position: fixed;
     top: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.75);
-    color: #a6a6a6;
+    background: #333333;
+    color: #3e3d3d;
     cursor: default;
     line-height: 3.25em;
     text-align: right;
-    /*z-index: 9;*/
+    z-index: 1;
+    padding: 0 4rem !important;
 }
 
 #header .toggle span {
@@ -21,8 +23,8 @@
 
 #header > .logo {
     font-family: 'Roboto Condensed', sans-serif;
-    display: inline-block;
-    margin-left: 1em;
+    display: flex;
+    align-items: center;
 }
 
 #header > .logo a {
@@ -88,6 +90,7 @@
     position: fixed;
     justify-content: end;
     right: 0;
+    margin-right: 4em;
 }
 
 /* Menu */
@@ -118,7 +121,8 @@
 
 .nav > .user-box > .user-image-box {
     display: flex;
-    width: 7em;
+    min-width: 7em;
+    width: fit-content;
     margin-right: 1em;
     justify-content: space-between;
     text-align: center;
@@ -129,10 +133,12 @@
     width: 3em;
     height: 3em;
     line-height: 1.5em;
+    margin-right:1rem;
 }
 
 .nav > .user-box .userbox-text {
     color: white;
+    margin-right: 1rem;
 }
 
 /* Footer */

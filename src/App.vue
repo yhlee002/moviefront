@@ -1,20 +1,34 @@
 <script setup>
 import {RouterLink, RouterView} from 'vue-router'
-import HeaderComponent from './components/HeaderComponent.vue'
-import FooterComponent from './components/FooterComponent.vue'
+import HeaderComponent from './components/fragment/HeaderComponent.vue'
+import FooterComponent from './components/fragment/FooterComponent.vue'
+import BasicModal from '@/components/BasicModal.vue';
+import {useModalStore} from '@/stores/modal.js';
+import {storeToRefs} from "pinia";
+
+const modalStore = useModalStore();
+const {modalOpen, datas, open} = storeToRefs(modalStore);
+
 </script>
 
 <template>
-  <HeaderComponent></HeaderComponent>
-  <div class="main-block">
-    <Suspense>
-      <RouterView/>
-      <template #fallback>
-        Loading...
-      </template>
-    </Suspense>
+  <div id="app">
+    <HeaderComponent></HeaderComponent>
+    <div class="main-block">
+      <Suspense>
+        <RouterView/>
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
+    </div>
+    <FooterComponent></FooterComponent>
   </div>
-  <FooterComponent></FooterComponent>
+  <BasicModal v-if="modalOpen" ref="basicModal" :datas="datas" @close="open = false">
+    <template #title></template>
+    <template #content></template>
+  </BasicModal>
+
 </template>
 
 <style scoped>
@@ -26,12 +40,6 @@ header {
 .logo {
   display: block;
   margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 1em;
-  text-align: center;
 }
 
 nav a.router-link-exact-active {
@@ -67,13 +75,6 @@ nav a:first-of-type {
     display: flex;
     place-items: flex-start;
     flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    font-size: 1rem;
-
-    padding: 1rem 0;
   }
 }
 </style>

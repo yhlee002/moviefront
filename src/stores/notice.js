@@ -1,25 +1,43 @@
-import { defineStore } from 'pinia'
+import {defineStore} from 'pinia'
 import axios from 'axios';
 
-export const useNoticeStore = defineStore('board', {
+export const useNoticeStore = defineStore('notice', {
     state: () => {
         return {
-            boardList: {},
+            totalPages: 1,
+            currentPage: 1,
+            boardList: [],
             currentBoard: {},
             prevBoard: {},
             nextBoard: {}
         }
     },
-    getters: {
-    },
+    getters: {},
     actions: {
-        async getBoardList() {
-            const result = await axios.get(`/notices`).data;
-            return result.boards;
+        async getNotices(page, size, query) {
+            await axios.get(`/api/notices`, {
+                params: {
+                    page: page - 1,
+                    size: size,
+                    query: query
+                }
+            })
+                .then(response => response.data)
+                .then(result => result.data)
+                .then(data => {
+                    this.boardList = data.boardNoticeList;
+                    this.totalPages = data.totalPageCnt;
+                });
         },
-        async getBoard(id) {
-            const result = await axios.get(`/notice/${id}`).data;
-            return result.board;
+        async getNotice(id) {
+            await axios.get(`/api/notice/${id}`)
+                .then(response => response.data)
+                .then(result => result.data)
+                .then(data => {
+                    this.currentBoard = data.board;
+                    this.prevBoard = data.prevBoard;
+                    this.nextBoard = data.nextBoard;
+                });
         }
     }
 })

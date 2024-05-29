@@ -5,3 +5,219 @@
   flex-direction: column;
   margin-top: 4em;
 }
+
+.align-center {
+  align-content: center;
+}
+
+.wrapper-block {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 4rem;
+  border: 0.1em solid #f2f2f2;
+}
+
+.wrapper-block > .inner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.wrapper-block > .inner > .inner-block {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.wrapper-block > .inner > .block-vertical-line {
+  border-right: 1px solid #f2f2f2;
+  margin: 0 2em;
+}
+
+.wrapper-block > .inner > .inner-block > .content {
+  max-width: 60rem;
+  width: 100%;
+}
+
+.wrapper-block > .inner > .inner-block > .content > .block-title-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2em;
+}
+
+.wrapper-block > .inner > .inner-block > .content > .block-title-box > .block-title {
+
+}
+
+.wrapper-block > .inner > .inner-block > .content > .block-title-box > .more {
+  color: #555555;
+}
+
+/* Form */
+.form-box {
+  justify-content: center;
+  display: flex;
+}
+
+.form-box form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+}
+
+.form-box form a {
+  color: #387cf6;
+  text-decoration-line: underline;
+}
+
+.form-box form > .form-message-box > small {
+  text-align: center;
+}
+
+.form-box form > .form-message-box > small:before {
+  background-image: url('@/assets/images/speech-balloon-48.png')
+}
+
+.form-box form > .form-message-box {
+  display: flex;
+  width: 30rem;
+  min-height: 1.4rem;
+  padding: 0.3rem 0;
+  overflow: visible;
+  align-items: center;
+}
+
+.form-box form .form-group { /* 전체 form에 동일 적용 */
+  display: flex;
+  flex-direction: row;
+  width: 30rem;
+  height: 2.7rem; /* 4rem; */
+  align-items: center;
+}
+
+.form-box form .form-group input[type=checkbox] {
+  margin: 0 0.2rem;
+}
+
+form .form-group label {/* 해당 form에만 적용 */
+  width: 7rem;
+  margin-right: 1rem;
+}
+
+form .form-group input[type=text],
+form .form-group input[type=tel],
+form .form-group input[type=email],
+form .form-group input[type=password] {/* 해당 form에만 적용 */
+  display: flex;
+  width: 15.2rem;
+  height: 2.4rem;
+  margin-right: 1rem;
+  padding: 0 0.8rem;
+}
+
+.form-box form input[type=reset] {
+  border: 1px solid #3e3d3d;
+  border-radius: 2px;
+  background: #cbcbcb;
+}
+
+.button-default {
+  width: 4rem;
+  height: 2.4rem;
+}
+
+.button-large {
+  width: 6rem;
+  height: 2.4rem;
+}
+
+.form-box form ul.button-box {
+  margin-top: 2rem;
+}
+
+.form-box form ul.button-box > button {
+  margin: 0 0.5rem;
+}
+
+button.submit { /* .form-box form button.submit */
+  color: #FFFFFF;
+  background-color: #387cf6;
+  border: 0.1rem solid #2553a7;
+  border-radius: 0.1rem;
+}
+
+.icon-button {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  justify-content: space-between;
+  font-size: 1rem;
+}
+
+.icon-button img {
+  height: 1rem;
+  margin-right: 0.4rem;
+}
+
+.button-gray {
+  color: #FFFFFF;
+  background: gray;
+  border: 0.1rem solid #727272;
+  border-radius: 0.1rem;
+}
+
+.button-modify-minimalize {
+  color: #FFFFFF;
+  background-color: #387cf6;
+  border: 0.1rem solid #2553a7;
+  border-radius: 0.1rem;
+
+  background-image: url("@/assets/images/icons/icons8-pencil-48.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  /*background-size: cover;*/
+  background-size: 1rem;
+}
+
+.button-delete-minimalize {
+  color: #FFFFFF;
+  background-color: gray;
+  border: 0.1rem solid #727272;
+  border-radius: 0.1rem;
+
+  background-image: url("@/assets/images/icons/icons8-trash-48.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  /*background-size: cover;*/
+  background-size: 1rem;
+}
+
+.button-report-minimalize {
+  color: #ffffff;
+  background-color: #c11717;
+  border: 0.1rem solid #8f1010;
+  border-radius: 0.1rem;
+
+  background-image: url("@/assets/images/icons/icons8-siren-48.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  /*background-size: cover;*/
+  background-size: 1rem;
+}
+
+/* Image Slider */
+.carousel__pagination {
+  margin-top: 2rem !important;
+}
+
+/* Input */
+input[readonly] {
+  background-color: #f1f1f1;
+  border-width: 1px;
+  border-radius: 2px;
+  outline: none;
+  cursor: default;
+}
