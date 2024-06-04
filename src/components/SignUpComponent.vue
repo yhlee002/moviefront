@@ -5,20 +5,20 @@ import {useUserStore} from '@/stores/user';
 import {useMessageStore} from "@/stores/message.js";
 import VueSimpleAlert from "vue3-simple-alert";
 import {useModalStore} from "@/stores/modal.js";
-import {inject, ref} from "vue";
+import {ref} from "vue";
 import {useRouter} from "vue-router";
+import emitter from '@/eventBus/emitter';
 
 const router = useRouter();
-const emitter = inject('emitter');
 
 const modalStore = useModalStore();
 const userStore = useUserStore();
 const messageStore = useMessageStore();
 mapStores(messageStore);
 
-let email = ref('');
-let name = ref('');
-let password = ref('');
+// let email = ref('');
+// let name = ref('');
+// let password = ref('');
 let phone = ref('');
 
 let emailCk = false;
@@ -38,11 +38,6 @@ const resetMessage = function () {
   messageStore.updatePwdMsg('');
   messageStore.updatePwdConfMsg('');
 }
-
-// const validatePhone = function () {
-//   const phone = document.querySelector('#form_signup #phone').value;
-//   userStore.sendCertificationMessage(phone); // validate duplication + cert key
-// }
 
 const signUp = async function () {
   // document.getElementById('form_signup').submit();
@@ -89,7 +84,6 @@ const signUp = async function () {
 
 // 이메일 - 유효성 검사
 async function checkIdentifier() {
-  const emailDupCk = false;
   const email = document.querySelector('#form-signup #identifier').value;
   if (email === "" || email.length === 0) {
     messageStore.updateEmailMsg("이메일을 입력해주세요.");
@@ -203,9 +197,20 @@ function checkPasswordConfirm() {
   }
 }
 
-emitter.on('phone-validation', (param) => {
+function showSecret(elemId) {
+  const input = document.getElementById(elemId);
+  input.type = 'text';
+}
+
+function hideSecret(elemId) {
+  const input = document.getElementById(elemId);
+  input.type = 'password';
+}
+
+emitter.on('phone-validation', param => {
+  if (!param.target === 'sign-up') return;
   if (param.result) {
-    phone.value = param.phone;
+    phone.value = param.data.phone;
   }
 });
 </script>
@@ -250,6 +255,7 @@ emitter.on('phone-validation', (param) => {
               <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input id="password" @blur="checkPassword()" type="password" name="password">
+                <img class="show-secret-button" @click="showSecret('password')" @mouseleave="hideSecret('password')" src="@/assets/images/icons/icons8-eye-48.png" style="margin-left: 1.3rem">
               </div>
               <div class="form-message-box">
                 <div style="width: 7.9rem"></div>
@@ -260,6 +266,7 @@ emitter.on('phone-validation', (param) => {
               <div class="form-group">
                 <label for="passwordConf">비밀번호 재확인</label>
                 <input id="passwordConf" @blur="checkPasswordConfirm()" type="password" name="passwordConf">
+                <img class="show-secret-button" @click="showSecret('passwordConf')" @mouseleave="hideSecret('passwordConf')" src="@/assets/images/icons/icons8-eye-48.png" style="margin-left: 1.3rem">
               </div>
               <div class="form-message-box">
                 <div style="width: 7.9rem"></div>
@@ -296,5 +303,9 @@ emitter.on('phone-validation', (param) => {
 </template>
 
 <style scoped>
-
+.show-secret-button {
+  cursor: pointer;
+  width: 1.2rem;
+  height: 1.2rem;
+}
 </style>

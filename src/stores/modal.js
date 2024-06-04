@@ -47,4 +47,4 @@ export const useModalStore = defineStore('modal', {
             return this.result;
         }
     }
-});
+}, {persist: true});

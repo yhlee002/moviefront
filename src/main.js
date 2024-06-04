@@ -4,6 +4,7 @@ import '@/assets/css/fragments.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import App from './App.vue'
 import router from './router/index.js'
@@ -25,11 +26,13 @@ axios.defaults.withCredentials = true;
 
 // mitt
 let emitter = mitt();
+let pinia = createPinia();
+pinia.use(piniaPluginPersistedstate);
 
 const app = createApp(App)
 app.config.globalProperties.emitter = emitter;
 app.provide('emitter', emitter)
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 
 window.emitter = mitt();

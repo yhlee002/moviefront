@@ -1,9 +1,8 @@
 <script setup>
-import {storeToRefs} from 'pinia';
 import {useUserStore} from '@/stores/user';
 
 const userStore = useUserStore();
-
+userStore.getUser();
 
 </script>
 
@@ -17,15 +16,15 @@ const userStore = useUserStore();
     <nav class="nav">
       <!-- Menu -->
       <ul class="menus">
-        <li v-if="userStore.isAdmin"><a href="/admin">관리자 페이지</a></li>
-        <li><a href="/notice">공지사항</a></li>
-        <li><a href="/board">감상 후기</a></li>
+        <li v-if="userStore.isAdmin"><router-link v-bind:to="'admin'">관리자 페이지</router-link></li>
+        <li><router-link v-bind:to="'notice'">공지사항</router-link></li>
+        <li><router-link v-bind:to="'board'">감상 후기</router-link></li>
       </ul>
       <!-- User Info -->
       <div class="user-box">
         <div class="user-image-box" v-if="!userStore.isAuthenticated">
           <img class="profile_image" src="../../assets/images/test-account-96.png" alt="user profile image">
-          <span><a href="/sign-in">로그인</a></span>
+          <span><router-link v-bind:to="'sign-in'">로그인</router-link></span>
         </div>
 
         <div class="user-image-box" v-if="userStore.isAuthenticated">
@@ -41,10 +40,10 @@ const userStore = useUserStore();
           </span>
           <br>
           <span class="userbox-text">
-            <a v-if="userStore.isAuthenticated" href="/mypage" style="margin-right: 3px">내정보</a>
+            <router-link v-bind:to="'mypage'" v-if="userStore.isAuthenticated" style="margin-right: 3px">내정보</router-link>
         </span>
           <span>
-          <a href="#" @click="document.getElementById('logout').submit();">로그아웃</a>
+          <a href="#" @click="userStore.logout">로그아웃</a>
         </span>
           &nbsp;
           <form id="logout" action="/logout" method="POST"></form>

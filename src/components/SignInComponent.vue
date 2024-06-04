@@ -22,9 +22,15 @@ if (params.cert === 'mail') {
   const certKey = params.certKey;
 
   const result = await userStore.validateCertificationMail(memNo, certKey);
-  if (result.data) {
-    VueSimpleAlert.alert("이메일 인증에 성공하였습니다.");
-    router.push("/sign-in")
+  if (result.data.status) {
+    if (result.data.message === 'SIGNUP') {
+      VueSimpleAlert.alert("이메일 인증에 성공하였습니다.");
+      router.push("/sign-in");
+    } else if (result.data.message === 'FINDPASSWORD') {
+      modalStore.setData({memNo: memNo});
+      modalStore.openModal('ResetPassword');
+    }
+
   } else {
     VueSimpleAlert.alert("만료된 인증입니다.");
   }
@@ -46,28 +52,28 @@ const submitForm = async function () {
 
   const result0 = await userStore.loginCheck(loginData);
   if (result0 === "didn't matching" || result0 === "not user") {
-    await VueSimpleAlert.alert("잘못된 이메일 혹은 비밀번호 입니다.", "로그인", "info");
+    VueSimpleAlert.alert("이메일 또는 비밀번호를 확인해주세요.", "로그인", "info");
     return false;
   } else if (result0 === "not certified") {
     VueSimpleAlert.confirm(
         "이메일 인증이 필요한 계정입니다. 이메일 재전송을 원하십니까?", "로그인", "info")
         .then(async result => {
           if (result) {
-            const sendResult = await userStore.sendCertificationMail(loginData.identifier);
-            const resultCode = sendResult.data['resultCode'];
-            if ("success" !== resultCode) VueSimpleAlert.alert("메일 전송에 실패했습니다.");
+            const sendResult = await userStore.sendCertificationMail(loginData.identifier, 'SIGNUP');
+            const status = sendResult.data.status;
+            if (status) {
+              VueSimpleAlert.alert("메일 전송에 성공했습니다. 인증은 10분간 유효합니다.");
+            } else {
+              VueSimpleAlert.alert("메일 전송에 실패했습니다.");
+            }
           }
         })
         .finally();
     return false;
   } else {
-    const loginResult = await userStore.login(loginData);
-
-    if (loginResult.status === 200) {
-      userStore.user = loginResult.data;
-      router.push('/');
-    } else {
-      await VueSimpleAlert.alert("이메일과 비밀번호를 확인해주세요.", "로그인", "info");
+    await userStore.login(loginData);
+    if (userStore.user.memNo) {
+      router.push("/");
     }
   }
 }
@@ -92,7 +98,15 @@ const checkParams = function (loginData) {
   return checked;
 }
 
+function showSecret(elemId) {
+  const input = document.getElementById(elemId);
+  input.type = 'text';
+}
 
+function hideSecret(elemId) {
+  const input = document.getElementById(elemId);
+  input.type = 'password';
+}
 </script>
 
 <template>
@@ -117,6 +131,7 @@ const checkParams = function (loginData) {
               <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input id="f-s-password" type="password" name="password" @keydown="enterSubmit()" required>
+                <img @click="showSecret('f-s-password')" @mouseleave="hideSecret('f-s-password')" src="@/assets/images/icons/icons8-eye-48.png" style="cursor: pointer; width: 1.2rem; height: 1.2rem;">
               </div>
               <!-- remember me checkbox -->
               <div class="form-group">
@@ -129,7 +144,7 @@ const checkParams = function (loginData) {
 
               <div class="form-group" style="flex-direction: row; justify-content: space-around; width: 20rem">
                 <!--              <a onclick="window.open('/findaccount', '회원 정보 찾기', 'height=500px, width=650px, scrollbars=no');">이메일 또는 비밀번호가 기억나지 않습니다.</a>-->
-                <a style="cursor: pointer" @click="modalStore.openModal('ValidateDuplicationPhoneComponent')">
+                <a style="cursor: pointer" @click="modalStore.openModal('FindAccount')">
                   이메일 또는 비밀번호가 기억나지 않습니다.</a>
                 <div style="border-right: #f2f2f2 solid 0.1em; height: 0.8rem"></div>
                 <a href="/sign-up">회원가입</a>

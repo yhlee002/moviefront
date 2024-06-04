@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Admin from '@/components/AdminComponent.vue'
+import Admin from '@/components/admin/AdminComponent.vue'
 import Preview from "@/components/PreviewComponent.vue";
 import Main from "@/components/MainComponent.vue";
 import SearchMovie from "@/components/SearchMovieComponent.vue";

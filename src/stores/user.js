@@ -17,7 +17,7 @@ const userDefault = {
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
-            user: userDefault,
+            user: {},
             oauthLoginURL: {
                 naver: '',
                 kakao: ''
@@ -51,23 +51,15 @@ export const useUserStore = defineStore('user', {
     },
     actions: {
         clearState() {
-            this.user = {
-                id: null,
-                identifier: null,
-                name: null,
-                phone: null,
-                profileImage: null,
-                role: "Anonymous",
-                regDate: null
-            };
+            this.user = userDefault;
         },
-        async getUserData() { // get current user data
-            const result = (await axios.get('/api/member/auth')).data;
-            this.user = result.data;
-            // this.addUserDataSession(this.user);
+        async getUser() {
+            const str = localStorage.getItem('user');
+            const user = JSON.parse(str);
 
-            // const redirectUrl = result.redirectUrl;
-            // if (redirectUrl) window.location.href = redirectUrl;
+            if (user) {
+                this.user = user;
+            }
         },
         // addUserDataSession(user) {
         //     sessionstorage.setItem("id", user.memNo);
@@ -84,20 +76,18 @@ export const useUserStore = defineStore('user', {
             window.location.href = this.oauthLoginURL[provider];
         },
         async login(loginData) {
-            return (await axios.post('/api/sign-in', qs.stringify(loginData), {
+            return (await axios.post('/api/sign-in', loginData, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
             })
-                // .then(response => {
-                //     if (response.status === 'OK') {
-                //         this.user = response.data;
-                //         this.$router.push('/');
-                //     } else {
-                //         VueSimpleAlert.alert("이메일과 비밀번호를 확인해주세요.", "로그인", "info");
-                //     }
-                //
-                // })
+                .then(response => {
+                    if (response.status === 200) {
+                        this.user = response.data;
+                        localStorage.setItem('user', JSON.stringify(response.data));
+                    }
+
+                })
                 .catch(e => {
                     console.error(e);
                     VueSimpleAlert.alert('로그인에 실패하였습니다. 입력된 정보를 확인해주세요.', '로그인', 'info');
@@ -105,6 +95,19 @@ export const useUserStore = defineStore('user', {
         },
         async loginCheck(loginData) {
             return (await axios.post('/api/sign-in/check', loginData)).data.data;
+        },
+        async logout() {
+            await axios.post('/logout', {
+                headers: {
+                    'Access-Control-Allow-Origin': '*'
+                }
+            })
+                .then(response => {
+                    this.clearState();
+                })
+                .catch(e => {
+                    console.error(e);
+                })
         },
         async validateIdentifier(identifier) {
             return (await axios.get(`/api/member?identifier=${identifier}`)).data;
@@ -130,8 +133,11 @@ export const useUserStore = defineStore('user', {
                     VueSimpleAlert.alert("회원가입에 실패하였습니다.");
                 });
         },
-        async sendCertificationMail(email) {
-            return (await axios.post(`/api/cert-mail`, email)).data;
+        async sendCertificationMail(identifier, reason) {
+            return (await axios.post(`/api/cert-mail`, {
+                identifier: identifier,
+                reason: reason
+            })).data;
             // VueSimpleAlert.alert(`[임시] 인증번호는 ${data.key}입니다. 인증번호는 3분간 유효합니다.`);
         },
         async validateCertificationMail(memNo, certKey) {
@@ -157,6 +163,12 @@ export const useUserStore = defineStore('user', {
                 phone: "+82" + phone,
                 certKey: certKey
             })).data;
+        },
+        async updatePassword(memNo, password) {
+            return (await axios.patch('/api/member/password', {
+                memNo: memNo,
+                password: password
+            })).data;
         }
     }
-})
+}, {persist: true})
