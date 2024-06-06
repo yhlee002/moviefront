@@ -53,13 +53,23 @@ export const useUserStore = defineStore('user', {
         clearState() {
             this.user = userDefault;
         },
+        clearSession() {
+          // sessionStorage.removeItem('user');
+        },
         async getUser() {
-            const str = localStorage.getItem('user');
-            const user = JSON.parse(str);
-
-            if (user) {
-                this.user = user;
-            }
+            await axios.get('/api/member/current')
+                .then(response => response.data)
+                .then(result  => result.data)
+                .then(data => {
+                    if (data) { // !== null
+                        this.user = data;
+                    } else {
+                        this.user = userDefault;
+                    }
+                })
+                .catch(e => {
+                    console.error(e);
+                })
         },
         // addUserDataSession(user) {
         //     sessionstorage.setItem("id", user.memNo);
@@ -84,7 +94,7 @@ export const useUserStore = defineStore('user', {
                 .then(response => {
                     if (response.status === 200) {
                         this.user = response.data;
-                        localStorage.setItem('user', JSON.stringify(response.data));
+                        sessionStorage.setItem('user', JSON.stringify(response.data));
                     }
 
                 })
@@ -104,6 +114,7 @@ export const useUserStore = defineStore('user', {
             })
                 .then(response => {
                     this.clearState();
+                    this.clearSession();
                 })
                 .catch(e => {
                     console.error(e);

@@ -15,7 +15,7 @@ export const useCommentStore = defineStore('comment', {
         }
     },
     actions: {
-        async getCommentsByBoard(boardId, page) {
+        async getCommentImpsByBoard(boardId, page) {
             await axios.get('/api/comments/imp', {
                 params: {
                     boardId: boardId,
@@ -33,6 +33,24 @@ export const useCommentStore = defineStore('comment', {
                 .catch(error => {
                     console.error(error);
                 })
+        },
+        async updateCommentImp(boardId, writerId, content) {
+            return (await axios.post('/api/comment/imp', {
+                boardId: boardId,
+                writerId: writerId,
+                content: content
+            })
+                    .catch(e => console.error(e))
+            ).data;
+        },
+        async deleteCommentImp(commentId) {
+            return (await axios.delete('/api/comment/imp', {
+                    boardId: boardId,
+                    writerId: writerId,
+                    content: content
+                })
+                    .catch(e => console.error(e))
+            ).data;
         }
     }
 })

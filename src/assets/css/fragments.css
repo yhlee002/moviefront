@@ -2,43 +2,32 @@
 
 #header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     width: 100%;
     height: 4em;
     position: fixed;
     top: 0;
     left: 0;
-    background: #333333;
-    color: #3e3d3d;
+    /*background: #333333;*/
+    /*color: #3e3d3d;*/
+    border-bottom: 1px solid #f2f2f2;
     cursor: default;
     line-height: 3.25em;
     text-align: right;
     z-index: 1;
-    padding: 0 4rem !important;
 }
 
-#header .toggle span {
-    display: none;
-}
-
-#header > .logo {
-    font-family: 'Roboto Condensed', sans-serif;
+#header > #header-main {
     display: flex;
-    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 80rem;
+    height: 100%;
+    padding: 0 2rem;
 }
 
-#header > .logo a {
-    color: #bfbfbf;
-    text-decoration: none;
-    display: inline-block;
-}
-
-#header > .logo #siteName {
-    /*font-family: 'Do Hyeon', sans-serif;*/
-    font-family: 'TTHakgyoansimYeohaengR';
-    font-weight: 300;
-    font-size: 2em;
-    vertical-align: middle;
+#header > #header-main .toggle span {
+    display: none;
 }
 
 #header > a {
@@ -50,15 +39,15 @@
     padding: 0 0.75em;
     color: inherit;
     text-decoration: none;
-    color: #FFF;
+    /*color: #FFF;*/
 }
 
-#header > a[href="#menu"] {
+#header > #header-main > a[href="#menu"] {
     text-decoration: none;
     -webkit-tap-highlight-color: transparent;
 }
 
-#header > a[href="#menu"]:before {
+#header > #header-main > a[href="#menu"]:before {
     content: "";
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
@@ -68,17 +57,17 @@
     text-transform: none !important;
 }
 
-#header > a[href="#menu"]:before {
+#header > #header-main > a[href="#menu"]:before {
     margin: 0 0.5em 0 0;
 }
 
-#header > a + a[href="#menu"]:last-child {
+#header > #header-main > a + a[href="#menu"]:last-child {
     border-left: solid 1px rgba(0, 0, 0, 0.15);
     padding-left: 1.25em;
     margin-left: 0.5em;
 }
 
-#header > a:last-child {
+#header > #header-main > a:last-child {
     padding-right: 1.25em;
 }
 
@@ -87,10 +76,8 @@
     display: flex;
     height: 4em;
     line-height: 1.5em;
-    position: fixed;
     justify-content: end;
     right: 0;
-    margin-right: 4em;
 }
 
 /* Menu */
@@ -106,16 +93,22 @@
     padding-left: 1em;
     padding-right: 1em;
     align-content: center;
+    white-space: nowrap;
+}
+
+.nav > .menus > li.active {
+    color: #dd701a;
 }
 
 /* User Profile */
 .nav > .user-box {
     width: fit-content;
     align-content: center;
+    white-space: nowrap;
 }
 
 .nav > .user-box a {
-    color: #bfbfbf;
+    color: #000000;
     text-decoration: none;
 }
 
@@ -137,14 +130,13 @@
 }
 
 .nav > .user-box .userbox-text {
-    color: white;
     margin-right: 1rem;
 }
 
 /* Footer */
 
 #footer {
-    /*position: absolute;*/
+    position: relative;
     /*bottom: 0px;*/
     width: 100%;
     padding: 2rem 0 2rem 0;

@@ -1,11 +1,20 @@
 <script setup>
 import {useNoticeStore} from "@/stores/notice.js";
 import ListComponent from "@/components/sub/ListComponent.vue";
+import {useRouter} from "vue-router";
+import {useUserStore} from "@/stores/user";
 
+const router = useRouter();
+const userStore = useUserStore();
 const noticeStore = useNoticeStore();
 
-noticeStore.getNotices(noticeStore.currentPage, 15, null);
+noticeStore.getBoards(noticeStore.currentPage, 15, null);
+
 // noticeStore.getTotalPages();
+
+function writeNewPost() {
+  router.push("/newpost?category=notice");
+}
 </script>
 
 <template>
@@ -18,8 +27,8 @@ noticeStore.getNotices(noticeStore.currentPage, 15, null);
           </div>
 
           <!-- Function Buttons -->
-          <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
-            <button class="button-default submit" type="button">작성하기</button>
+          <div style="display: flex; margin-bottom: 2rem;" :style="userStore.isAdmin ? {'justify-content': 'space-between'} : {'justify-content': 'end'}">
+            <button class="button-default submit" type="button" @click="writeNewPost" v-show="userStore.isAdmin">작성하기</button>
             <select>
               <option value="recent" selected>최신순</option>
               <option value="comment">댓글순</option>
@@ -27,9 +36,11 @@ noticeStore.getNotices(noticeStore.currentPage, 15, null);
             </select>
           </div>
 
+          <div class="block-horizontal-line"></div>
+
           <!-- Board List -->
           <div>
-            <ListComponent :list="noticeStore.boardList" :recommended="false"></ListComponent>
+            <ListComponent category="notice" :list="noticeStore.boardList" :recommended="false"></ListComponent>
           </div>
 
         </div>

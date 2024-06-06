@@ -8,6 +8,7 @@ import {useModalStore} from "@/stores/modal.js";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 import emitter from '@/eventBus/emitter';
+import Logo from "@/components/fragment/LogoComponent.vue";
 
 const router = useRouter();
 
@@ -220,8 +221,9 @@ emitter.on('phone-validation', param => {
     <div class="inner">
       <div class="inner-block">
         <div class="content">
-          <div class="block-title-box">
-            <h2 class="block-title align-center">회원가입</h2>
+          <div class="greeting-message">
+            <Logo></Logo>
+            <span>에 오신 것을 환영합니다.</span>
           </div>
 
           <div class="form-box align-center">
@@ -275,7 +277,7 @@ emitter.on('phone-validation', param => {
               </div>
 
               <div class="form-group">
-                <label for="phone">연락처(휴대전화)</label>
+                <label for="phone">휴대전화 번호</label>
                 <input id="phone" type="tel" name="phone" v-model="phone" readonly>
                 <button id="phoneValidationBnt" @click="modalStore.openModal('ValidatePhone');" type="button"
                         class="button-default">인증하기

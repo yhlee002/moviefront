@@ -115,14 +115,14 @@ async function submit() {
         <div class="reset-pwd-input-box" style="margin-top: 0.4rem;">
           <label for="newPwdInput">비밀번호</label>
           <input id="newPwdInput" type="password" @blur="passwordCheck">
-          <img @click="showSecret('newPwdInput')" @mouseleave="hideSecret('newPwdInput')" src="../../../assets/images/icons/icons8-eye-48.png">
+          <img @click="showSecret('newPwdInput')" @mouseleave="hideSecret('newPwdInput')" src="@/assets/images/icons/icons8-eye-48.png">
         </div>
         <small class="message-small-error">{{messageStore.pwdMsg}}</small>
 
         <div class="reset-pwd-input-box">
           <label for="newPwdInput2">재확인</label>
           <input id="newPwdInput2" type="password" @blur="passwordConfCheck">
-          <img @click="showSecret('newPwdInput2')" @mouseleave="hideSecret('newPwdInput2')" src="../../../assets/images/icons/icons8-eye-48.png">
+          <img @click="showSecret('newPwdInput2')" @mouseleave="hideSecret('newPwdInput2')" src="@/assets/images/icons/icons8-eye-48.png">
         </div>
       </div>
       <small class="message-small-error">{{messageStore.pwdConfMsg}}</small>

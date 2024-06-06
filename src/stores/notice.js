@@ -14,7 +14,7 @@ export const useNoticeStore = defineStore('notice', {
     },
     getters: {},
     actions: {
-        async getNotices(page, size, query) {
+        async getBoards(page, size, query) {
             await axios.get(`/api/notices`, {
                 params: {
                     page: page - 1,
@@ -29,7 +29,7 @@ export const useNoticeStore = defineStore('notice', {
                     this.totalPages = data.totalPageCnt;
                 });
         },
-        async getNotice(id) {
+        async getBoard(id) {
             await axios.get(`/api/notice/${id}`)
                 .then(response => response.data)
                 .then(result => result.data)
@@ -38,6 +38,18 @@ export const useNoticeStore = defineStore('notice', {
                     this.prevBoard = data.prevBoard;
                     this.nextBoard = data.nextBoard;
                 });
+        },
+        async updateBoard(board) {
+            return (await axios.post(`/api/notice`, board)
+                .catch(e => {
+                    console.error(e);
+                })).data;
+        },
+        async deleteBoard(board) {
+            return (await axios.delete(`/api/notice`, board)
+                .catch(e => {
+                    console.error(e);
+                })).data;
         }
     }
 })

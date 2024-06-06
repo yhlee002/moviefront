@@ -12,7 +12,7 @@ const comment = props.comment;
   <div class="comment-item-box">
     <!-- Writer & RegDate -->
     <div style="width: 10rem; margin-right: 1rem; border-right: 0.1rem solid #f2f2f2;">
-      <UserCard :member="comment.writer"></UserCard>
+      <UserCard :member="{memNo: comment.writerId, name: comment.writerName, profileImage: comment.writerProfileImage}"></UserCard>
     </div>
 
     <div style="height: 100%;"></div>

@@ -5,6 +5,8 @@ import {useMessageStore} from "@/stores/message.js";
 import {useUserStore} from "@/stores/user.js";
 import {useModalStore} from "@/stores/modal.js";
 import VueSimpleAlert from "vue3-simple-alert";
+import Logo from "@/components/fragment/LogoComponent.vue";
+import HeaderComponent from "@/components/fragment/HeaderComponent.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -114,8 +116,9 @@ function hideSecret(elemId) {
     <div class="inner">
       <div class="inner-block">
         <div class="content">
-          <div class="block-title-box">
-            <h2 class="block-title align-center">로그인</h2>
+          <div class="greeting-message">
+            <Logo></Logo>
+            <span>에 오신 것을 환영합니다.</span>
           </div>
 
           <input id="message-oauth" hidden="hidden" v-if="oauthMsg !== null"
@@ -131,7 +134,9 @@ function hideSecret(elemId) {
               <div class="form-group">
                 <label for="password">비밀번호</label>
                 <input id="f-s-password" type="password" name="password" @keydown="enterSubmit()" required>
-                <img @click="showSecret('f-s-password')" @mouseleave="hideSecret('f-s-password')" src="@/assets/images/icons/icons8-eye-48.png" style="cursor: pointer; width: 1.2rem; height: 1.2rem;">
+                <img @click="showSecret('f-s-password')" @mouseleave="hideSecret('f-s-password')"
+                     src="@/assets/images/icons/icons8-eye-48.png"
+                     style="cursor: pointer; width: 1.2rem; height: 1.2rem;">
               </div>
               <!-- remember me checkbox -->
               <div class="form-group">
@@ -142,11 +147,12 @@ function hideSecret(elemId) {
                 </div>
               </div>
 
-              <div class="form-group" style="flex-direction: row; justify-content: space-around; width: 20rem">
+              <div class="form-group" style="flex-direction: row; justify-content: center;">
                 <!--              <a onclick="window.open('/findaccount', '회원 정보 찾기', 'height=500px, width=650px, scrollbars=no');">이메일 또는 비밀번호가 기억나지 않습니다.</a>-->
                 <a style="cursor: pointer" @click="modalStore.openModal('FindAccount')">
                   이메일 또는 비밀번호가 기억나지 않습니다.</a>
-                <div style="border-right: #f2f2f2 solid 0.1em; height: 0.8rem"></div>
+                <div
+                    style="border-right: #f2f2f2 solid 0.1em; height: 0.8rem; margin-left: 0.4rem; margin-right: 0.4rem"></div>
                 <a href="/sign-up">회원가입</a>
               </div>
 
@@ -169,6 +175,7 @@ function hideSecret(elemId) {
       </div>
     </div>
   </div>
+
 </template>
 
 <style scoped>
@@ -186,12 +193,12 @@ function hideSecret(elemId) {
 }
 
 #naverSignInBtn {
-  background: url("src/assets/images/naver-xs.png") no-repeat;
+  background: url("@/assets/images/naver-xs.png") no-repeat;
   background-size: 100% 100%;
 }
 
 #kakaoSignInBtn {
-  background: url("src/assets/images/kakao-xs.png") no-repeat;
+  background: url("@/assets/images/kakao-xs.png") no-repeat;
   background-size: 100% 100%;
 }
 </style>

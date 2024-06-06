@@ -1,20 +1,75 @@
 <script setup>
 import {useModalStore} from "@/stores/modal.js";
+import {useNoticeStore} from "@/stores/notice";
+import {useBoardStore} from "@/stores/board";
+import {ref} from "vue";
+import {useUserStore} from "@/stores/user";
+import VueSimpleAlert from "vue3-simple-alert";
+import {useRouter} from "vue-router";
 
-const modalStroe = useModalStore();
+const router = useRouter();
+
+const userStore = useUserStore();
+const boardStore = useBoardStore();
+const noticeStore = useNoticeStore();
+const modalStore = useModalStore();
+
+const props = defineProps(['id', 'category']);
+
+const category = props.category;
+const store = category === 'notice' ? noticeStore : category === 'board' ? boardStore : null;
+
+const board = ref({
+  title: '',
+  content: '',
+  writerId: userStore.user.memNo
+});
+
+function updateBoard(value) {
+  board.value = value
+}
+
+if (props.id) {
+  store.getBoard(props.id);
+  updateBoard(Object.assign({}, store.currentBoard));
+}
 
 function openSelectMovieModal() {
-  // modalStroe.openModal('', );
+  // modalStore.openModal('', );
+}
+
+function checkParams(board) {
+  if (!board.title) {
+    VueSimpleAlert.alert("제목을 입력해주세요.");
+    return false;
+  } else if (!board.content) {
+    VueSimpleAlert.alert("내용을 입력해주세요.");
+    return false;
+  }
+  return true;
+}
+
+async function submit() {
+  if (!checkParams(board.value)) return;
+
+  const result = await store.updateBoard(board.value);
+  if (result.count > 0) {
+    const id = result.data.id;
+    router.push(`/${category}/${id}`);
+  } else {
+    VueSimpleAlert.alert("오류가 발생했습니다.");
+  }
 }
 </script>
 
 <template>
-  <div id="index_boarditem" class="wrapper-block">
+  <div id="index_editor" class="wrapper-block">
     <div class="inner">
       <div class="inner-block">
         <div class="content">
           <div class="block-title-box">
-            <h2 class="block-title">감상 후기</h2>
+            <h2 class="block-title" v-if="category === 'notice'">공지사항</h2>
+            <h2 class="block-title" v-if="category === 'board'">감상 후기</h2>
           </div>
 
           <!-- Board -->
@@ -24,9 +79,11 @@ function openSelectMovieModal() {
               <input id="boardTitle" type="text" v-model="board.title" placeholder="제목을 입력해주세요.">
             </div>
 
-            <p>영화</p>
-            <div>
-              <input type="text" @click="openSelectMovieModal()" readonly>
+            <div v-if="category === 'board'">
+              <p>영화</p>
+              <div>
+                <input type="text" @click="openSelectMovieModal()" readonly>
+              </div>
             </div>
 
             <p>내용</p>
@@ -51,7 +108,7 @@ function openSelectMovieModal() {
             <!--              <input id="boardRegDt" type="date" v-model="board.regDate" readonly/>-->
             <!--            </div>-->
             <div class="button-box">
-              <button class="button-large submit" type="button">확인</button>
+              <button class="button-large submit" type="button" @click="submit">확인</button>
             </div>
           </div>
         </div>

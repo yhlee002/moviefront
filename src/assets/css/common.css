@@ -7,7 +7,8 @@
 
 * {
     padding: 0;
-    margin: 0
+    margin: 0;
+    font-family: 'Nanum Gothic', serif;
 }
 
 ul, ol {
@@ -16,12 +17,18 @@ ul, ol {
 
 a {
     text-decoration: none;
-    color: #fff;
+    color: #000000;
     font-size: 15px
 }
 
 button {
     cursor: pointer;
+    box-shadow: 1px 1px 1px #c8c8c8;
+}
+
+input[type=reset] {
+    cursor: pointer;
+    box-shadow: 1px 1px 1px #c8c8c8;
 }
 
 select {

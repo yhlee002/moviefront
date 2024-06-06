@@ -23,7 +23,7 @@ if (5 <= today <= 7) {
 }
 
 // notices
-noticeStore.getNotices(1, 5);
+noticeStore.getBoards(1, 5);
 // boards
 boardStore.getBoards(1, 5);
 
@@ -89,7 +89,7 @@ function searchMovie() {
             <a class="more" href="/notice">더보기</a>
           </div>
           <div>
-            <ListComponent :list="noticeStore.boardList" :field-show="false"></ListComponent>
+            <ListComponent category="notice" :list="noticeStore.boardList" :field-show="false"></ListComponent>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ function searchMovie() {
             <a class="more" href="/board">더보기</a>
           </div>
           <div>
-            <ListComponent :list="boardStore.boardList" :field-show="false"></ListComponent>
+            <ListComponent category="board" :list="boardStore.boardList" :field-show="false"></ListComponent>
           </div>
         </div>
       </div>

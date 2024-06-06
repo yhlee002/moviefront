@@ -21,6 +21,7 @@ axios.defaults.baseURL = 'http://' + HOST + ':' + PORT + '/';
 // }
 axios.defaults.withXSRFToken = true;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
+axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
 axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
 axios.defaults.withCredentials = true;
 

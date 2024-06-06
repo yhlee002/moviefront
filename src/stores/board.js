@@ -26,11 +26,10 @@ export const useBoardStore = defineStore('board', {
             })
                 .then(response => response.data)
                 .then(result => result.data)
-                .then (data => {
+                .then(data => {
                     this.boardList = data.boardImpList;
                     this.totalPages = data.totalPageCnt;
                 });
-            console.log(result);
         },
         async getBoard(id) {
             await axios.get(`/api/imp/${id}`)
@@ -41,6 +40,18 @@ export const useBoardStore = defineStore('board', {
                     this.prevBoard = data.prevBoard;
                     this.nextBoard = data.nextBoard;
                 });
+        },
+        async updateBoard(board) {
+            return (await axios.post(`/api/imp`, board)
+                .catch(e => {
+                    console.error(e);
+                })).data;
+        },
+        async deleteBoard(board) {
+            return (await axios.delete(`/api/imp`, board)
+                .catch(e => {
+                    console.error(e);
+                })).data;
         }
     }
 })

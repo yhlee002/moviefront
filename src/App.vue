@@ -1,5 +1,5 @@
 <script setup>
-import {RouterLink, RouterView} from 'vue-router'
+import {RouterView} from 'vue-router'
 import HeaderComponent from './components/fragment/HeaderComponent.vue'
 import FooterComponent from './components/fragment/FooterComponent.vue'
 import BasicModal from '@/components/BasicModal.vue';
@@ -8,7 +8,6 @@ import {storeToRefs} from "pinia";
 
 const modalStore = useModalStore();
 const {modalOpen, datas, open} = storeToRefs(modalStore);
-
 </script>
 
 <template>
@@ -37,11 +36,6 @@ header {
   max-height: 100vh;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
 nav a.router-link-exact-active {
   color: #555555;
 }
@@ -65,10 +59,6 @@ nav a:first-of-type {
     display: flex;
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
   }
 
   header .wrapper {

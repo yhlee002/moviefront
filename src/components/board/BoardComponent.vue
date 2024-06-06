@@ -18,6 +18,10 @@ function enter() {
 function search(condition, query) {
 
 }
+
+function writeNewPost() {
+  router.push("/newpost?category=board");
+}
 </script>
 
 <template>
@@ -46,7 +50,7 @@ function search(condition, query) {
             <div id="boardList">
               <!-- Function Buttons -->
               <div class="board-options">
-                <button class="button-default submit icon-button" type="button">
+                <button class="button-default submit icon-button" type="button" @click="writeNewPost">
                   <img src="@/assets/images/icons/icons8-pencil-48.png" alt="작성하기">
                   작성하기
                 </button>
@@ -61,9 +65,11 @@ function search(condition, query) {
                 </select>
               </div>
 
+              <div class="block-horizontal-line"></div>
+
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
 
-              <ListComponent :list="boardStore.boardList" :recommended="true"></ListComponent><!-- :sub-url="router." -->
+              <ListComponent category="board" :list="boardStore.boardList" :recommended="true"></ListComponent><!-- :sub-url="router." -->
 
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>

@@ -1,24 +1,24 @@
 <script setup>
-const props = defineProps(['list', 'fieldShow', 'recommended']);
+const props = defineProps(['list', 'category', 'fieldShow', 'recommended']);
 
 const fieldShow = props.fieldShow ?? true;
 const recommended = props.recommended ?? false;
 </script>
 
 <template>
-  <!--  <div class="list-item-field-box" v-if="fieldShow">-->
-  <!--    <ul class="list-item-field-group">-->
-  <!--      <li><p class="list-item-fields">제목</p></li>-->
-  <!--      <li><p class="list-item-fields">작성자</p></li>-->
-  <!--      <li><p class="list-item-fields">조회수</p></li>-->
-  <!--    </ul>-->
-  <!--  </div>-->
+  <div class="list-item-field-box" v-if="fieldShow">
+    <ul class="list-item-field-group">
+      <li><p class="list-item-fields">제목</p></li>
+      <li><p class="list-item-fields">작성자</p></li>
+      <li><p class="list-item-fields">조회수</p></li>
+    </ul>
+  </div>
   <div :id="`list-item-${item.id}`" class="list-item-box" v-for="item in props.list" :key="item.id">
     <ul class="list-item-group">
       <li>
-        <a :href="`/board/${item.id}`">
+        <router-link :to="`/${category}/${item.id}`">
           <p class="list-item-title">{{ item.title }}</p>
-          <p class="list-item-writer">{{ item.writer.name }}</p>
+          <p class="list-item-writer">{{ item.writerName }}</p>
 
           <div class="list-item-etc">
             <div class="list-icons">
@@ -28,7 +28,7 @@ const recommended = props.recommended ?? false;
 
             <div class="list-icons">
               <img src="@/assets/images/icons/icons8-comment-50.png" alt="댓글수"/>
-              <p class="list-item-views">{{ item.comments.length }}</p>
+              <p class="list-item-views">{{ item.commentSize }}</p>
             </div>
 
             <div class="list-icons" v-if="recommended">
@@ -36,7 +36,7 @@ const recommended = props.recommended ?? false;
               <p class="list-item-recommended">{{ item.recommended }}</p>
             </div>
           </div>
-        </a>
+        </router-link>
       </li>
     </ul>
   </div>
