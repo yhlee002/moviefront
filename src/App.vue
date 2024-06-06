@@ -21,7 +21,7 @@ const {modalOpen, datas, open} = storeToRefs(modalStore);
         </template>
       </Suspense>
     </div>
-    <FooterComponent></FooterComponent>
+<!--    <FooterComponent></FooterComponent>-->
   </div>
   <BasicModal v-if="modalOpen" ref="basicModal" :datas="datas" @close="open = false">
     <template #title></template>

@@ -60,6 +60,7 @@ async function submit() {
     VueSimpleAlert.alert("오류가 발생했습니다.");
   }
 }
+
 </script>
 
 <template>
@@ -74,19 +75,19 @@ async function submit() {
 
           <!-- Board -->
           <div class="board-box">
-            <p>제목</p>
+            <p class="input-title">제목</p>
             <div class="board-title-box">
               <input id="boardTitle" type="text" v-model="board.title" placeholder="제목을 입력해주세요.">
             </div>
 
             <div v-if="category === 'board'">
-              <p>영화</p>
+              <p style="margin-bottom: 0.4rem;">영화</p>
               <div>
                 <input type="text" @click="openSelectMovieModal()" readonly>
               </div>
             </div>
 
-            <p>내용</p>
+            <p class="input-title">내용</p>
             <div class="board-editor-box">
 
               <div class="board-option-box">
@@ -95,13 +96,11 @@ async function submit() {
                 <!-- font-style: italic -->
                 <button type="button" value="underline"><span style="text-decoration: underline">a</span></button>
                 <!-- text-decoration: underline; -->
-                <button type="button" value="image">
-                  <img src="@/assets/images/icons/icons8-image-50.png" alt="이미지 불러오기"/>
-                </button>
+                <button type="button" id="addImgBtn" value="image"></button>
               </div>
 
               <div class="board-content-box">
-                <input id="boardContent" type="text" v-model="board.content" placeholder="내용을 입력해주세요.">
+                <textarea id="boardContent" type="text" v-model="board.content" placeholder="내용을 입력해주세요."></textarea>
               </div>
             </div>
             <!--            <div class="board-regdt-box">-->
@@ -118,6 +117,10 @@ async function submit() {
 </template>
 
 <style scoped>
+#index_editor {
+  margin-top: 6rem;
+}
+
 .board-box {
   display: flex;
   flex-direction: column;
@@ -135,15 +138,13 @@ async function submit() {
 .board-box > .board-editor-box > .board-content-box {
   display: flex;
   flex-direction: column;
-  /*justify-content: center;*/
-  margin-bottom: 2rem;
 }
 
 .board-box > .board-editor-box {
   display: flex;
   flex-direction: column;
   border: 0.1rem solid #000000;
-  border-radius: 1rem;
+  border-radius: 2px;
 }
 
 .board-box > .board-editor-box > .board-option-box {
@@ -153,21 +154,48 @@ async function submit() {
   width: 100%;
   height: 2rem;
   background: #f2f2f2;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: 2px 2px 0 0;
   border-bottom: 0.1rem solid #000000;
 }
 
-#boardTitle, #boardContent {
-  padding: 0 1rem;
+.board-box > .board-editor-box > .board-option-box > button {
+  width: 1.6rem;
+  margin-right: 0.2rem;
+  border: transparent;
+  box-shadow: none;
+}
+
+.input-title {
+  margin-bottom: 0.4rem;
 }
 
 #boardTitle {
   height: 2rem;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-width: 20rem;
 }
 
 #boardContent {
-  height: 30rem;
+  height: 24rem;
   border: none;
   outline: none;
+  padding: 1rem;
+  resize: none;
+  width: 100%;
+  max-width: 20rem;
+}
+
+#index_editor .button-box {
+  display: flex;
+  justify-content: end;
+}
+
+#addImgBtn {
+  background-image: url("@/assets/images/icons/icons8-image-50.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 </style>

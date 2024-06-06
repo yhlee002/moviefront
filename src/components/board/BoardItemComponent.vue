@@ -58,13 +58,7 @@ async function submitComment() {
 }
 
 async function modifyBoard() {
-  await store.updateBoard(board.value);
-  router.push({
-    path: `/newpost?id=${board.id}&category=notice`,
-    state: {
-      board: board
-    }
-  });
+  router.push(`/newpost?id=${board.id}&category=${props.category}`);
 }
 
 function deleteBoard() {
@@ -86,8 +80,8 @@ function deleteBoard() {
           <div class="breadcrumb">
             <!--            <div class="breadcrumb-line breadcrumb-line-1"></div>-->
             <span class="breadcrumb-item">
-              <router-link v-if="category === 'notice'" to="/notice">공지사항</router-link>
-              <router-link v-if="category === 'board'" to="/board">감상 후기</router-link>
+              <router-link v-if="props.category === 'notice'" to="/notice">공지사항</router-link>
+              <router-link v-if="props.category === 'board'" to="/board">감상 후기</router-link>
             </span>
             <div class="breadcrumb-line breadcrumb-line-2"></div>
           </div>
@@ -113,7 +107,7 @@ function deleteBoard() {
               <h2 id="boardTitle" v-text="board.title"></h2>
             </div>
 
-            <!--            <div v-if="category === 'board'">-->
+            <!--            <div v-if="props.category === 'board'">-->
             <!--              <p>영화</p>-->
             <!--              <div>-->
             <!--                <p></p>-->
@@ -163,7 +157,7 @@ function deleteBoard() {
           </div>
 
           <!-- TODO. 작성 필요 -->
-          <div v-if="category === 'board'" style="display: flex; flex-direction: column">
+          <div v-if="props.category === 'board'" style="display: flex; flex-direction: column">
             <ul>
               <li>
                 <div>{{ boardStore.prevBoard.title }}</div>
