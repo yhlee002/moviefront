@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 .logo {
@@ -179,11 +180,11 @@ form .form-group input[type=password] { /* 해당 form에만 적용 */
     height: 2.4rem;
 }
 
-.form-box form ul.button-box {
-    margin-top: 2rem;
+.button-box {
+    margin-top: 1rem;
 }
 
-.form-box form ul.button-box > button {
+.button-box > button {
     margin: 0 0.5rem;
 }
 
