@@ -101,7 +101,7 @@ async function submit() {
               </div>
 
               <div class="board-content-box">
-                <input id="boardContent" type="text" v-model="board.content" placeholder="내용을 입력해주세요.">
+                <textarea id="boardContent" type="text" v-model="board.content" placeholder="내용을 입력해주세요."></textarea>
               </div>
             </div>
             <!--            <div class="board-regdt-box">-->
@@ -118,6 +118,10 @@ async function submit() {
 </template>
 
 <style scoped>
+#index_editor {
+  margin-top: 6rem;
+}
+
 .board-box {
   display: flex;
   flex-direction: column;
@@ -157,17 +161,16 @@ async function submit() {
   border-bottom: 0.1rem solid #000000;
 }
 
-#boardTitle, #boardContent {
-  padding: 0 1rem;
-}
-
 #boardTitle {
+  padding: 0 1rem;
   height: 2rem;
 }
 
 #boardContent {
-  height: 30rem;
+  height: 20rem;
   border: none;
   outline: none;
+  padding: 1rem;
+  resize: none;
 }
 </style>
