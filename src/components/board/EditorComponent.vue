@@ -6,12 +6,14 @@ import {ref} from "vue";
 import {useUserStore} from "@/stores/user";
 import VueSimpleAlert from "vue3-simple-alert";
 import {useRouter} from "vue-router";
+import {useMovieStore} from "@/stores/movie";
 
 const router = useRouter();
 
 const userStore = useUserStore();
 const boardStore = useBoardStore();
 const noticeStore = useNoticeStore();
+const movieStore = useMovieStore();
 const modalStore = useModalStore();
 
 const props = defineProps(['id', 'category']);
@@ -62,6 +64,10 @@ async function submit() {
   }
 }
 
+async function getMovies(query) {
+  const result = await movieStore.searchMovie(query); // id, title, poster_path
+}
+
 </script>
 
 <template>
@@ -84,7 +90,10 @@ async function submit() {
             <div v-if="category === 'board'">
               <p style="margin-bottom: 0.4rem;">영화</p>
               <div>
-                <input type="text" @click="openSelectMovieModal()" readonly>
+<!--                <input type="text" @click="openSelectMovieModal()" readonly>-->
+                <select>
+                  <option v-model="movie."
+                </select>
               </div>
             </div>
 
