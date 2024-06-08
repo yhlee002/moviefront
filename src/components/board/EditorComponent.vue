@@ -92,7 +92,7 @@ async function getMovies(query) {
               <div>
 <!--                <input type="text" @click="openSelectMovieModal()" readonly>-->
                 <select>
-                  <option v-model="movie."
+<!--                  <option v-model="movie."-->
                 </select>
               </div>
             </div>

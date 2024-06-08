@@ -1,14 +1,16 @@
 # moviefront
 
-This template should help get you started developing with Vue 3 in Vite.
+## 개요
+영화 커뮤니티 사이트 MovieSite의 프론트엔드 애플리케이션(2024.04 ~ )
 
-## Recommended IDE Setup
+## 개발환경
+* 개발 언어 : JavaScript
+* 프레임워크 : Vuejs(version 3)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+## 배포 환경(예정)
++ Amazon EC2 인스턴스
+    - 운영체제 : Amazon Linux 2
+    - 인스턴스 유형 : t2.micro
 
 ## Project Setup
 
