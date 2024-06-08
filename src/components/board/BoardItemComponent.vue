@@ -8,21 +8,18 @@ import {useBoardStore} from "@/stores/board";
 
 import CommentItem from "@/components/sub/CommentItemComponent.vue";
 import {useCommentStore} from "@/stores/comment";
+import {ref} from "vue";
 
 const props = defineProps(['category']);
 const router = useRouter();
 const id = router.currentRoute.value.params.id;
 
-const noticeStore = useNoticeStore();
-const boardStore = useBoardStore();
 const userStore = useUserStore();
-const store = props.category === 'notice' ? noticeStore : props.category === 'board' ? boardStore : null;
-
+const commentStore = useCommentStore();
+const store = props.category === 'notice' ? useNoticeStore() : props.category === 'board' ? useBoardStore() : null;
 
 await store.getBoard(id);
 const board = store.currentBoard;
-const prevBoardTitle = store.prevBoard?.title;
-const nextBoardTitle = store.nextBoard?.title;
 
 const regDate = new Date(board.regDate);
 const now = new Date();
@@ -46,15 +43,18 @@ if (millisecond / 1000 < 60) {
 writeTime += '전';
 
 // get comments
-const commentStore = useCommentStore();
 await commentStore.getCommentImpsByBoard(board.id, commentStore.currentPage);
 
 async function submitComment() {
-  const input = document.getElementById('commentInput').value;
-  if (input) {
-    await commentStore.updateCommentImp();
+  const value = document.getElementById('commentInput').value;
+  if (value) {
+    const result = await commentStore.saveCommentImp(board.id, userStore.user.memNo, value);
+    if (result.data) {
+      await commentStore.getCommentImpsByBoard(board.id, commentStore.currentPage, 20);
+    }
+  } else {
+    VueSimpleAlert.alert("댓글 내용을 입력해주세요.");
   }
-  console.log('저장할 코멘트 정보 : {}', input);
 }
 
 async function modifyBoard() {
@@ -65,10 +65,15 @@ function deleteBoard() {
   VueSimpleAlert.confirm("정말 삭제하시겠습니까?")
       .then(async result => {
         if (result) {
-          await store.deleteBoard(noticeStore.currentBoard.id);
+          await store.deleteBoard(board.id);
           router.push('/notice')
         }
       })
+}
+
+async function go(path) {
+  // await router.push(path);
+  location.href = path; // re-rendering을 위해 사용
 }
 </script>
 
@@ -130,56 +135,48 @@ function deleteBoard() {
 
           <!-- TODO. 수정 필요 -->
           <!-- 댓글 -->
-          <!-- Comment Editor -->
-          <p id="commentsBlockTitle">댓글</p>
-          <div class="comment-write-form">
-            <div class="comment-input-box">
-              <UserCard
-                  :member="{memNo: userStore.user.memNo, name: userStore.user.name, profileImage: userStore.user.profileImage}"
-                  :image-only="true"></UserCard>
-              <div style="margin: 0 1.4rem 0 0; height: 100%; border-right: 0.1rem solid #f2f2f2"></div>
-              <input id="commentInput" type="text" style="width: 100%; border: 0.1rem solid #f2f2f2;">
-            </div>
+          <div v-if="category === 'board'" style="display: flex; flex-direction: column;">
+            <p id="commentsBlockTitle">댓글</p>
+            <div class="comment-write-form">
+              <div class="comment-input-box">
+                <UserCard
+                    :member="{memNo: userStore.user.memNo, name: userStore.user.name, profileImage: userStore.user.profileImage}"
+                    :image-only="true"></UserCard>
+                <div style="margin: 0 1.4rem 0 0; height: 100%; border-right: 0.1rem solid #f2f2f2"></div>
+                <textarea id="commentInput" type="text" style="width: 100%; border: 0.1rem solid #f2f2f2;"></textarea>
+              </div>
 
-            <div style="display: flex; justify-content: end; margin-top: 0.5rem">
-              <button class="button-default submit" @click="submitComment()" type="button">작성</button>
-            </div>
-          </div>
-
-          <!-- Comments -->
-          <div class="comment-box">
-            <div v-if="commentStore.comments.length === 0">
-              <div style="border: 0.1rem solid #f2f2f2; border-radius: 2px; display: flex; justify-content: center; align-items: center;">
-                <p>작성된 댓글이 없습니다.</p>
+              <div style="display: flex; justify-content: end; margin-top: 0.5rem">
+                <button class="button-default submit" @click="submitComment()" type="button">작성</button>
               </div>
             </div>
-            <CommentItem v-for="comment in commentStore.comments" :key="comment" :comment="comment"></CommentItem>
-          </div>
 
-          <!-- TODO. 작성 필요 -->
-          <div v-if="props.category === 'board'" style="display: flex; flex-direction: column">
-            <ul>
-              <li>
-                <div>{{ boardStore.prevBoard.title }}</div>
-              </li>
-              <li>
-                <div>{{ boardStore.nextBoard.title }}</div>
-              </li>
-            </ul>
+            <!-- Comments -->
+            <div class="comment-box">
+              <div v-if="commentStore.comments.length === 0">
+                <div
+                    style="border: 0.1rem solid #f2f2f2; border-radius: 2px; display: flex; justify-content: center; align-items: center;">
+                  <p>작성된 댓글이 없습니다.</p>
+                </div>
+              </div>
+              <CommentItem v-for="comment in commentStore.comments" :key="comment" :comment="comment"></CommentItem>
+            </div>
           </div>
 
           <!-- TODO. 작성 필요 -->
           <div style="display: flex; flex-direction: column">
             <ul>
               <li style="display: flex;">
-                <div>이전글</div>
-                <div v-if="store.prevBoard">{{ store.prevBoard.title }}</div>
-                <div v-if="!store.prevBoard">없음</div>
+                <div style="margin-right: 1rem;">이전글</div>
+                <p style="cursor: pointer;" v-if="store.prevBoard" @click="go(`/${category}/${store.prevBoard.id}`)">
+                  {{ store.prevBoard.title }}</p>
+                <p style="cursor: pointer;" v-if="!store.prevBoard">없음</p>
               </li>
               <li style="display: flex;">
-                <div>다음글</div>
-                <div v-if="store.nextBoard">{{ store.nextBoard.title }}</div>
-                <div v-if="!store.nextBoard">없음</div>
+                <div style="margin-right: 1rem;">다음글</div>
+                <p style="cursor: pointer;" v-if="store.nextBoard" @click="go(`/${category}/${store.nextBoard.id}`)">
+                  {{ store.nextBoard.title }}</p>
+                <p style="cursor: pointer;" v-if="!store.nextBoard">없음</p>
               </li>
             </ul>
           </div>
@@ -288,6 +285,7 @@ function deleteBoard() {
   align-content: center;
   border-top: 0.1rem solid #f2f2f2;
 }
+
 .comment-write-form {
   display: flex;
   flex-direction: column;

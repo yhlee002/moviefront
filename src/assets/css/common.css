@@ -31,6 +31,13 @@ input[type=reset] {
     box-shadow: 1px 1px 1px #c8c8c8;
 }
 
+textarea {
+    border: none;
+    outline: none;
+    padding: 1rem;
+    resize: none;
+}
+
 select {
     height: 2rem;
     padding: 0 1rem;

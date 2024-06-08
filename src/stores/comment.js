@@ -15,11 +15,12 @@ export const useCommentStore = defineStore('comment', {
         }
     },
     actions: {
-        async getCommentImpsByBoard(boardId, page) {
+        async getCommentImpsByBoard(boardId, page, size) {
             await axios.get('/api/comments/imp', {
                 params: {
                     boardId: boardId,
-                    page: page - 1
+                    page: page - 1,
+                    size: size
                 }
             })
                 .then(response => {
@@ -34,21 +35,24 @@ export const useCommentStore = defineStore('comment', {
                     console.error(error);
                 })
         },
-        async updateCommentImp(boardId, writerId, content) {
+        async saveCommentImp(boardId, writerId, content) {
             return (await axios.post('/api/comment/imp', {
-                boardId: boardId,
-                writerId: writerId,
-                content: content
-            })
-                    .catch(e => console.error(e))
-            ).data;
-        },
-        async deleteCommentImp(commentId) {
-            return (await axios.delete('/api/comment/imp', {
                     boardId: boardId,
                     writerId: writerId,
                     content: content
                 })
+                    .catch(e => console.error(e))
+            ).data;
+        },
+        async updateCommentImp(commentId, content) {
+            return (await axios.patch('/api/comment/imp', {
+                    content: content
+                })
+                    .catch(e => console.error(e))
+            ).data;
+        },
+        async deleteCommentImp(commentId) {
+            return (await axios.delete(`/api/comment/imp?commentId=${commentId}`)
                     .catch(e => console.error(e))
             ).data;
         }

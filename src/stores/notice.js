@@ -39,14 +39,20 @@ export const useNoticeStore = defineStore('notice', {
                     this.nextBoard = data.nextBoard;
                 });
         },
-        async updateBoard(board) {
+        async saveBoard(board) {
             return (await axios.post(`/api/notice`, board)
                 .catch(e => {
                     console.error(e);
                 })).data;
         },
-        async deleteBoard(board) {
-            return (await axios.delete(`/api/notice`, board)
+        async updateBoard(board) {
+            return (await axios.patch(`/api/notice`, board)
+                .catch(e => {
+                    console.error(e);
+                })).data;
+        },
+        async deleteBoard(boardId) {
+            return (await axios.delete(`/api/notice?boardId=${boardId}`)
                 .catch(e => {
                     console.error(e);
                 })).data;

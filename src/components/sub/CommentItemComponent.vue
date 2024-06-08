@@ -1,15 +1,41 @@
 <script setup>
 import UserCard from "@/components/sub/UserCardComponent.vue";
+import VueSimpleAlert from "vue3-simple-alert";
 
 const props = defineProps(['comment']);
 
 const comment = props.comment;
 
+function changeCommentUpdateForm(commentId) {
+  const inputs = document.getElementsByClassName(`board_item_comments`);
+  inputs.readonly = true;
 
+  const input = document.getElementById(`comment_${commentId}`);
+  input.readonly = false;
+}
+
+async function updateComment(commentId) {
+  const value = document.getElementById(`comment_${commentId}`).value;
+
+  if (value) {
+    await commentStore.updateCommentImp(commentId, value);
+  } else {
+    VueSimpleAlert.alert("댓글 내용을 입력해주세요.");
+  }
+}
+
+function deleteComment(commentId) {
+  VueSimpleAlert.confirm("댓글을 삭제하시겠습니까?")
+      .then(result => {
+        if (result) {
+          commentStore.deleteCommentImp(commentId);
+        }
+      })
+}
 </script>
 
 <template>
-  <div class="comment-item-box">
+  <div class="board_item_comment comment-item-box" :id="comment.id">
     <!-- Writer & RegDate -->
     <div style="width: 10rem; margin-right: 1rem; border-right: 0.1rem solid #f2f2f2;">
       <UserCard :member="{memNo: comment.writerId, name: comment.writerName, profileImage: comment.writerProfileImage}"></UserCard>
@@ -19,7 +45,7 @@ const comment = props.comment;
 
     <!-- Comment Content -->
     <div class="comment-item-content">
-      <p>{{ comment.content }}</p>
+      <textarea v-model="comment.content"></textarea>
     </div>
 
     <!-- Comment Options -->

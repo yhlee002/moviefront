@@ -41,14 +41,20 @@ export const useBoardStore = defineStore('board', {
                     this.nextBoard = data.nextBoard;
                 });
         },
-        async updateBoard(board) {
+        async saveBoard(board) {
             return (await axios.post(`/api/imp`, board)
                 .catch(e => {
                     console.error(e);
                 })).data;
         },
-        async deleteBoard(board) {
-            return (await axios.delete(`/api/imp`, board)
+        async updateBoard(board) {
+            return (await axios.patch(`/api/imp`, board)
+                .catch(e => {
+                    console.error(e);
+                })).data;
+        },
+        async deleteBoard(boardId) {
+            return (await axios.delete(`/api/imp?boardId=${boardId}`)
                 .catch(e => {
                     console.error(e);
                 })).data;

@@ -20,6 +20,7 @@ const category = props.category;
 const store = category === 'notice' ? noticeStore : category === 'board' ? boardStore : null;
 
 const board = ref({
+  id: '',
   title: '',
   content: '',
   writerId: userStore.user.memNo
@@ -30,7 +31,7 @@ function updateBoard(value) {
 }
 
 if (props.id) {
-  store.getBoard(props.id);
+  await store.getBoard(props.id);
   updateBoard(Object.assign({}, store.currentBoard));
 }
 
@@ -52,7 +53,7 @@ function checkParams(board) {
 async function submit() {
   if (!checkParams(board.value)) return;
 
-  const result = await store.updateBoard(board.value);
+  const result = props.id ? await store.updateBoard(board.value) : await store.saveBoard(board.value);
   if (result.count > 0) {
     const id = result.data.id;
     router.push(`/${category}/${id}`);
@@ -175,14 +176,15 @@ async function submit() {
   margin-bottom: 1rem;
   width: 100%;
   max-width: 20rem;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid #000000;
+  outline-style: none;
 }
 
 #boardContent {
   height: 24rem;
-  border: none;
-  outline: none;
-  padding: 1rem;
-  resize: none;
   width: 100%;
   max-width: 20rem;
 }
