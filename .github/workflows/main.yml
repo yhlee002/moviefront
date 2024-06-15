@@ -48,4 +48,4 @@ jobs:
       env:
         CODEDEPLOY_NAME: MovieSite
         CODEDEPLOY_GROUP: moviesite-group
-        run: aws deploy create-deployment --application-name $CODEDEPLOY_NAME --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $CODEDEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=moviesite-front-$GITHUB_SHA.zip
+      run: aws deploy create-deployment --application-name $CODEDEPLOY_NAME --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $CODEDEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=moviesite-front-$GITHUB_SHA.zip
