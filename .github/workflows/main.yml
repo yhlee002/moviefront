@@ -28,9 +28,9 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run build --if-present
-
-    - run: mkdir deploy
-    - run: cp ./dist/* ./deploy
+    # - run: mkdir -p deploy
+    # - run: cp ./dist/* ./deploy
+    - run: zip -r -qq -j ./moviesite-front-$GITHUB_SHA.zip ./deploy
     
     - name: Make zip file
       run: zip -r -qq -j ./moviesite-front-$GITHUB_SHA.zip ./deploy
@@ -48,6 +48,6 @@ jobs:
 
     - name: CodeDeploy
       env:
-        CODEDEPLOY_NAME: MovieSite
-        CODEDEPLOY_GROUP: moviesite-group
+        CODEDEPLOY_NAME: MovieSiteWeb
+        CODEDEPLOY_GROUP: moviesite-web-group
       run: aws deploy create-deployment --application-name $CODEDEPLOY_NAME --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $CODEDEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=moviesite-front-$GITHUB_SHA.zip
