@@ -1,0 +1,51 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Build with Node.js CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.1.0]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+        AWS_REGION: ap-northeast-2
+        S3_BUCKET_NAME: project-moviesite
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
+    
+    - name: Make zip file
+      run: zip -r -qq -j ./moviesite-front-$GITHUB_SHA.zip ./deploy
+
+    - name: Configure AWS Credentials for GitHub Actions
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-region: ap-northeast-2
+        aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
+
+    # Upload to S3
+    - name: Upload to S3
+      run: aws s3 cp --region $AWS_REGION --acl private ./moviesite-front-$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/moviesite-front-$GITHUB_SHA
+
+    - name: CodeDeploy
+      env:
+        CODEDEPLOY_NAME: MovieSite
+        CODEDEPLOY_GROUP: moviesite-group
+      run: aws deploy create-deployment --application-name $CODEDEPLOY_NAME --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $CODEDEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=moviesite-front-$GITHUB_SHA.zip
