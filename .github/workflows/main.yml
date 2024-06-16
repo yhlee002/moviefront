@@ -30,7 +30,7 @@ jobs:
     - run: npm run build --if-present
 
     - name: Make zip file
-      run: zip -r -qq -j ./moviesite-front-$GITHUB_SHA.zip ./dist
+      run: zip -r -qq -j ./moviesite-front-$GITHUB_SHA.zip ./dist ./appspec.yml
 
     - name: Configure AWS Credentials for GitHub Actions
       uses: aws-actions/configure-aws-credentials@v4
