@@ -29,8 +29,15 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
 
+    - run: mkdir deploy
+    - run: cp ./dist/* ./deploy
+    - run: cp ./appspec.yml ./deploy
+    - run: cp ./deploy.sh ./deploy
+
     - name: Make zip file
-      run: zip -r -qq -j ./moviesite-front-$GITHUB_SHA.zip ./dist ./appspec.yml ./deploy.sh
+#      run: zip -r -qq -j ./moviesite-front-$GITHUB_SHA.zip ./dist ./appspec.yml ./deploy.sh
+#      run: tar cvf ./moviesite-front-$GITHUB_SHA.tar ./dist ./appspec.yml ./deploy.sh
+      run: tar cvf ./moviesite-front-$GITHUB_SHA.tar ./deploy
 
     - name: Configure AWS Credentials for GitHub Actions
       uses: aws-actions/configure-aws-credentials@v4
@@ -41,10 +48,10 @@ jobs:
 
     # Upload to S3
     - name: Upload to S3
-      run: aws s3 cp --region $AWS_REGION --acl private ./moviesite-front-$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/moviesite-front-$GITHUB_SHA
+      run: aws s3 cp --region $AWS_REGION --acl private ./moviesite-front-$GITHUB_SHA.tar s3://$S3_BUCKET_NAME/moviesite-front-$GITHUB_SHA
 
     - name: CodeDeploy
       env:
         CODEDEPLOY_NAME: MovieSiteWeb
         CODEDEPLOY_GROUP: moviesite-web-group
-      run: aws deploy create-deployment --application-name $CODEDEPLOY_NAME --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $CODEDEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=moviesite-front-$GITHUB_SHA
+      run: aws deploy create-deployment --application-name $CODEDEPLOY_NAME --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $CODEDEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=tar,key=moviesite-front-$GITHUB_SHA
