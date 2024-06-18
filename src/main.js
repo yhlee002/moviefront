@@ -10,11 +10,10 @@ import App from './App.vue'
 import router from './router/index.js'
 import axios from 'axios';
 import mitt from 'mitt';
-import { HOST, PORT } from '@/config/config';
+
 
 // axios
-// axios.defaults.baseURL = 'http://' + HOST + ':' + PORT + '/';
-axios.defaults.baseURL = window.location.origin + '/';
+axios.defaults.baseURL = 'http://' + import.meta.env.VITE_APP_HOST + ':' + import.meta.env.VITE_APP_PORT + '/';
 // axios.defaults.headers.common = {
 //     'X-Requested-With': 'XMLHttpRequest',
 //     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content');
