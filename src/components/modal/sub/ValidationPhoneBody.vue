@@ -1,10 +1,10 @@
 <script setup>
 import {ref} from "vue";
 import {useUserStore} from "@/stores/user.js";
-import {useModalStore} from "@/stores/modal";
+import {useModalStore} from "@/stores/modal.js";
 import VueSimpleAlert from "vue3-simple-alert";
 
-import emitter from '@/eventBus/emitter';
+import emitter from '@/eventBus/emitter.js';
 
 const props = defineProps(['mode']);
 const userStore = useUserStore();

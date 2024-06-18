@@ -1,5 +1,5 @@
 <script setup>
-import {useUserStore} from '@/stores/user';
+import {useUserStore} from '@/stores/user.js';
 import Logo from "@/components/fragment/LogoComponent.vue";
 
 const userStore = useUserStore();

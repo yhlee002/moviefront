@@ -1,13 +1,13 @@
 <script setup>
 import {useRouter} from "vue-router";
-import {useUserStore} from "@/stores/user";
+import {useUserStore} from "@/stores/user.js";
 import VueSimpleAlert from "vue3-simple-alert";
-import {useNoticeStore} from "@/stores/notice";
+import {useNoticeStore} from "@/stores/notice.js";
 import UserCard from "@/components/sub/UserCardComponent.vue";
-import {useBoardStore} from "@/stores/board";
+import {useBoardStore} from "@/stores/board.js";
 
 import CommentItem from "@/components/sub/CommentItemComponent.vue";
-import {useCommentStore} from "@/stores/comment";
+import {useCommentStore} from "@/stores/comment.js";
 import {ref} from "vue";
 
 const props = defineProps(['category']);

@@ -1,8 +1,8 @@
 <script setup>
-import {useModalStore} from "@/stores/modal";
-import {useUserStore} from "@/stores/user";
+import {useModalStore} from "@/stores/modal.js";
+import {useUserStore} from "@/stores/user.js";
 import {ref} from "vue";
-import {useMessageStore} from "@/stores/message";
+import {useMessageStore} from "@/stores/message.js";
 import VueSimpleAlert from "vue3-simple-alert";
 
 const modalStore = useModalStore();

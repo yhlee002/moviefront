@@ -2,7 +2,7 @@
 import {useNoticeStore} from "@/stores/notice.js";
 import ListComponent from "@/components/sub/ListComponent.vue";
 import {useRouter} from "vue-router";
-import {useUserStore} from "@/stores/user";
+import {useUserStore} from "@/stores/user.js";
 
 const router = useRouter();
 const userStore = useUserStore();

@@ -1,5 +1,5 @@
 <script setup>
-import {useBoardStore} from '@/stores/board';
+import {useBoardStore} from '@/stores/board.js';
 import ListComponent from "@/components/sub/ListComponent.vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
 import {useRouter} from "vue-router";

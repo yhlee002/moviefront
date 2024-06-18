@@ -1,9 +1,9 @@
 <script setup>
 import {useUserStore} from '@/stores/user.js'
-import {useNoticeStore} from "@/stores/notice";
-import {useBoardStore} from "@/stores/board";
-import {useMovieCommentStore} from "@/stores/moviecomments";
-import {useCommentStore} from "@/stores/comment";
+import {useNoticeStore} from "@/stores/notice.js";
+import {useBoardStore} from "@/stores/board.js";
+import {useMovieCommentStore} from "@/stores/moviecomments.js";
+import {useCommentStore} from "@/stores/comment.js";
 
 const userStore = useUserStore();
 const noticeStore = useNoticeStore();

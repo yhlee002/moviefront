@@ -1,12 +1,12 @@
 <script setup>
 import {useModalStore} from "@/stores/modal.js";
-import {useNoticeStore} from "@/stores/notice";
-import {useBoardStore} from "@/stores/board";
+import {useNoticeStore} from "@/stores/notice.js";
+import {useBoardStore} from "@/stores/board.js";
 import {ref} from "vue";
-import {useUserStore} from "@/stores/user";
+import {useUserStore} from "@/stores/user.js";
 import VueSimpleAlert from "vue3-simple-alert";
 import {useRouter} from "vue-router";
-import {useMovieStore} from "@/stores/movie";
+import {useMovieStore} from "@/stores/movie.js";
 
 const router = useRouter();
 

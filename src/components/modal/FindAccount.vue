@@ -4,9 +4,9 @@ import ModalTitle from "@/components/modal/ModalTitle.vue";
 import {ref} from "vue";
 import ValidationPhoneBody from "@/components/modal/sub/ValidationPhoneBody.vue";
 import VueSimpleAlert from "vue3-simple-alert";
-import {useUserStore} from "@/stores/user";
-import emitter from '@/eventBus/emitter';
-import {useModalStore} from "@/stores/modal";
+import {useUserStore} from "@/stores/user.js";
+import emitter from '@/eventBus/emitter.js';
+import {useModalStore} from "@/stores/modal.js";
 import ResetPassword from "@/components/modal/sub/ResetPasswordBody.vue";
 
 const userStore = useUserStore();

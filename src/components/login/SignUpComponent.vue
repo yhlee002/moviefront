@@ -1,7 +1,7 @@
 <script setup>
 
 import {mapStores, storeToRefs} from 'pinia';
-import {useUserStore} from '@/stores/user';
+import {useUserStore} from '@/stores/user.js';
 import {useMessageStore} from "@/stores/message.js";
 import VueSimpleAlert from "vue3-simple-alert";
 import {useModalStore} from "@/stores/modal.js";
