@@ -66,7 +66,7 @@ function deleteBoard() {
       .then(async result => {
         if (result) {
           await store.deleteBoard(board.id);
-          router.push('/notice')
+          router.push(`/${props.category}`)
         }
       })
 }

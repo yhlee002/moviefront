@@ -28,7 +28,9 @@ function writeNewPost() {
 
           <!-- Function Buttons -->
           <div style="display: flex; margin-bottom: 2rem;" :style="userStore.isAdmin ? {'justify-content': 'space-between'} : {'justify-content': 'end'}">
-            <button class="button-default submit" type="button" @click="writeNewPost" v-show="userStore.isAdmin">작성하기</button>
+            <button class="button-default submit icon-button" type="button" @click="writeNewPost" v-show="userStore.isAdmin">
+              <img src="@/assets/images/icons/icons8-pencil-48.png" alt="작성하기">
+              작성하기</button>
             <select>
               <option value="recent" selected>최신순</option>
               <option value="comment">댓글순</option>
