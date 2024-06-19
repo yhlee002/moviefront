@@ -6,7 +6,6 @@ import {useUserStore} from "@/stores/user.js";
 import {useModalStore} from "@/stores/modal.js";
 import VueSimpleAlert from "vue3-simple-alert";
 import Logo from "@/components/fragment/LogoComponent.vue";
-import HeaderComponent from "@/components/fragment/HeaderComponent.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -24,17 +23,13 @@ if (params.cert === 'mail') {
   const certKey = params.certKey;
 
   const result = await userStore.validateCertificationMail(memNo, certKey);
-  if (result.data.status) {
+  if (result.data.status || result.data.status === 200) {
     if (result.data.message === 'SIGNUP') {
-      VueSimpleAlert.alert("이메일 인증에 성공하였습니다.");
       router.push("/sign-in");
     } else if (result.data.message === 'FINDPASSWORD') {
       modalStore.setData({memNo: memNo});
       modalStore.openModal('ResetPassword');
     }
-
-  } else {
-    VueSimpleAlert.alert("만료된 인증입니다.");
   }
 }
 

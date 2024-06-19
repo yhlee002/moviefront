@@ -4,6 +4,9 @@ import {useUserStore} from "@/stores/user.js";
 import {ref} from "vue";
 import {useMessageStore} from "@/stores/message.js";
 import VueSimpleAlert from "vue3-simple-alert";
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const modalStore = useModalStore();
 const userStore = useUserStore();
@@ -98,6 +101,7 @@ async function submit() {
 
   if (result.count > 0) {
     VueSimpleAlert.alert("비밀번호 변경에 성공하였습니다. 다시 로그인해주세요.");
+    router.push("/sign-in")
   } else {
     VueSimpleAlert.alert("비밀번호 변경에 실패하였습니다. 다시 시도해주세요.");
   }

@@ -93,8 +93,8 @@ export const useUserStore = defineStore('user', {
             })
                 .then(response => {
                     if (response.status === 200) {
-                        this.user = response.data;
-                        sessionStorage.setItem('user', JSON.stringify(response.data));
+                        this.user = JSON.parse(response.data);
+                        sessionStorage.setItem('user', this.user);
                     }
 
                 })
@@ -155,7 +155,20 @@ export const useUserStore = defineStore('user', {
             return (await axios.post(`/api/cert-mail/validation`, {
                 memNo: memNo,
                 certKey: certKey
-            })).data;
+            })
+                .then(response => {
+                    VueSimpleAlert.alert("이메일 인증에 성공하였습니다.");
+                    return response.data;
+                })
+                .catch(e => {
+                    if (e.response.data.status === 500 && e.response.data.message === "인증 정보가 존재하지 않습니다.") {
+                        VueSimpleAlert.alert("만료된 인증입니다.");
+                    } else {
+                        VueSimpleAlert.alert("인증 진행중 오류가 발생했습니다.");
+                    }
+
+                    return e.response;
+                }));
         },
         async sendCertificationMessage(phone) {
             return await axios.post("/api/cert-message", {
