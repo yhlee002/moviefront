@@ -30,9 +30,9 @@ jobs:
     - run: npm run build --if-present
 
     - run: mkdir deploy
-    - run: cp ./dist/* ./deploy
-    - run: cp ./appspec.yml ./deploy
-    - run: cp ./deploy.sh ./deploy
+    - run: cp -r dist deploy
+    - run: cp appspec.yml deploy
+    - run: cp deploy.sh deploy
 
     - name: Make zip file
 #      run: zip -r -qq -j ./moviesite-front-$GITHUB_SHA.zip ./dist ./appspec.yml ./deploy.sh
