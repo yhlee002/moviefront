@@ -40,7 +40,8 @@
     width: 100%;
     max-width: 80rem;
     max-height: 100%;
-    overflow: visible;
+    overflow-y: visible;
+    overflow-x: hidden;
     padding: 0.4rem;
     /*border-left: 0.1em solid #f2f2f2;*/
     /*border-right: 0.1em solid #f2f2f2;*/

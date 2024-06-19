@@ -18,7 +18,7 @@ function writeNewPost() {
 </script>
 
 <template>
-  <div id="index_board" class="wrapper-block">
+  <div id="index_notice" class="wrapper-block">
     <div class="inner">
       <div class="inner-block">
         <div class="content">
@@ -42,7 +42,7 @@ function writeNewPost() {
 
           <!-- Board List -->
           <div>
-            <ListComponent category="notice" :list="noticeStore.boardList" :recommended="false"></ListComponent>
+            <ListComponent category="notice" :list="noticeStore.boardList" :comment="false" :recommended="false"></ListComponent>
           </div>
 
         </div>

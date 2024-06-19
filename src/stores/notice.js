@@ -12,7 +12,16 @@ export const useNoticeStore = defineStore('notice', {
             nextBoard: {}
         }
     },
-    getters: {},
+    getters: {
+        listItems() {
+            const list = Object.assign([], this.boardList);
+            list.forEach(b => {
+                b['subTitle'] = b.writerName;
+            });
+
+            return list;
+        }
+    },
     actions: {
         async getBoards(page, size, query) {
             await axios.get(`/api/notices`, {

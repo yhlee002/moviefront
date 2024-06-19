@@ -56,7 +56,7 @@ async function submit() {
   if (!checkParams(board.value)) return;
 
   const result = props.id ? await store.updateBoard(board.value) : await store.saveBoard(board.value);
-  if (result.count > 0) {
+  if (result.data.count > 0) {
     const id = result.data.id;
     router.push(`/${category}/${id}`);
   } else {

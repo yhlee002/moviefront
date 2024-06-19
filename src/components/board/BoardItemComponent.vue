@@ -43,14 +43,16 @@ if (millisecond / 1000 < 60) {
 writeTime += '전';
 
 // get comments
-await commentStore.getCommentImpsByBoard(board.id, commentStore.currentPage);
+await commentStore.getCommentsByBoard(board.id, commentStore.currentPage);
 
 async function submitComment() {
-  const value = document.getElementById('commentInput').value;
+  const input = document.getElementById('commentInput');
+  const value = input.value;
   if (value) {
-    const result = await commentStore.saveCommentImp(board.id, userStore.user.memNo, value);
+    const result = await commentStore.saveComment(board.id, userStore.user.memNo, value);
     if (result.data) {
-      await commentStore.getCommentImpsByBoard(board.id, commentStore.currentPage, 20);
+      input.value = '';
+      await commentStore.getCommentsByBoard(board.id, commentStore.currentPage, 20);
     }
   } else {
     VueSimpleAlert.alert("댓글 내용을 입력해주세요.");
@@ -163,7 +165,6 @@ async function go(path) {
             </div>
           </div>
 
-          <!-- TODO. 작성 필요 -->
           <div style="display: flex; flex-direction: column">
             <ul>
               <li style="display: flex;">

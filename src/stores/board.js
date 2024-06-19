@@ -13,10 +13,19 @@ export const useBoardStore = defineStore('board', {
             top5Boards: []
         }
     },
-    getters: {},
+    getters: {
+        listItems() {
+            const list = Object.assign([], this.boardList);
+            list.forEach(b => {
+                b['subTitle'] = b.writerName;
+            });
+
+            return list;
+        }
+    },
     actions: {
         async getBoards(page, size, condition, query) {
-            const result = await axios.get(`/api/imps`, {
+            await axios.get(`/api/imps`, {
                 params: {
                     page: page - 1,
                     size: size,
@@ -45,19 +54,22 @@ export const useBoardStore = defineStore('board', {
             return (await axios.post(`/api/imp`, board)
                 .catch(e => {
                     console.error(e);
-                })).data;
+                    return e.response;
+                }));
         },
         async updateBoard(board) {
             return (await axios.patch(`/api/imp`, board)
                 .catch(e => {
                     console.error(e);
-                })).data;
+                    return e.response;
+                }));
         },
         async deleteBoard(boardId) {
             return (await axios.delete(`/api/imp?boardId=${boardId}`)
                 .catch(e => {
                     console.error(e);
-                })).data;
+                    return e.response;
+                }));
         }
     }
 })

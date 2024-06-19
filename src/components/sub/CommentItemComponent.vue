@@ -18,7 +18,7 @@ async function updateComment(commentId) {
   const value = document.getElementById(`comment_${commentId}`).value;
 
   if (value) {
-    await commentStore.updateCommentImp(commentId, value);
+    await commentStore.updateComment(commentId, value);
   } else {
     VueSimpleAlert.alert("댓글 내용을 입력해주세요.");
   }
@@ -28,9 +28,14 @@ function deleteComment(commentId) {
   VueSimpleAlert.confirm("댓글을 삭제하시겠습니까?")
       .then(result => {
         if (result) {
-          commentStore.deleteCommentImp(commentId);
+          commentStore.deleteComment(commentId);
         }
       })
+}
+
+// TODO. 미구현 기능(신고 기능)
+function reportComment(commentId) {
+  VueSimpleAlert.alert("아직 구현되지 않은 기능입니다.");
 }
 </script>
 
@@ -50,9 +55,9 @@ function deleteComment(commentId) {
 
     <!-- Comment Options -->
     <div class="comment-option-box">
-      <button class="button-modify-minimalize" type="button"></button>
-      <button class="button-delete-minimalize" type="button"></button>
-      <button class="button-report-minimalize" type="button"></button>
+      <button class="button-modify-minimalize" type="button" @click="changeCommentUpdateForm"></button>
+      <button class="button-delete-minimalize" type="button" @click="deleteComment"></button>
+      <button class="button-report-minimalize" type="button" @click="reportComment"></button>
     </div>
   </div>
 </template>
@@ -66,6 +71,13 @@ function deleteComment(commentId) {
 
 .comment-item-content {
   width: 100%;
+}
+
+.comment-item-content textarea {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  width: calc(100% - 2rem);
 }
 
 .comment-option-box {

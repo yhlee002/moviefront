@@ -1,8 +1,11 @@
 <script setup>
-const props = defineProps(['list', 'category', 'fieldShow', 'recommended']);
+const props = defineProps(['list', 'category', 'fieldShow', 'view', 'comment', 'recommended', 'seqField']);
 
 const fieldShow = props.fieldShow ?? true;
+const view = props.view ?? true;
+const comment = props.comment ?? true;
 const recommended = props.recommended ?? false;
+const seqField = props.seqField ?? 'id';
 </script>
 
 <template>
@@ -13,20 +16,20 @@ const recommended = props.recommended ?? false;
       <li><p class="list-item-fields">조회수</p></li>
     </ul>
   </div>
-  <div :id="`list-item-${item.id}`" class="list-item-box" v-for="item in props.list" :key="item.id">
+  <div :id="`list-item-${item[seqField]}`" class="list-item-box" v-for="item in props.list" :key="item[seqField]">
     <ul class="list-item-group">
       <li>
-        <router-link :to="`/${category}/${item.id}`">
+        <router-link :to="`/${category}/${item[seqField]}`" style="justify-content: space-between;">
           <p class="list-item-title">{{ item.title }}</p>
-          <p class="list-item-writer">{{ item.writerName }}</p>
+          <p class="list-item-subtitle">{{ item.subTitle }}</p> <!-- board/notice : writerName -->
 
           <div class="list-item-etc">
-            <div class="list-icons">
+            <div class="list-icons" v-if="view">
               <img src="@/assets/images/icons/icons8-eye-48.png" alt="조회수"/>
               <p class="list-item-views">{{ item.views }}</p>
             </div>
 
-            <div class="list-icons">
+            <div class="list-icons" v-if="comment">
               <img src="@/assets/images/icons/icons8-comment-50.png" alt="댓글수"/>
               <p class="list-item-views">{{ item.commentSize }}</p>
             </div>
@@ -88,32 +91,41 @@ const recommended = props.recommended ?? false;
   color: #000000;
 }
 
-.list-item-box > ul.list-item-group > li > a p.list-item-title {
+.list-item-box > ul.list-item-group > li p.list-item-title {
   /*
   min-width: 22rem;
   max-width: 30rem;
    */
+  max-width: 17rem;
   width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.list-item-box > ul.list-item-group > li > a p.list-item-writer {
+.list-item-box > ul.list-item-group > li p.list-item-subtitle {
   /*
   min-width: 10rem;
   max-width: 14rem;
    */
   width: 20%;
+  min-width: 8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
 }
 
-.list-item-box > ul.list-item-group > li .list-item-etc {
+.list-item-box > ul.list-item-group > li div.list-item-etc {
   /*
 min-width: 10rem;
 max-width: 14rem;
    */
   display: flex;
+  /*
   width: 10%;
+   */
+  width: fit-content;
 }
 
 .list-icons {

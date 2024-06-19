@@ -79,7 +79,7 @@ function searchMovie() {
     </div>
   </div>
 
-  <div id="index_board" class="wrapper-block">
+  <div id="index_boards" class="wrapper-block" style="margin-top: 4rem;">
     <div class="inner">
       <!-- Notice Board -->
       <div class="inner-block">

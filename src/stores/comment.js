@@ -10,12 +10,37 @@ export const useCommentStore = defineStore('comment', {
         }
     },
     getters: {
-        getComments() {
-            return this.comments;
+        listItems() {
+            const list = Object.assign([], this.comments);
+            list.forEach(c => {
+                c['title'] = c.content;
+                c['subTitle'] = c.writerName;
+            });
+
+            return list;
         }
     },
     actions: {
-        async getCommentImpsByBoard(boardId, page, size) {
+        async getComments(page, size) {
+            await axios.get('/api/comments/imp', {
+                params: {
+                    page: page - 1,
+                    size: size
+                }
+            })
+                .then(response => {
+                    if (response.status === 200) {
+                        const result = response.data;
+                        const data = result.data;
+                        this.comments = data.commentImpsList;
+                        this.totalPages = data.totalPageCnt;
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+        },
+        async getCommentsByBoard(boardId, page, size) {
             await axios.get('/api/comments/imp', {
                 params: {
                     boardId: boardId,
@@ -35,7 +60,7 @@ export const useCommentStore = defineStore('comment', {
                     console.error(error);
                 })
         },
-        async saveCommentImp(boardId, writerId, content) {
+        async saveComment(boardId, writerId, content) {
             return (await axios.post('/api/comment/imp', {
                     boardId: boardId,
                     writerId: writerId,
@@ -44,14 +69,14 @@ export const useCommentStore = defineStore('comment', {
                     .catch(e => console.error(e))
             ).data;
         },
-        async updateCommentImp(commentId, content) {
+        async updateComment(commentId, content) {
             return (await axios.patch('/api/comment/imp', {
                     content: content
                 })
                     .catch(e => console.error(e))
             ).data;
         },
-        async deleteCommentImp(commentId) {
+        async deleteComment(commentId) {
             return (await axios.delete(`/api/comment/imp?commentId=${commentId}`)
                     .catch(e => console.error(e))
             ).data;

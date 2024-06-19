@@ -69,7 +69,7 @@ function writeNewPost() {
 
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
 
-              <ListComponent category="board" :list="boardStore.boardList" :recommended="true"></ListComponent><!-- :sub-url="router." -->
+              <ListComponent category="board" :list="boardStore.listItems" :recommended="true"></ListComponent><!-- :sub-url="router." -->
 
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>

@@ -18,6 +18,7 @@ export const useUserStore = defineStore('user', {
     state: () => {
         return {
             user: {},
+            users: [],
             oauthLoginURL: {
                 naver: '',
                 kakao: ''
@@ -47,6 +48,15 @@ export const useUserStore = defineStore('user', {
         },
         defaultUser() {
             return userDefault;
+        },
+        listItems() {
+            const users = Object.assign([], this.users);
+            users.forEach(user => {
+                user['title'] = user.identifier;
+                user['subTitle'] = user.name;
+            });
+
+            return users;
         }
     },
     actions: {
@@ -54,12 +64,12 @@ export const useUserStore = defineStore('user', {
             this.user = userDefault;
         },
         clearSession() {
-          // sessionStorage.removeItem('user');
+            // sessionStorage.removeItem('user');
         },
         async getUser() {
             await axios.get('/api/member/current')
                 .then(response => response.data)
-                .then(result  => result.data)
+                .then(result => result.data)
                 .then(data => {
                     if (data) { // !== null
                         this.user = data;
@@ -70,6 +80,32 @@ export const useUserStore = defineStore('user', {
                 .catch(e => {
                     console.error(e);
                 })
+        },
+        /**
+         *
+         * @param page
+         * @param size
+         * @param condition 객체 타입으로 한번에 한 쌍의 키(key), 값(value)만 존재. key에는 identifier|name|phone 가능(키워드 포함 검색)
+         * @returns {Promise<axios.AxiosResponse<any>|void>}
+         */
+        async getUsers(page, size, condition) {
+            let url = `/api/members?page=${page - 1}&size=${size}`;
+            if (condition) {
+                url += `&${condition.key}=${condition.value}`;
+            }
+            return (await axios.get(url, {
+                // params: {
+                //     page: page - 1,
+                //     size: size
+                // }
+            })
+                .then(response => response.data)
+                .then(result => {
+                    this.users = result.data;
+                })
+                .catch(e => {
+                    console.error(e);
+                }));
         },
         // addUserDataSession(user) {
         //     sessionstorage.setItem("id", user.memNo);
@@ -93,8 +129,8 @@ export const useUserStore = defineStore('user', {
             })
                 .then(response => {
                     if (response.status === 200) {
-                        this.user = JSON.parse(response.data);
-                        sessionStorage.setItem('user', this.user);
+                        this.user = response.data;
+                        sessionStorage.setItem('user', response.data);
                     }
 
                 })
