@@ -10,5 +10,8 @@
 Amazon EC2 인스턴스(OS: Amazon Linux 2)
 
 ## 아키텍처
-![image](https://github.com/yhlee002/moviefront/assets/60289743/5e0f61eb-3531-4dfb-831f-70a37051dad1)
+![image](https://github.com/yhlee002/moviefront/assets/60289743/7226586a-9993-47e1-b1cd-f455e1a9b323)
+
+
+
 
