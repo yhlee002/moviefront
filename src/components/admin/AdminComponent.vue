@@ -27,7 +27,9 @@ commentStore.getComments(1, 10, null);
       <div class="admin-panel-block-2">
         <div class="block-title" style="display: flex; justify-content: space-between; align-content: center;">
           <h3>공지사항 게시글 관리</h3>
-          <small><router-link to="/admin/notice">더보기</router-link></small>
+          <small>
+            <router-link to="/admin/notice">더보기</router-link>
+          </small>
         </div>
         <div class="block-content">
           <ListComponent :list="noticeStore.listItems" :field-show="false" category="notice"
@@ -39,7 +41,9 @@ commentStore.getComments(1, 10, null);
       <div class="admin-panel-block-2">
         <div class="block-title">
           <h3>감상 후기 게시글 관리</h3>
-          <small><router-link to="/admin/board">더보기</router-link></small>
+          <small>
+            <router-link to="/admin/board">더보기</router-link>
+          </small>
         </div>
         <div class="block-content">
           <ListComponent :list="boardStore.listItems" :field-show="false" category="board"></ListComponent>
@@ -54,10 +58,13 @@ commentStore.getComments(1, 10, null);
       <div class="admin-panel-block-2">
         <div class="block-title">
           <h3>영화 후기 관리</h3>
-          <small><router-link to="/admin/movie-comment">더보기</router-link></small>
+          <small>
+            <router-link to="/admin/movie-comment">더보기</router-link>
+          </small>
         </div>
         <div class="block-content">
-          <ListComponent :list="movieCommentStore.listItems" :field-show="false" category="movie" seq-field="movieCd"></ListComponent>
+          <ListComponent :list="movieCommentStore.listItems" :field-show="false" category="movie"
+                         seq-field="movieCd"></ListComponent>
         </div>
       </div>
 
@@ -65,10 +72,13 @@ commentStore.getComments(1, 10, null);
       <div class="admin-panel-block-2">
         <div class="block-title">
           <h3>감상 후기 게시글 댓글 관리</h3>
-          <small><router-link to="/admin/imp-comment">더보기</router-link></small>
+          <small>
+            <router-link to="/admin/imp-comment">더보기</router-link>
+          </small>
         </div>
         <div class="block-content">
-          <ListComponent :list="commentStore.listItems" :field-show="false" :view="false" :comment="false" category="board" seq-field="boardId"></ListComponent>
+          <ListComponent :list="commentStore.listItems" :field-show="false" :view="false" :comment="false"
+                         category="board" seq-field="boardId"></ListComponent>
         </div>
       </div>
     </div>
@@ -79,10 +89,13 @@ commentStore.getComments(1, 10, null);
       <div class="admin-panel-block-2">
         <div class="block-title">
           <h3>회원 관리</h3>
-          <small><router-link to="/admin/user">더보기</router-link></small>
+          <small>
+            <router-link to="/admin/user">더보기</router-link>
+          </small>
         </div>
         <div class="block-content">
-          <ListComponent :list="userStore.listItems" :field-show="false" :view="false" :comment="false" category="user" seq-field="memNo"></ListComponent>
+          <ListComponent :list="userStore.listItems" :field-show="false" :view="false" :comment="false" category="user"
+                         seq-field="memNo"></ListComponent>
         </div>
       </div>
     </div>
@@ -92,20 +105,10 @@ commentStore.getComments(1, 10, null);
 <style scoped>
 #adminPanel {
   display: flex;
-  flex-direction: row;
-  padding-left: 4rem;
-  padding-right: 4rem;
-}
-
-#adminPanel .admin-panel-seperate-line {
-  width: 100%;
-  border-right: 1px solid #f2f2f2;
-  margin: 0 2em;
 }
 
 #adminPanel .admin-panel-block-1 {
   display: flex;
-  flex-direction: column;
 }
 
 #adminPanel .admin-panel-block-2 {
@@ -122,8 +125,62 @@ commentStore.getComments(1, 10, null);
 }
 
 #adminPanel .block-content {
-  width: 340px;
   height: 350px;
   overflow: hidden;
+}
+
+@media (min-width: 1290px) {
+  #adminPanel {
+    flex-direction: row;
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+
+  #adminPanel .admin-panel-seperate-line {
+    width: 100%;
+    border-right: 1px solid #f2f2f2;
+    margin: 0 2rem;
+  }
+
+  #adminPanel .admin-panel-block-1 {
+    flex-direction: column;
+  }
+
+  #adminPanel .block-content {
+    width: 340px;
+  }
+}
+
+@media (max-width: 1289px) {
+  #adminPanel {
+    flex-direction: column;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  #adminPanel .admin-panel-seperate-line {
+    height: 100%;
+    border-bottom: 1px solid #f2f2f2;
+    margin: 2rem 0;
+  }
+
+  #adminPanel .admin-panel-block-1 {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #adminPanel .block-content {
+    width: 500px;
+  }
+}
+
+@media(max-width: 1100px) {
+  #adminPanel .admin-panel-block-1 {
+    flex-direction: column;
+  }
+
+  #adminPanel .block-content {
+    width: 100%;
+  }
 }
 </style>

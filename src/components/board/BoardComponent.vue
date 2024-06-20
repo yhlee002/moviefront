@@ -53,11 +53,11 @@ function writeNewPost() {
                   <h4>주간 추천수 Top 5</h4>
                 </div>
 
-                <small v-if="boardStore.weeklyRecommendedTop5Boards.length === 0">
+                <small v-if="boardStore.mostPopularBoards.length === 0">
                   일주일내에 작성된 게시글이 존재하지 않습니다.
                 </small>
-                <div v-if="boardStore.weeklyRecommendedTop5Boards.length > 0">
-                  <ListComponent :list="boardStore.weeklyRecommendedTop5Boards"
+                <div v-if="boardStore.mostPopularBoards.length > 0">
+                  <ListComponent :list="boardStore.mostPopularBoards"
                                  :field-show="false" category="board"
                                  :subTitleShow="false"></ListComponent>
                 </div>
@@ -68,11 +68,11 @@ function writeNewPost() {
                 <div style="height: 100%">
                   <h4>주간 조회수 Top 5</h4>
                 </div>
-                <small v-if="boardStore.weeklyViewTop5Boards.length === 0">
+                <small v-if="boardStore.mostSeenBoards.length === 0">
                   일주일내에 작성된 게시글이 존재하지 않습니다.
                 </small>
-                <div v-if="boardStore.weeklyViewTop5Boards.length === 0">
-                  <ListComponent :list="boardStore.weeklyViewTop5Boards"
+                <div v-if="boardStore.mostSeenBoards.length === 0">
+                  <ListComponent :list="boardStore.mostSeenBoards"
                                :field-show="false" category="board"
                                :subTitleShow="false"></ListComponent>
                 </div>
