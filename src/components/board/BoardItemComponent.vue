@@ -18,6 +18,7 @@ const userStore = useUserStore();
 const commentStore = useCommentStore();
 const store = props.category === 'notice' ? useNoticeStore() : props.category === 'board' ? useBoardStore() : null;
 
+store.updateBoardViews(id);
 await store.getBoard(id);
 const board = store.currentBoard;
 

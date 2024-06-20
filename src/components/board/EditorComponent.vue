@@ -148,6 +148,7 @@ async function getMovies(query) {
 .board-box > .board-editor-box > .board-content-box {
   display: flex;
   flex-direction: column;
+  min-height: 12rem;
 }
 
 .board-box > .board-editor-box {

@@ -23,12 +23,13 @@ export const useNoticeStore = defineStore('notice', {
         }
     },
     actions: {
-        async getBoards(page, size, query) {
+        async getBoards(page, size, query, condition) {
             await axios.get(`/api/notices`, {
                 params: {
                     page: page - 1,
                     size: size,
-                    query: query
+                    query: query,
+                    condition: condition
                 }
             })
                 .then(response => response.data)
@@ -59,6 +60,15 @@ export const useNoticeStore = defineStore('notice', {
                 .catch(e => {
                     console.error(e);
                 })).data;
+        },
+        async updateBoardViews(boardId) {
+            return (await axios.patch('/api/notice/view', {
+                id: boardId
+            })
+                .catch(e => {
+                    console.error(e);
+                    return e.response;
+                }));
         },
         async deleteBoard(boardId) {
             return (await axios.delete(`/api/notice?boardId=${boardId}`)

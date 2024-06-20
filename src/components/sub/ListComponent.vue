@@ -1,7 +1,8 @@
 <script setup>
-const props = defineProps(['list', 'category', 'fieldShow', 'view', 'comment', 'recommended', 'seqField']);
+const props = defineProps(['list', 'category', 'fieldShow', 'subTitleShow', 'view', 'comment', 'recommended', 'seqField']);
 
 const fieldShow = props.fieldShow ?? true;
+const subTitleShow = props.subTitleShow ?? true;
 const view = props.view ?? true;
 const comment = props.comment ?? true;
 const recommended = props.recommended ?? false;
@@ -9,13 +10,13 @@ const seqField = props.seqField ?? 'id';
 </script>
 
 <template>
-  <div class="list-item-field-box" v-if="fieldShow">
-    <ul class="list-item-field-group">
-      <li><p class="list-item-fields">제목</p></li>
-      <li><p class="list-item-fields">작성자</p></li>
-      <li><p class="list-item-fields">조회수</p></li>
-    </ul>
-  </div>
+<!--  <div class="list-item-field-box" v-if="fieldShow">-->
+<!--    <ul class="list-item-field-group">-->
+<!--      <li><p class="list-item-fields">제목</p></li>-->
+<!--      <li><p class="list-item-fields">작성자</p></li>-->
+<!--      <li><p class="list-item-fields">조회수</p></li>-->
+<!--    </ul>-->
+<!--  </div>-->
   <div :id="`list-item-${item[seqField]}`" class="list-item-box" v-for="item in props.list" :key="item[seqField]">
     <ul class="list-item-group">
       <li>

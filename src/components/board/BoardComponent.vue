@@ -3,11 +3,24 @@ import {useBoardStore} from '@/stores/board.js';
 import ListComponent from "@/components/sub/ListComponent.vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
 import {useRouter} from "vue-router";
+import {ref, watch} from "vue";
 
 const router = useRouter();
 const boardStore = useBoardStore();
 
 boardStore.getBoards(boardStore.currentPage, 15, null, null);
+boardStore.getWeeklyRecommendedTopBoards(5);
+boardStore.getWeeklyViewTopBoards(5);
+
+const condition = ref("recent");
+
+watch(condition, (newVal) => {
+  if (newVal === 'recent') {
+    boardStore.getBoards(boardStore.currentPage, 15, null, null)
+  } else {
+    boardStore.getBoards(boardStore.currentPage, 15, null, newVal);
+  }
+})
 
 function enter() {
   if (window.event.keyCode === 13) {
@@ -33,15 +46,37 @@ function writeNewPost() {
             <h2 class="block-title">감상 후기</h2>
           </div>
 
-          <div style="display: flex; flex-direction: row; width: 100%; justify-content: space-between;">
-            <div style="display: flex; width: 20%; height: 100%">
-<!--              <div-->
-<!--                  style="position: fixed; display: flex; flex-direction: column; justify-content: center; width: 15rem; border: 0.1rem solid #f2f2f2; border-radius: 1rem">-->
-<!--                <div style="height: 100%">-->
-<!--                  <h3>인기 감상글 Top 5</h3>-->
-<!--                </div>-->
-<!--                <ListComponent :list="boardStore.top5Boards" :field-show="false"></ListComponent>-->
-<!--              </div>-->
+          <div class="board-main-block">
+            <div class="board-side-block">
+              <div class="board-side-block-item">
+                <div style="height: 100%">
+                  <h4>주간 추천수 Top 5</h4>
+                </div>
+
+                <small v-if="boardStore.weeklyRecommendedTop5Boards.length === 0">
+                  일주일내에 작성된 게시글이 존재하지 않습니다.
+                </small>
+                <div v-if="boardStore.weeklyRecommendedTop5Boards.length > 0">
+                  <ListComponent :list="boardStore.weeklyRecommendedTop5Boards"
+                                 :field-show="false" category="board"
+                                 :subTitleShow="false"></ListComponent>
+                </div>
+
+              </div>
+
+              <div class="board-side-block-item">
+                <div style="height: 100%">
+                  <h4>주간 조회수 Top 5</h4>
+                </div>
+                <small v-if="boardStore.weeklyViewTop5Boards.length === 0">
+                  일주일내에 작성된 게시글이 존재하지 않습니다.
+                </small>
+                <div v-if="boardStore.weeklyViewTop5Boards.length === 0">
+                  <ListComponent :list="boardStore.weeklyViewTop5Boards"
+                               :field-show="false" category="board"
+                               :subTitleShow="false"></ListComponent>
+                </div>
+              </div>
             </div>
 
             <div class="board-vertical-line"></div>
@@ -58,18 +93,20 @@ function writeNewPost() {
                 <!-- Search Bar -->
                 <input id="boardSearchInput" @keydown="enter()" type="text" placeholder="...">
 
-                <select>
+                <select v-model="condition">
                   <option value="recent" selected>최신순</option>
-                  <option value="comment">댓글순</option>
-                  <option value="view">조회순</option>
+                  <option value="recommended">추천순</option>
+                  <option value="comments">댓글순</option>
+                  <option value="views">조회순</option>
                 </select>
               </div>
 
               <div class="block-horizontal-line"></div>
 
-              <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
+              <!--              <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>-->
 
-              <ListComponent category="board" :list="boardStore.listItems" :recommended="true"></ListComponent><!-- :sub-url="router." -->
+              <ListComponent category="board" :list="boardStore.listItems" :recommended="true"></ListComponent>
+              <!-- :sub-url="router." -->
 
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>
@@ -88,11 +125,67 @@ function writeNewPost() {
 }
 
 #boardSearchInput {
-  width: 30rem;
-  min-width: 20rem;
+  height: 2rem;
   border: 0.1rem solid #000000;
   border-radius: 4rem;
   padding: 0 2rem;
+}
+
+.board-main-block {
+  display: flex;
+  justify-content: space-between;
+}
+
+.board-side-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.board-side-block .board-side-block-item {
+  /* position: fixed; */
+  display: flex;
+  flex-direction: column;
+  width: 10rem;
+  margin-bottom: 2rem;
+  min-height: 4rem;
+}
+
+@media (min-width: 1024px) {
+  #boardSearchInput {
+    width: 30rem;
+    min-width: 20rem;
+  }
+
+  .board-main-block {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .board-side-block {
+    width: 20%;
+    height: 100%;
+    max-width: 167px;
+  }
+}
+
+@media (max-width: 1023px) {
+  /* min-width: 536px */
+  #boardSearchInput {
+    width: 50%;
+    min-width: 6rem;
+  }
+
+  .board-main-block {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .board-side-block {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-width: 167px;
+  }
 }
 
 .board-vertical-line {

@@ -173,7 +173,7 @@ form .form-group input[type=password] { /* 해당 form에만 적용 */
 
 .button-default {
     width: 4rem;
-    height: 2.4rem;
+    height: 2rem;
 }
 
 .button-large {
@@ -203,12 +203,16 @@ button.submit { /* .form-box form button.submit */
     align-items: center;
     padding: 0.4rem 0.6rem;
     justify-content: space-between;
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
 .icon-button img {
     height: 1rem;
     margin-right: 0.4rem;
+}
+
+.image-button {
+    box-shadow: none;
 }
 
 .button-gray {

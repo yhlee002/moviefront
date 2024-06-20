@@ -25,7 +25,7 @@ function goNextPage() {
     <div class="prev-button">
 <!--      <img v-if="showPages[0] > 1" src="@/assets/images/icons/icons8-left-arrow-50.png" alt="이전 페이지">-->
 <!--      <img v-if="showPages[0] === 1" src="@/assets/images/icons/icons8-left-arrow-50-gray.png" alt="이전 페이지">-->
-      <button type="button" @click="goPrevPage()" :disabled="showPages[0] === 1"></button>
+      <button class="image-button" type="button" @click="goPrevPage()" :disabled="showPages[0] === 1"></button>
     </div>
     <div>
       <ul class="pagenation-page-list">
@@ -39,7 +39,7 @@ function goNextPage() {
 <!--           src="@/assets/images/icons/icons8-right-arrow-50.png" alt="다음 페이지">-->
 <!--      <img v-if="showPages[showPages.length - 1] >= pages[pages.length - 1]"-->
 <!--           src="@/assets/images/icons/icons8-right-arrow-50-gray.png" alt="다음 페이지">-->
-      <button type="button" @click="goNextPage()" :disabled="showPages[showPages.length - 1] >= pages[pages.length - 1]"></button>
+      <button class="image-button" type="button" @click="goNextPage()" :disabled="showPages[showPages.length - 1] >= pages[pages.length - 1]"></button>
     </div>
   </div>
 </template>

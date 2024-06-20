@@ -3,14 +3,24 @@ import {useNoticeStore} from "@/stores/notice.js";
 import ListComponent from "@/components/sub/ListComponent.vue";
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user.js";
+import {ref, watch} from "vue";
 
 const router = useRouter();
 const userStore = useUserStore();
 const noticeStore = useNoticeStore();
 
-noticeStore.getBoards(noticeStore.currentPage, 15, null);
+noticeStore.getBoards(noticeStore.currentPage, 15, null, null);
 
 // noticeStore.getTotalPages();
+const condition = ref("recent");
+
+watch(condition, (newVal) => {
+  if (newVal === 'recent') {
+    noticeStore.getBoards(noticeStore.currentPage, 15, null, null)
+  } else {
+    noticeStore.getBoards(noticeStore.currentPage, 15, null, newVal);
+  }
+})
 
 function writeNewPost() {
   router.push("/newpost?category=notice");
@@ -31,10 +41,9 @@ function writeNewPost() {
             <button class="button-default submit icon-button" type="button" @click="writeNewPost" v-show="userStore.isAdmin">
               <img src="@/assets/images/icons/icons8-pencil-48.png" alt="작성하기">
               작성하기</button>
-            <select>
+            <select v-model="condition">
               <option value="recent" selected>최신순</option>
-              <option value="comment">댓글순</option>
-              <option value="view">조회순</option>
+              <option value="views">조회순</option>
             </select>
           </div>
 
@@ -42,7 +51,7 @@ function writeNewPost() {
 
           <!-- Board List -->
           <div>
-            <ListComponent category="notice" :list="noticeStore.boardList" :comment="false" :recommended="false"></ListComponent>
+            <ListComponent category="notice" :list="noticeStore.listItems" :comment="false" :recommended="false"></ListComponent>
           </div>
 
         </div>
