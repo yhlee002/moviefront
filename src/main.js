@@ -20,10 +20,10 @@ axios.defaults.baseURL = 'http://' + import.meta.env.VITE_APP_HOST + ':' + impor
 // }
 axios.defaults.withXSRFToken = true;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-axios.defaults.headers.get['Access-Control-Allow-Origin'] = `${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_POST}`;
-axios.defaults.headers.patch['Access-Control-Allow-Origin'] = `${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_POST}`;
-axios.defaults.headers.delete['Access-Control-Allow-Origin'] = `${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_POST}`;
-axios.defaults.headers.options['Access-Control-Allow-Origin'] = `${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_POST}`;
+axios.defaults.headers.get['Access-Control-Allow-Origin'] = `${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}`;
+axios.defaults.headers.patch['Access-Control-Allow-Origin'] = `${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}`;
+axios.defaults.headers.delete['Access-Control-Allow-Origin'] = `${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}`;
+axios.defaults.headers.options['Access-Control-Allow-Origin'] = `${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}`;
 
 axios.defaults.withCredentials = true;
 
