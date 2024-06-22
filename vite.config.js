@@ -8,12 +8,12 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 export default defineConfig({
   server: {
     port: 80,
-    // proxy: {
-    //   '/api': {
-    //     target: `http://10.0.3.80:8080/api`,
-    //     changeOrigin: true,
-    //   }
-    // }
+    proxy: {
+      '/api': {
+        target: `http://localhost:8080/api`,
+        changeOrigin: true,
+      }
+    }
   },
   plugins: [
     vue(),
