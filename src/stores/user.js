@@ -2,6 +2,7 @@ import {defineStore} from 'pinia'
 import axios from 'axios';
 import VueSimpleAlert from "vue3-simple-alert";
 import qs from 'qs';
+import {useRouter} from "vue-router";
 // import AWS from 'aws-sdk-js/dist/aws-sdk';
 
 const userDefault = {
@@ -112,14 +113,22 @@ export const useUserStore = defineStore('user', {
         //     sessionstorage.setItem("name", user.name);
         //     sessionstorage.setItem("role", user.role);
         // },
-        async getSocialLoginData() {
+        // async getSocialLoginData() {
+        //     const result = (await axios.get("/api/member/oauth2-url")).data;
+        //     const data = result.data;
+        //     this.oauthLoginURL.naver = data.naver;
+        //     this.oauthLoginURL.kakao = data.kakao;
+        // },
+        async socialLogin(provider) {
             const result = (await axios.get("/api/member/oauth2-url")).data;
             const data = result.data;
-            this.oauthLoginURL.naver = data.naver;
-            this.oauthLoginURL.kakao = data.kakao;
-        },
-        socialLogin(provider) {
-            window.location.href = this.oauthLoginURL[provider];
+            const router = useRouter();
+            router.push(data[provider.toUpperCase()]);
+
+            // this.oauthLoginURL.naver = data.naver;
+            // this.oauthLoginURL.kakao = data.kakao;
+
+            // window.location.href = this.oauthLoginURL[provider];
         },
         async login(loginData) {
             return (await axios.post('/api/sign-in', loginData, {

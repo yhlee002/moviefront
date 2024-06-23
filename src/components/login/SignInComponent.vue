@@ -13,8 +13,6 @@ const modalStore = useModalStore();
 const messageStore = useMessageStore();
 const {oauthMsg} = storeToRefs(messageStore);
 
-userStore.getSocialLoginData();
-
 // cert 정보 넘어왔는지 확인
 const params = router.currentRoute.value.query; // sign-in?cert=mail&memNo=[]&certKey=[]
 
