@@ -14,15 +14,9 @@ import mitt from 'mitt';
 
 // axios
 axios.defaults.baseURL = 'http://' + import.meta.env.VITE_APP_HOST + ':' + import.meta.env.VITE_APP_PORT + '/';
-// axios.defaults.headers.common = {
-//     'X-Requested-With': 'XMLHttpRequest',
-//     'X-CSRF-TOKEN' : document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-// }
 axios.defaults.withXSRFToken = true;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-axios.defaults.headers.get['Access-Control-Allow-Origin'] = '*';
-axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 
 // mitt
 let emitter = mitt();
