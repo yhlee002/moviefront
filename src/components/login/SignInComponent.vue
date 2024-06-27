@@ -103,13 +103,8 @@ function hideSecret(elemId) {
 }
 
 async function socialLogin(provider) {
-  /* 기존 코드 */
-  // const result = await userStore.getSocialLoginUrl(provider);
-  // const data = result.data;
-  // window.location.href = data.url;
-
-  window.location.href = `http://localhost:8080/api/oauth2/authorization/${provider.toLowerCase()}`;
-  // const result = await userStore.socialLogin(provider);
+  // ajax 또는 axios 등을 사용하면 redirect uri에 대해 cors 문제 발생. location.href 사용해야 함
+  window.location.href = `http://${import.meta.env.VITE_APP_HOST}:8080/api/oauth2/authorization/${provider.toLowerCase()}`;
 }
 </script>
 
