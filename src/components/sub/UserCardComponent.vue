@@ -13,9 +13,11 @@ member.profileImage = member.profileImage ?? '';
 <template>
   <div class="writer-box">
     <div v-if="member.profileImage" id="writerProfileImage">
-      <img :src="member.profileImage" alt="프로필 이미지"/>
+      <img v-if="member.role !== 'ROLE_ADMIN' && member.profileImage" :src="member.profileImage" alt="프로필 이미지"/>
     </div>
-    <div v-if="!member.profileImage" id="writerProfileImage">{{ member.name ? member.name[0] : '' }}</div>
+    <div v-if="!member.profileImage && member.role === 'ROLE_ADMIN'" id="writerProfileImage" class="admin_no_image">
+    </div>
+    <div v-if="!member.profileImage && member.role !== 'ROLE_ADMIN'" id="writerProfileImage">{{ member.name ? member.name[0] : '' }}</div>
     <div id="writerData" v-if="!imageOnly">
       <p id="writerName">{{ member.name }}</p>
       <img id="writerRole" v-if="member.role === 'ROLE_USER'" src="@/assets/images/icons/icons8-check-48.png">
@@ -29,23 +31,30 @@ member.profileImage = member.profileImage ?? '';
   flex-direction: row;
   margin-right: 1rem;
   align-items: center;
+  justify-content: center;
   width: fit-content;
 }
 
 .writer-box > div#writerProfileImage {
-  background: #231eff;
-  color: #FFFFFF;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 2rem;
-  margin-right: 0.5rem;
+  background: #cfcfcf;
+  color: #000000;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 3rem;
   text-align: center;
-  line-height: 2rem;
+  line-height: 3rem;
+  overflow: hidden;
+}
+
+.writer-box > div#writerProfileImage > img {
+  width: 3rem;
+  height: 3rem;
 }
 
 .writer-box > #writerData {
   display: flex;
   flex-direction: column;
+  margin-left: 0.5rem;
 }
 
 .writer-box > #writerData > #writerName {

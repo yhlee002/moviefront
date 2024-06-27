@@ -31,7 +31,6 @@ if (params.cert === 'mail') {
   }
 }
 
-
 const enterSubmit = function () {
   if (window.event.keyCode === 13) submitForm();
 }
@@ -102,6 +101,16 @@ function hideSecret(elemId) {
   const input = document.getElementById(elemId);
   input.type = 'password';
 }
+
+async function socialLogin(provider) {
+  /* 기존 코드 */
+  // const result = await userStore.getSocialLoginUrl(provider);
+  // const data = result.data;
+  // window.location.href = data.url;
+
+  window.location.href = `http://localhost:8080/api/oauth2/authorization/${provider.toLowerCase()}`;
+  // const result = await userStore.socialLogin(provider);
+}
 </script>
 
 <template>
@@ -157,9 +166,11 @@ function hideSecret(elemId) {
               <!-- 네이버, 카카오, 구글 로그인 api 버튼 -->
               <ul class="button-box">
                 <button id="naverSignInBtn" class="oauthBtn" type="button"
-                        @click="userStore.socialLogin('naver')"></button>
+                        @click="socialLogin('naver')"></button>
+<!--                <a href="/oauth2/authorization/naver"><button id="naverSignInBtn" class="oauthBtn" type="button">-->
+<!--                </button></a>-->
                 <button id="kakaoSignInBtn" class="oauthBtn" type="button"
-                        @click="userStore.socialLogin('kakao')"></button>
+                        @click="socialLogin('kakao')"></button>
               </ul>
             </form>
           </div>

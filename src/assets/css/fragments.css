@@ -125,6 +125,7 @@
 .nav > .user-box > .user-image-box > img.profile_image {
     width: 3em;
     height: 3em;
+    border-radius: 3rem;
     line-height: 1.5em;
     margin-right:1rem;
 }

@@ -1,9 +1,6 @@
 import {defineStore} from 'pinia'
 import axios from 'axios';
 import VueSimpleAlert from "vue3-simple-alert";
-import qs from 'qs';
-import {useRouter} from "vue-router";
-// import AWS from 'aws-sdk-js/dist/aws-sdk';
 
 const userDefault = {
     id: null,
@@ -20,9 +17,11 @@ export const useUserStore = defineStore('user', {
         return {
             user: {},
             users: [],
-            oauthLoginURL: {
-                naver: '',
-                kakao: ''
+            profile: {
+                identifier: null,
+                provider: null,
+                name: null,
+                profileImageUrl: null
             }
         }
     },
@@ -70,8 +69,8 @@ export const useUserStore = defineStore('user', {
         async getUser() {
             await axios.get('/api/member/current')
                 .then(response => response.data)
-                .then(result => result.data)
-                .then(data => {
+                .then(result => {
+                    const data = result.data;
                     if (data) { // !== null
                         this.user = data;
                     } else {
@@ -113,22 +112,38 @@ export const useUserStore = defineStore('user', {
         //     sessionstorage.setItem("name", user.name);
         //     sessionstorage.setItem("role", user.role);
         // },
-        // async getSocialLoginData() {
-        //     const result = (await axios.get("/api/member/oauth2-url")).data;
-        //     const data = result.data;
-        //     this.oauthLoginURL.naver = data.naver;
-        //     this.oauthLoginURL.kakao = data.kakao;
+        async getSocialLoginUrl(provider) {
+            return (await axios.get(`/api/member/oauth2-url?provider=${provider.toLowerCase()}`)).data;
+        },
+        async getToken(provider, code, state) {
+            return (await axios.get(`/api/member/oauth2/${provider.toLowerCase()}?code=${code}&state=${state}`)).data;
+        },
+        async getOauthUserInfoFromSession() {
+            return (await axios.get('/api/oauth2/userinfo')).data;
+        },
+        // async getSocialProfile(provider) {
+        //     return (await axios.get(`/api/member/oauth2/profile/${provider}`)).data;
         // },
-        async socialLogin(provider) {
-            const result = (await axios.get("/api/member/oauth2-url")).data;
-            const data = result.data;
-            const router = useRouter();
-            router.push(data[provider.toUpperCase()]);
-
-            // this.oauthLoginURL.naver = data.naver;
-            // this.oauthLoginURL.kakao = data.kakao;
-
-            // window.location.href = this.oauthLoginURL[provider];
+        // async getSocialProfileFromServer() {
+        //     await axios.get(`/api/member/oauth2/profile-server`)
+        //         .then(response => response.data)
+        //         .then(result => {
+        //             const data = result.data;
+        //
+        //             this.profile.identifier = data.id;
+        //             this.profile.provider = data.provider;
+        //             this.profile.name = data.name;
+        //             this.profile.profileImageUrl = data.profileImageUrl;
+        //         });
+        // },
+        // async removeSocialProfile() {
+        //     await axios.delete('/api/member/oauth2/profile-server');
+        //     this.resetProfile();
+        // },
+        resetProfile() {
+            this.profile.id = null;
+            this.profile.name = null;
+            this.profile.profileImageUrl = null;
         },
         async login(loginData) {
             return (await axios.post('/api/sign-in', loginData, {
@@ -151,22 +166,11 @@ export const useUserStore = defineStore('user', {
         async loginCheck(loginData) {
             return (await axios.post('/api/sign-in/check', loginData)).data.data;
         },
-        async logout() {
-            await axios.post('/logout', {
-                headers: {
-                    'Access-Control-Allow-Origin': '*'
-                }
-            })
-                .then(response => {
-                    this.clearState();
-                    this.clearSession();
-                })
-                .catch(e => {
-                    console.error(e);
-                })
-        },
         async validateIdentifier(identifier) {
             return (await axios.get(`/api/member?identifier=${identifier}`)).data;
+        },
+        async validateIdentifierWithProvider(identifier, provider) {
+            return (await axios.get(`/api/member?identifier=${identifier}&provider=${provider}`)).data;
         },
         async validateName(name) {
             return (await axios.get(`/api/member?name=${name}`)).data;

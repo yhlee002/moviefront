@@ -1,26 +1,34 @@
 <script setup>
+import '@/assets/css/board.css'
+
 import {useBoardStore} from '@/stores/board.js';
 import ListComponent from "@/components/sub/ListComponent.vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
 import {useRouter} from "vue-router";
 import {ref, watch} from "vue";
 
+
 const router = useRouter();
 const boardStore = useBoardStore();
 
-boardStore.getBoards(boardStore.currentPage, 15, null, null);
-boardStore.getWeeklyRecommendedTopBoards(5);
-boardStore.getWeeklyViewTopBoards(5);
+await boardStore.getBoards(boardStore.currentPage, 15, null, null);
+await boardStore.getWeeklyRecommendedTopBoards(5);
+await boardStore.getWeeklyViewTopBoards(5);
 
-const condition = ref("recent");
+const query = ref("");
+const condition = ref("titleOrContent");
+const orderBy = ref("recent");
 
-watch(condition, (newVal) => {
+watch(orderBy, async (newVal) => {
   if (newVal === 'recent') {
-    boardStore.getBoards(boardStore.currentPage, 15, null, null)
+    await boardStore.getBoards(boardStore.currentPage, 15, null, null)
   } else {
-    boardStore.getBoards(boardStore.currentPage, 15, null, newVal);
+    await boardStore.getBoards(boardStore.currentPage, 15, null, null, newVal);
   }
-})
+
+  query.value = "";
+  condition.value = "titleOrContent";
+});
 
 function enter() {
   if (window.event.keyCode === 13) {
@@ -28,8 +36,10 @@ function enter() {
   }
 }
 
-function search(condition, query) {
-
+async function search(query) {
+  // const condition = document.getElementById('boardSearchConditionSelect').value;
+  orderBy.value = "recent";
+  await boardStore.getBoards(1, 15, query, condition.value);
 }
 
 function writeNewPost() {
@@ -49,7 +59,7 @@ function writeNewPost() {
           <div class="board-main-block">
             <div class="board-side-block">
               <div class="board-side-block-item">
-                <div style="height: 100%">
+                <div class="board-side-block-item-title">
                   <h4>주간 추천수 Top 5</h4>
                 </div>
 
@@ -59,22 +69,24 @@ function writeNewPost() {
                 <div v-if="boardStore.mostPopularBoards.length > 0">
                   <ListComponent :list="boardStore.mostPopularBoards"
                                  :field-show="false" category="board"
-                                 :subTitleShow="false"></ListComponent>
+                                 :subTitleShow="false" :recommended="false" :view="false"
+                                 :comment="false"></ListComponent>
                 </div>
 
               </div>
 
               <div class="board-side-block-item">
-                <div style="height: 100%">
+                <div class="board-side-block-item-title">
                   <h4>주간 조회수 Top 5</h4>
                 </div>
                 <small v-if="boardStore.mostSeenBoards.length === 0">
                   일주일내에 작성된 게시글이 존재하지 않습니다.
                 </small>
-                <div v-if="boardStore.mostSeenBoards.length === 0">
+                <div v-if="boardStore.mostSeenBoards.length > 0">
                   <ListComponent :list="boardStore.mostSeenBoards"
-                               :field-show="false" category="board"
-                               :subTitleShow="false"></ListComponent>
+                                 :field-show="false" category="board"
+                                 :subTitleShow="false" :recommended="false" :view="false"
+                                 :comment="false"></ListComponent>
                 </div>
               </div>
             </div>
@@ -91,9 +103,13 @@ function writeNewPost() {
                 </button>
 
                 <!-- Search Bar -->
-                <input id="boardSearchInput" @keydown="enter()" type="text" placeholder="...">
+                <select id="boardSearchConditionSelect" v-model="condition">
+                  <option value="titleOrContent" selected>제목 또는 내용</option>
+                  <option value="writerName">작성자</option>
+                </select>
+                <input id="boardSearchInput" v-model="query" @keydown="enter()" type="text" placeholder="검색">
 
-                <select v-model="condition">
+                <select v-model="orderBy">
                   <option value="recent" selected>최신순</option>
                   <option value="recommended">추천순</option>
                   <option value="comments">댓글순</option>
@@ -103,11 +119,7 @@ function writeNewPost() {
 
               <div class="block-horizontal-line"></div>
 
-              <!--              <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>-->
-
               <ListComponent category="board" :list="boardStore.listItems" :recommended="true"></ListComponent>
-              <!-- :sub-url="router." -->
-
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>
           </div>
@@ -119,100 +131,5 @@ function writeNewPost() {
 </template>
 
 <style scoped>
-#boardList {
-  width: 80%;
-  margin-left: 2rem;
-}
-
-#boardSearchInput {
-  height: 2rem;
-  border: 0.1rem solid #000000;
-  border-radius: 4rem;
-  padding: 0 2rem;
-}
-
-.board-main-block {
-  display: flex;
-  justify-content: space-between;
-}
-
-.board-side-block {
-  display: flex;
-  flex-direction: column;
-}
-
-.board-side-block .board-side-block-item {
-  /* position: fixed; */
-  display: flex;
-  flex-direction: column;
-  width: 10rem;
-  margin-bottom: 2rem;
-  min-height: 4rem;
-}
-
-@media (min-width: 1024px) {
-  #boardSearchInput {
-    width: 30rem;
-    min-width: 20rem;
-  }
-
-  .board-main-block {
-    flex-direction: row;
-    width: 100%;
-  }
-
-  .board-side-block {
-    width: 20%;
-    height: 100%;
-    max-width: 167px;
-  }
-}
-
-@media (max-width: 1023px) {
-  /* min-width: 536px */
-  #boardSearchInput {
-    width: 50%;
-    min-width: 6rem;
-  }
-
-  .board-main-block {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .board-side-block {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    min-width: 167px;
-  }
-}
-
-.board-vertical-line {
-  margin: 0 1rem;
-  border-right: 0.1rem solid #f2f2f2
-}
-
-.board-options {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  padding-bottom: 1rem;
-  border-bottom: 0.1rem solid #f2f2f2;
-  margin-bottom: 1rem;
-}
-
-.board-options > button {
-  /*width: fit-content;*/
-  min-width: fit-content;
-  margin-right: 1rem;
-}
-
-.board-options > select {
-  /*width: fit-content;*/
-  min-width: fit-content;
-  margin-left: 1rem;
-}
 
 </style>

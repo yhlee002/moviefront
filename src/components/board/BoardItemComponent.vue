@@ -98,7 +98,8 @@ async function go(path) {
           <div class="board-box">
             <div class="board-datas">
               <UserCard
-                  :member="{memNo: board.writerId, name: board.writerName, profileImage: board.writerProfileImage}"></UserCard>
+                  :member="{memNo: board.writerId, name: board.writerName,
+                  profileImage: board.writerProfileImage, role: board.writerRole}"></UserCard>
 
               <div class="board-regdt-box">
                 <p id="writeTime">{{ writeTime }}</p>
@@ -123,7 +124,7 @@ async function go(path) {
             <!--            </div>-->
 
             <div class="board-content-box">
-              <p id="boardContent" type="text" v-text="board.content"></p>
+              <textarea id="boardContent" type="text" v-text="board.content" readonly style="resize: none"></textarea>
             </div>
 
             <div class="button-box">
@@ -143,7 +144,8 @@ async function go(path) {
             <div class="comment-write-form">
               <div class="comment-input-box">
                 <UserCard
-                    :member="{memNo: userStore.user.memNo, name: userStore.user.name, profileImage: userStore.user.profileImage}"
+                    :member="{memNo: board.writerId, name: board.writerName,
+                  profileImage: board.writerProfileImage, role: board.writerRole}"
                     :image-only="true"></UserCard>
                 <div style="margin: 0 1.4rem 0 0; height: 100%; border-right: 0.1rem solid #f2f2f2"></div>
                 <textarea id="commentInput" type="text" style="width: 100%; border: 0.1rem solid #f2f2f2;"></textarea>
@@ -198,10 +200,11 @@ async function go(path) {
   display: flex;
   flex-direction: row;
   align-items: center;
+  height: 2rem;
 }
 
 .breadcrumb > .breadcrumb-line {
-  height: 50%;
+  height: 1px;
   border-bottom: 0.1rem solid #f2f2f2;
 }
 
@@ -279,6 +282,7 @@ async function go(path) {
 
 #boardContent {
   padding: 1rem 1rem 3rem 1rem;
+  width: calc(100% - 2rem);
 }
 
 #commentsBlockTitle {

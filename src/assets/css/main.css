@@ -82,6 +82,8 @@
 }
 
 .wrapper-block > .inner > .inner-block > .content {
+    display: flex;
+    flex-direction: column;
     max-width: 60rem;
     width: 100%;
 }
@@ -90,7 +92,7 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 2em;
+    margin: 1em 0 2rem 0;
 }
 
 .wrapper-block > .inner > .inner-block > .content > .block-title-box > .block-title {
@@ -285,4 +287,12 @@ input[readonly] {
 
 .greeting-message > span {
     margin: 0.4rem;
+}
+
+/* Profile Image */
+div.admin_no_image {
+    background-image: url("@/assets/images/icons/icons8-woman-48.png") !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-size: 2rem !important;
 }

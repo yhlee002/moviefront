@@ -57,8 +57,7 @@ async function submit() {
 
   const result = props.id ? await store.updateBoard(board.value) : await store.saveBoard(board.value);
   if (result.data.count > 0) {
-    const id = result.data.id;
-    router.push(`/${category}/${id}`);
+    router.push(`/${category}/${props.id}`);
   } else {
     VueSimpleAlert.alert("오류가 발생했습니다.");
   }
@@ -148,7 +147,7 @@ async function getMovies(query) {
 .board-box > .board-editor-box > .board-content-box {
   display: flex;
   flex-direction: column;
-  min-height: 12rem;
+  min-width: 12rem;
 }
 
 .board-box > .board-editor-box {

@@ -23,13 +23,14 @@ export const useNoticeStore = defineStore('notice', {
         }
     },
     actions: {
-        async getBoards(page, size, query, condition) {
+        async getBoards(page, size, query, condition, orderby) {
             await axios.get(`/api/notices`, {
                 params: {
                     page: page - 1,
                     size: size,
                     query: query,
-                    condition: condition
+                    condition: condition,
+                    orderby: orderby
                 }
             })
                 .then(response => response.data)

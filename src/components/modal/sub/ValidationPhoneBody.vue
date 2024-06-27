@@ -68,7 +68,10 @@ async function sendMessage() {
 
   // 회원가입 시에만 중복검사 수행
   if (props.mode === 'CREATE') {
-    if (!await checkPhoneDuplication(phone)) return;
+    if (!await checkPhoneDuplication(phone)) {
+      VueSimpleAlert.alert("이미 가입된 번호입니다. 계정찾기를 해주세요.");
+      return;
+    }
   }
 
   await userStore.sendCertificationMessage(phone);

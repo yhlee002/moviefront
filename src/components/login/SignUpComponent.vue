@@ -11,16 +11,31 @@ import emitter from '@/eventBus/emitter';
 import Logo from "@/components/fragment/LogoComponent.vue";
 
 const router = useRouter();
+const params = router.currentRoute.value.query;
 
 const modalStore = useModalStore();
 const userStore = useUserStore();
 const messageStore = useMessageStore();
 mapStores(messageStore);
 
-// let email = ref('');
-// let name = ref('');
-// let password = ref('');
-let phone = ref('');
+const provider = ref('none');
+const identifier = ref('');
+const password = ref('');
+const password2 = ref('');
+const name = ref('');
+const phone = ref('');
+
+
+if (params.type === 'oauth') {
+  VueSimpleAlert.alert("회원가입을 위해 추가 정보를 입력해주세요.");
+
+  const result = await userStore.getOauthUserInfoFromSession();
+  const sessionUser = result.data;
+
+  identifier.value = sessionUser.identifier + "@socialuser.com";
+  name.value = sessionUser.name;
+  provider.value = sessionUser.provider;
+}
 
 let emailCk = false;
 let emailDupCk = false;
@@ -41,7 +56,6 @@ const resetMessage = function () {
 }
 
 const signUp = async function () {
-  // document.getElementById('form_signup').submit();
   const form = document.getElementById('form-signup');
 
   const identifier = form.identifier.value;
@@ -50,36 +64,59 @@ const signUp = async function () {
   const phone = form.phone.value;
   const provider = form.provider.value;
 
-  if (!emailCk) {
-    form.identifier.focus();
-    return;
-  } else if (!emailDupCk) {
-    VueSimpleAlert.alert("이메일 중복 검사를 수행해주세요.");
-    return;
-  } else if (!nameCk) {
-    form.name.focus();
-    return;
-  } else if (!pwdCk) {
-    form.password.focus();
-    return;
-  } else if (!phone) {
-    VueSimpleAlert.alert("연락처는 비어있을 수 없습니다.", "로그인", "info");
-    return;
-  }
+  if (params.type === 'oauth') {
+    if (!nameCk) {
+      form.name.focus();
+      return;
+    } else if (!phone) {
+      VueSimpleAlert.alert("연락처는 비어있을 수 없습니다.", "로그인", "info");
+      return;
+    }
 
-  const signUpdata = {
-    identifier: identifier,
-    name: name,
-    password: password,
-    phone: phone,
-    provider: provider
-  }
-  const result = await userStore.signUp(signUpdata);
+    const signUpdata = {
+      identifier: identifier,
+      name: name,
+      phone: phone,
+      provider: provider
+    }
+    const result = await userStore.signUp(signUpdata);
 
-  if (result) {
-    router.push('/');
-    // spinner
-    VueSimpleAlert.alert("회원가입을 축하합니다. 이메일 인증을 완료해주세요.");
+    if (result) {
+      router.push('/');
+      // spinner
+    }
+  } else {
+    if (!emailCk) {
+      form.identifier.focus();
+      return;
+    } else if (!emailDupCk) {
+      VueSimpleAlert.alert("이메일 중복 검사를 수행해주세요.");
+      return;
+    } else if (!nameCk) {
+      form.name.focus();
+      return;
+    } else if (!pwdCk) {
+      form.password.focus();
+      return;
+    } else if (!phone) {
+      VueSimpleAlert.alert("연락처는 비어있을 수 없습니다.", "로그인", "info");
+      return;
+    }
+
+    const signUpdata = {
+      identifier: identifier,
+      name: name,
+      password: password,
+      phone: phone,
+      provider: provider
+    }
+    const result = await userStore.signUp(signUpdata);
+
+    if (result) {
+      router.push('/');
+      // spinner
+      VueSimpleAlert.alert("회원가입을 축하합니다. 이메일 인증을 완료해주세요.");
+    }
   }
 }
 
@@ -103,9 +140,10 @@ async function checkIdentifier() {
 
 // 이메일 - 중복 검사
 async function validateIdentifierDuplication() {
-  const email = document.querySelector('#form-signup #identifier').value;
+  const email = identifier.value;
 
   const validated = await userStore.validateIdentifier(email);
+
   if (validated.count === 0) {
     emailDupCk = true;
     VueSimpleAlert.alert("사용 가능한 이메일입니다.", "로그인", "info");
@@ -148,6 +186,8 @@ async function checkName() {
 
 // 비밀번호 - 유효성 + 일치 여부 검사
 function checkPassword() {
+  if (params.type === 'oauth') return;
+
   const pwd = document.querySelector('#form-signup #password').value;
 
   // (1) pwd 빈값 검사
@@ -171,6 +211,8 @@ function checkPassword() {
 }
 
 function checkPasswordConfirm() {
+  if (params.type === 'oauth') return;
+
   const pwd = document.querySelector('#form-signup #password').value;
   const pwdConf = document.querySelector('#form-signup #passwordConf').value;
 
@@ -229,13 +271,13 @@ emitter.on('phone-validation', param => {
           <div class="form-box align-center">
             <form id="form-signup" action="/member" method="post">
               <input name="type" id="type" value="o" hidden="hidden">
-              <input type="text" name="_csrf" value="" hidden="hidden">
-              <input name="provider" value="none" hidden="hidden">
+<!--              <input type="text" name="_csrf" value="" hidden="hidden">-->
+              <input name="provider" v-model="provider" hidden="hidden">
               <div class="form-group">
                 <label for="identifier">이메일</label>
-                <input id="identifier" @blur="checkIdentifier()" type="email" name="identifier">
+                <input id="identifier" v-model="identifier" @blur="checkIdentifier()" type="email" name="identifier" :readonly="params.type === 'oauth'">
                 <button id="emailValidationBnt" @click="validateIdentifierDuplication()" type="button"
-                        class="button-default">중복 검사
+                        class="button-default" v-if="params.type !== 'oauth'">중복 검사
                 </button>
               </div>
               <div class="form-message-box">
@@ -246,7 +288,7 @@ emitter.on('phone-validation', param => {
 
               <div class="form-group">
                 <label for="name">이름</label>
-                <input id="name" @blur="checkName()" type="text" name="name">
+                <input id="name" v-model="name" @blur="checkName()" type="text" name="name">
               </div>
               <div class="form-message-box">
                 <div style="width: 7.9rem"></div>
@@ -256,7 +298,7 @@ emitter.on('phone-validation', param => {
 
               <div class="form-group">
                 <label for="password">비밀번호</label>
-                <input id="password" @blur="checkPassword()" type="password" name="password">
+                <input id="password" v-model="password" @blur="checkPassword()" type="password" name="password" :readonly="params.type === 'oauth'">
                 <img class="show-secret-button" @click="showSecret('password')" @mouseleave="hideSecret('password')" src="@/assets/images/icons/icons8-eye-48.png" style="margin-left: 1.3rem">
               </div>
               <div class="form-message-box">
@@ -267,7 +309,7 @@ emitter.on('phone-validation', param => {
 
               <div class="form-group">
                 <label for="passwordConf">비밀번호 재확인</label>
-                <input id="passwordConf" @blur="checkPasswordConfirm()" type="password" name="passwordConf">
+                <input id="passwordConf" v-model="password2" @blur="checkPasswordConfirm()" type="password" name="passwordConf" :readonly="params.type === 'oauth'">
                 <img class="show-secret-button" @click="showSecret('passwordConf')" @mouseleave="hideSecret('passwordConf')" src="@/assets/images/icons/icons8-eye-48.png" style="margin-left: 1.3rem">
               </div>
               <div class="form-message-box">
@@ -278,14 +320,14 @@ emitter.on('phone-validation', param => {
 
               <div class="form-group">
                 <label for="phone">휴대전화 번호</label>
-                <input id="phone" type="tel" name="phone" v-model="phone" readonly>
+                <input id="phone" v-model="phone" type="tel" name="phone" readonly>
                 <button id="phoneValidationBnt" @click="modalStore.openModal('ValidatePhone');" type="button"
                         class="button-default">인증하기
                 </button>
               </div>
 
               <div class="form-message-box">
-                <small id="phoneComment">당사는 귀하의 이메일을 외부와 공유하지 않으며, 이메일 또는 패스워드 찾기, 고객지원
+                <small id="phoneComment">당사는 귀하의 연락처를 외부와 공유하지 않으며, 이메일 또는 패스워드 찾기, 고객지원
                   등의 목적만을 위해 연락처를 수집합니다.</small>
               </div>
 

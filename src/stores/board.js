@@ -16,33 +16,36 @@ export const useBoardStore = defineStore('board', {
     },
     getters: {
         listItems() {
-            const list = Object.assign([], this.boardList);
+            const list = this.boardList.slice();
             list.forEach(b => {
                 b['subTitle'] = b.writerName;
             });
             return list;
         },
         mostPopularBoards() {
-            const list = Object.assign([], this.weeklyRecommendedTop5Boards);
-            list.forEach(b => {
-                b['subTitle'] = b.writerName;
-            });
+            const list = this.weeklyRecommendedTop5Boards.slice();
+            // list.forEach(b => {
+            //     b['subTitle'] = b.writerName;
+            // });
+            return list;
         },
         mostSeenBoards() {
-            const list = Object.assign([], this.weeklyViewTop5Boards);
-            list.forEach(b => {
-                b['subTitle'] = b.writerName;
-            });
+            const list = this.weeklyViewTop5Boards.slice();
+            // list.forEach(b => {
+            //     b['subTitle'] = b.writerName;
+            // });
+            return list;
         }
     },
     actions: {
-        async getBoards(page, size, query, condition) {
+        async getBoards(page, size, query, condition, orderBy) {
             await axios.get(`/api/imps`, {
                 params: {
                     page: page - 1,
                     size: size,
                     query: query,
-                    condition: condition
+                    condition: condition,
+                    orderBy: orderBy
                 }
             })
                 .then(response => response.data)
@@ -72,7 +75,8 @@ export const useBoardStore = defineStore('board', {
             })
                 .then(response => response.data)
                 .then(result => {
-                    this.weeklyRecommendedTop5Boards = result.data;
+                    const data = result.data;
+                    this.weeklyRecommendedTop5Boards = data.boardImpList;
                 })
                 .catch(e => {
                     console.error(e);
@@ -88,7 +92,8 @@ export const useBoardStore = defineStore('board', {
             })
                 .then(response => response.data)
                 .then(result => {
-                    this.weeklyViewTop5Boards = result.data;
+                    const data = result.data;
+                    this.weeklyViewTop5Boards = data.boardImpList;
                 })
                 .catch(e => {
                     console.error(e);

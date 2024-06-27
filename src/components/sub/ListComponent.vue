@@ -22,7 +22,7 @@ const seqField = props.seqField ?? 'id';
       <li>
         <router-link :to="`/${category}/${item[seqField]}`" style="justify-content: space-between;">
           <p class="list-item-title">{{ item.title }}</p>
-          <p class="list-item-subtitle">{{ item.subTitle }}</p> <!-- board/notice : writerName -->
+          <p class="list-item-subtitle" v-if="subTitleShow">{{ item.subTitle }}</p> <!-- board/notice : writerName -->
 
           <div class="list-item-etc">
             <div class="list-icons" v-if="view">
@@ -92,19 +92,19 @@ const seqField = props.seqField ?? 'id';
   color: #000000;
 }
 
-.list-item-box > ul.list-item-group > li p.list-item-title {
-  /*
-  min-width: 22rem;
-  max-width: 30rem;
-   */
-  max-width: 17rem;
+.list-item-box > ul.list-item-group li div.list-item-title-box {
   width: 70%;
+}
+
+.list-item-box > ul.list-item-group li p.list-item-title {
+  max-width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex-grow: 1;
 }
 
-.list-item-box > ul.list-item-group > li p.list-item-subtitle {
+.list-item-box > ul.list-item-group li p.list-item-subtitle {
   /*
   min-width: 10rem;
   max-width: 14rem;
@@ -117,7 +117,7 @@ const seqField = props.seqField ?? 'id';
   text-align: center;
 }
 
-.list-item-box > ul.list-item-group > li div.list-item-etc {
+.list-item-box > ul.list-item-group li div.list-item-etc {
   /*
 min-width: 10rem;
 max-width: 14rem;

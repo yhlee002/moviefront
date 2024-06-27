@@ -4,6 +4,14 @@ import Logo from "@/components/fragment/LogoComponent.vue";
 
 const userStore = useUserStore();
 userStore.getUser();
+
+const logoutUrl = `http://${import.meta.env.VITE_APP_HOST}:8080/api/logout`;
+
+async function logout() {
+  // const result = await userStore.logout();
+  const form = document.getElementById('logout');
+  form.submit();
+}
 </script>
 
 <template>
@@ -49,9 +57,9 @@ userStore.getUser();
             <router-link to="/mypage" v-if="userStore.isAuthenticated" style="margin-right: 3px">내정보</router-link>
         </span>
         <span>
-          <a href="#" @click="userStore.logout">로그아웃</a>
+          <p style="cursor: pointer;" @click="logout()">로그아웃</p>
         </span>
-            <form id="logout" action="/logout" method="POST"></form>
+            <form id="logout" :action="logoutUrl" method="POST"></form>
           </div>
         </div>
       </nav>
