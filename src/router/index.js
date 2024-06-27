@@ -11,7 +11,6 @@ import SignIn from "@/components/login/SignInComponent.vue";
 import SignUp from "@/components/login/SignUpComponent.vue";
 import Editor from "@/components/board/EditorComponent.vue";
 import UserProfile from "@/components/UserProfileComponent.vue";
-import SocialLogin from "@/components/login/SocialLoginComponent.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,13 +56,12 @@ const router = createRouter({
                     path: '/board/:id',
                     name: 'singleBoardImp',
                     component: BoardItem,
-                    props: {category: 'board'} // true
+                    props: {category: 'board'}
                 },
                 {
                     path: '/newpost',
                     name: 'editor',
                     component: Editor,
-                    // props: true,
                     props: route => ({id: route.query.id, category: route.query.category})
                 },
                 {
@@ -76,7 +74,6 @@ const router = createRouter({
                     path: '/sign-in',
                     name: 'sign-in',
                     component: SignIn,
-
                 },
                 {
                     path: '/sign-up',
@@ -88,13 +85,7 @@ const router = createRouter({
                     path: '/mypage',
                     name: 'mypage',
                     component: UserProfile
-                },
-                {
-                    path: '/oauth-callback/:provider',
-                    name: 'oauth-callback',
-                    component: SocialLogin,
-                    props: route => ({provider: route.params.provider, code: route.query.code, state: route.query.state})
-                },
+                }
             ]
         },
     ]

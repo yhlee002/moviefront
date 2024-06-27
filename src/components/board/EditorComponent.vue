@@ -32,9 +32,14 @@ function updateBoard(value) {
   board.value = value
 }
 
+function updateBoardContent(value) {
+  board.value.content = value;
+}
+
 if (props.id) {
   await store.getBoard(props.id);
   updateBoard(Object.assign({}, store.currentBoard));
+  // document.getElementById('boardContent').innerHTML = board.value.content;
 }
 
 function openSelectMovieModal() {
@@ -55,6 +60,9 @@ function checkParams(board) {
 async function submit() {
   if (!checkParams(board.value)) return;
 
+  const content = document.getElementById('boardContent').innerHTML;
+  updateBoardContent(content);
+
   const result = props.id ? await store.updateBoard(board.value) : await store.saveBoard(board.value);
   if (result.data.count > 0) {
     router.push(`/${category}/${props.id}`);
@@ -67,6 +75,19 @@ async function getMovies(query) {
   const result = await movieStore.searchMovie(query); // id, title, poster_path
 }
 
+function formatText(command) {
+  document.execCommand(command, false, null);
+}
+
+function changeFontSize(action) {
+  const selection = window.getSelection();
+  if (!selection.rangeCount) return;
+
+  const range = selection.getRangeAt(0);
+  const span = document.createElement('span');
+  span.style.fontSize = action === 'increase' ? 'larger' : 'smaller';
+  range.surroundContents(span);
+}
 </script>
 
 <template>
@@ -100,21 +121,16 @@ async function getMovies(query) {
             <div class="board-editor-box">
 
               <div class="board-option-box">
-                <button type="button" value="bold"><b>a</b></button><!-- font-weight: bold -->
-                <button type="button" value="italic"><span style="font-style: italic">a</span></button>
-                <!-- font-style: italic -->
-                <button type="button" value="underline"><span style="text-decoration: underline">a</span></button>
-                <!-- text-decoration: underline; -->
+                <button type="button" @click="formatText('bold')"><b>a</b></button><!-- font-weight: bold -->
+                <button type="button" @click="formatText('italic')"><span style="font-style: italic">a</span></button>
+                <button type="button" @click="formatText('underline')"><span style="text-decoration: underline">a</span></button>
+                <button type="button" @click="changeFontSize('increase')" style="font-size: larger">F</button>
+                <button type="button" @click="changeFontSize('decrease')" style="font-size: smaller">F</button>
                 <button type="button" id="addImgBtn" value="image"></button>
               </div>
 
-              <div class="board-content-box">
-                <textarea id="boardContent" type="text" v-model="board.content" placeholder="내용을 입력해주세요."></textarea>
-              </div>
+              <div id="boardContent" contenteditable="true" v-html="board.content"></div>
             </div>
-            <!--            <div class="board-regdt-box">-->
-            <!--              <input id="boardRegDt" type="date" v-model="board.regDate" readonly/>-->
-            <!--            </div>-->
             <div class="button-box">
               <button class="button-large submit" type="button" @click="submit">확인</button>
             </div>
@@ -181,9 +197,9 @@ async function getMovies(query) {
 
 #boardTitle {
   height: 2rem;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
   margin-bottom: 1rem;
-  width: 100%;
+  width: calc(100% - 1rem);
   max-width: 20rem;
   border-top: none;
   border-left: none;
@@ -194,8 +210,8 @@ async function getMovies(query) {
 
 #boardContent {
   height: 24rem;
-  width: 100%;
-  max-width: 20rem;
+  width: calc(100% - 1rem);
+  padding: 0.5rem;
 }
 
 #index_editor .button-box {

@@ -124,7 +124,7 @@ async function go(path) {
             <!--            </div>-->
 
             <div class="board-content-box">
-              <textarea id="boardContent" type="text" v-text="board.content" readonly style="resize: none"></textarea>
+              <div id="boardContent" v-html="board.content"></div>
             </div>
 
             <div class="button-box">
@@ -277,12 +277,13 @@ async function go(path) {
 
 #boardTitle {
   height: 2rem;
-  padding: 0 1rem;
+  padding: 0 0.5rem;
+  width: calc(100% - 1rem);
 }
 
 #boardContent {
-  padding: 1rem 1rem 3rem 1rem;
-  width: calc(100% - 2rem);
+  padding: 0.5rem 0.5rem 3rem 0.5rem;
+  width: calc(100% - 1rem);
 }
 
 #commentsBlockTitle {
