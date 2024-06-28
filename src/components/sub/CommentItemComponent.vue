@@ -1,6 +1,6 @@
 <script setup>
 import UserCard from "@/components/sub/UserCardComponent.vue";
-import VueSimpleAlert from "vue3-simple-alert";
+import Swal from 'sweetalert2';
 
 const props = defineProps(['comment']);
 
@@ -20,22 +20,32 @@ async function updateComment(commentId) {
   if (value) {
     await commentStore.updateComment(commentId, value);
   } else {
-    VueSimpleAlert.alert("댓글 내용을 입력해주세요.");
+    Swal.fire({
+      text: '댓글 내용을 입력해주세요.',
+      icon: 'warning'
+    });
   }
 }
 
 function deleteComment(commentId) {
-  VueSimpleAlert.confirm("댓글을 삭제하시겠습니까?")
-      .then(result => {
-        if (result) {
-          commentStore.deleteComment(commentId);
-        }
-      })
+  Swal.fire({
+    text: '댓글을 삭제하시겠습니까?',
+    icon: 'question',
+    confirmButtonText: '확인',
+    cancelButtonText: '취소'
+  }).then(async result => {
+    if (result.isConfirmed) {
+      await commentStore.deleteComment(commentId);
+    }
+  })
 }
 
 // TODO. 미구현 기능(신고 기능)
 function reportComment(commentId) {
-  VueSimpleAlert.alert("아직 구현되지 않은 기능입니다.");
+  Swal.fire({
+    text: '아직 구현되지 않은 기능입니다.',
+    icon: 'info'
+  });
 }
 </script>
 

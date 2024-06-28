@@ -2,7 +2,7 @@
 import {ref} from "vue";
 import {useUserStore} from "@/stores/user.js";
 import {useModalStore} from "@/stores/modal.js";
-import VueSimpleAlert from "vue3-simple-alert";
+import Swal from 'sweetalert2';
 
 import emitter from '@/eventBus/emitter.js';
 
@@ -32,7 +32,10 @@ async function validateCertKey() {
   const key = document.getElementById('certKeyInput').value;
 
   if (!key) {
-    VueSimpleAlert.alert("인증번호를 입력해주세요.");
+    Swal.fire({
+      text: '인증번호를 입력해주세요.',
+      icon: 'warning'
+    })
     return;
   }
 
@@ -49,12 +52,18 @@ async function validateCertKey() {
     }
   } else {
     if (result.data.message === 'expired') {
-      VueSimpleAlert.alert("인증 시간이 만료되었습니다. 다시 전송해주세요.");
+      Swal.fire({
+        text: '인증 시간이 만료되었습니다. 다시 전송해주세요.',
+        icon: 'error'
+      })
       updateSendStatus(false);
 
       return;
     } else if (result.data.message === 'not matched') {
-      VueSimpleAlert.alert("인증번호가 일치하지 않습니다. 다시 확인해주세요.");
+      Swal.fire({
+        text: '인증번호가 일치하지 않습니다. 다시 확인해주세요.',
+        icon: 'error'
+      })
     }
   }
 }
@@ -69,14 +78,17 @@ async function sendMessage() {
   // 회원가입 시에만 중복검사 수행
   if (props.mode === 'CREATE') {
     if (!await checkPhoneDuplication(phone)) {
-      VueSimpleAlert.alert("이미 가입된 번호입니다. 계정찾기를 해주세요.");
+      Swal.fire({
+        text: '이미 가입된 번호입니다. 계정찾기를 해주세요.',
+        icon: 'info'
+      })
       return;
     }
   }
 
   await userStore.sendCertificationMessage(phone);
   updateSendStatus(true);
-  // 한번이라도 전송하고나면 '다시 전송하기'로 변경되도록
+  // 한번이라도 전송하고나면 '다시 전송하기'로 변경
   reSendMsg.style.display = 'inline';
   input.focus();
   startTimer();
@@ -92,11 +104,17 @@ function checkPhoneRegExp(phone) {
   const phoneRegExp = RegExp(/^(01[016789]{1})(\d{3,4})(\d{4})$/);
 
   if (!phone) {
-    VueSimpleAlert.alert("휴대전화 번호를 입력해주세요.");
+    Swal.fire({
+      text: '휴대전화 번호를 입력해주세요.',
+      icon: 'warning'
+    })
     return false;
 
   } else if (!phoneRegExp.test(phone)) {
-    VueSimpleAlert.alert("휴대전화 번호 양식을 확인해주세요.");
+    Swal.fire({
+      text: '휴대전화 번호 양식을 확인해주세요.',
+      icon: 'warning'
+    })
     return false;
 
   } else return true;

@@ -4,7 +4,7 @@ import {useRouter} from "vue-router";
 import {useMessageStore} from "@/stores/message.js";
 import {useUserStore} from "@/stores/user.js";
 import {useModalStore} from "@/stores/modal.js";
-import VueSimpleAlert from "vue3-simple-alert";
+import Swal from 'sweetalert2';
 import Logo from "@/components/fragment/LogoComponent.vue";
 
 const router = useRouter();
@@ -46,23 +46,35 @@ const submitForm = async function () {
 
   const result0 = await userStore.loginCheck(loginData);
   if (result0 === "didn't matching" || result0 === "not user") {
-    VueSimpleAlert.alert("이메일 또는 비밀번호를 확인해주세요.", "로그인", "info");
+    Swal.fire({
+      text: '이메일 또는 비밀번호를 확인해주세요.',
+      icon: 'error'
+    })
     return false;
   } else if (result0 === "not certified") {
-    VueSimpleAlert.confirm(
-        "이메일 인증이 필요한 계정입니다. 이메일 재전송을 원하십니까?", "로그인", "info")
-        .then(async result => {
-          if (result) {
-            const sendResult = await userStore.sendCertificationMail(loginData.identifier, 'SIGNUP');
-            const status = sendResult.data.status;
-            if (status) {
-              VueSimpleAlert.alert("메일 전송에 성공했습니다. 인증은 10분간 유효합니다.");
-            } else {
-              VueSimpleAlert.alert("메일 전송에 실패했습니다.");
-            }
-          }
-        })
-        .finally();
+    Swal.fire({
+      text: '이메일 인증이 필요한 계정입니다. 이메일 재전송을 원하십니까?',
+      icon: 'question',
+      confirmButtonText: '확인',
+      cancelButtonText: '취소'
+    }).then(async result => {
+      if (result.isConfirmed) {
+        const sendResult = await userStore.sendCertificationMail(loginData.identifier, 'SIGNUP');
+        const status = sendResult.data.status;
+        if (status) {
+          Swal.fire({
+            text: '메일 전송에 성공했습니다. 인증은 10분간 유효합니다.',
+            icon: 'success'
+          })
+        } else {
+          Swal.fire({
+            text: '메일 전송에 실패했습니다.',
+            icon: 'error'
+          })
+        }
+      }
+    })
+
     return false;
   } else {
     await userStore.login(loginData);
@@ -77,15 +89,24 @@ const checkParams = function (loginData) {
 
   let reg = RegExp(/^[A-Za-z0-9_.-]+@[A-Za-z0-9-]+\.[A-Za-z0-9-]+/);
   if (!loginData.identifier) {
-    VueSimpleAlert.alert("이메일을 입력해주세요.", "로그인", "info");
+    Swal.fire({
+      text: '이메일을 입력해주세요.',
+      icon: 'warning'
+    })
     return checked;
   } else if (!reg.test(loginData.identifier)) {
-    VueSimpleAlert.alert("이메일 양식에 맞지 않습니다.", "로그인", "info");
+    Swal.fire({
+      text: '이메일 양식에 맞지 않습니다.',
+      icon: 'warning'
+    })
     return checked;
   }
 
   if (!loginData.password) {
-    VueSimpleAlert.alert("비밀번호를 입력해주세요.", "로그인", "info");
+    Swal.fire({
+      text: '비밀번호를 입력해주세요.',
+      icon: 'warning'
+    })
   } else {
     checked = true;
   }
@@ -162,8 +183,8 @@ async function socialLogin(provider) {
               <ul class="button-box">
                 <button id="naverSignInBtn" class="oauthBtn" type="button"
                         @click="socialLogin('naver')"></button>
-<!--                <a href="/oauth2/authorization/naver"><button id="naverSignInBtn" class="oauthBtn" type="button">-->
-<!--                </button></a>-->
+                <!--                <a href="/oauth2/authorization/naver"><button id="naverSignInBtn" class="oauthBtn" type="button">-->
+                <!--                </button></a>-->
                 <button id="kakaoSignInBtn" class="oauthBtn" type="button"
                         @click="socialLogin('kakao')"></button>
               </ul>

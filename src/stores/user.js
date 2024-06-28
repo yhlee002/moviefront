@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import axios from 'axios';
-import VueSimpleAlert from "vue3-simple-alert";
+import Swal from 'sweetalert2';
 
 const userDefault = {
     id: null,
@@ -160,7 +160,11 @@ export const useUserStore = defineStore('user', {
                 })
                 .catch(e => {
                     console.error(e);
-                    VueSimpleAlert.alert('로그인에 실패하였습니다. 입력된 정보를 확인해주세요.', '로그인', 'info');
+
+                    Swal.fire({
+                        text: '로그인에 실패하였습니다. 입력된 정보를 확인해주세요.',
+                        icon: 'error'
+                    });
                 }));
         },
         async loginCheck(loginData) {
@@ -185,12 +189,18 @@ export const useUserStore = defineStore('user', {
                     if (result.count === 1) {
                         return true
                     } else {
-                        VueSimpleAlert.alert("회원가입에 실패하였습니다.");
+                        Swal.fire({
+                            text: '회원가입에 실패하였습니다.',
+                            icon: 'error'
+                        })
                         return false;
                     }
                 })
                 .catch(e => {
-                    VueSimpleAlert.alert("회원가입에 실패하였습니다.");
+                    Swal.fire({
+                        text: '회원가입에 실패하였습니다.',
+                        icon: 'error'
+                    })
                 });
         },
         async sendCertificationMail(identifier, reason) {
@@ -198,7 +208,6 @@ export const useUserStore = defineStore('user', {
                 identifier: identifier,
                 reason: reason
             })).data;
-            // VueSimpleAlert.alert(`[임시] 인증번호는 ${data.key}입니다. 인증번호는 3분간 유효합니다.`);
         },
         async validateCertificationMail(memNo, certKey) {
             return (await axios.post(`/api/cert-mail/validation`, {
@@ -206,14 +215,24 @@ export const useUserStore = defineStore('user', {
                 certKey: certKey
             })
                 .then(response => {
-                    VueSimpleAlert.alert("이메일 인증에 성공하였습니다.");
+                    Swal.fire({
+                        text: '이메일 인증에 성공하였습니다.',
+                        icon: 'success'
+                    })
+
                     return response.data;
                 })
                 .catch(e => {
                     if (e.response.data.status === 500 && e.response.data.message === "인증 정보가 존재하지 않습니다.") {
-                        VueSimpleAlert.alert("만료된 인증입니다.");
+                        Swal.fire({
+                            text: '만료된 인증입니다.',
+                            icon: 'error'
+                        })
                     } else {
-                        VueSimpleAlert.alert("인증 진행중 오류가 발생했습니다.");
+                        Swal.fire({
+                            text: '인증 진행중 오류가 발생했습니다.',
+                            icon: 'error'
+                        })
                     }
 
                     return e.response;
@@ -227,7 +246,12 @@ export const useUserStore = defineStore('user', {
                 .then(result => result.data)
                 .then(data => {
                     if (data.status) {
-                        VueSimpleAlert.alert(`[임시] 인증번호는 ${data.key}입니다. 인증번호는 3분간 유효합니다.`);
+                        if (import.meta.env.VITE_APP_HOST === 'local') {
+                            Swal.fire({
+                                text: '[개발용] 인증번호는 ${data.key}입니다. 인증번호는 3분간 유효합니다.',
+                                icon: 'info'
+                            })
+                        }
                     }
                 })
         },

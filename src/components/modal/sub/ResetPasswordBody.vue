@@ -3,8 +3,8 @@ import {useModalStore} from "@/stores/modal.js";
 import {useUserStore} from "@/stores/user.js";
 import {ref} from "vue";
 import {useMessageStore} from "@/stores/message.js";
-import VueSimpleAlert from "vue3-simple-alert";
 import {useRouter} from "vue-router";
+import Swal from 'sweetalert2';
 
 const router = useRouter();
 
@@ -100,10 +100,16 @@ async function submit() {
   const result = await userStore.updatePassword(memNo, pwd);
 
   if (result.count > 0) {
-    VueSimpleAlert.alert("비밀번호 변경에 성공하였습니다. 다시 로그인해주세요.");
+    Swal.fire({
+      text: '비밀번호 변경에 성공하였습니다. 다시 로그인해주세요.',
+      icon: 'success'
+    })
     router.push("/sign-in")
   } else {
-    VueSimpleAlert.alert("비밀번호 변경에 실패하였습니다. 다시 시도해주세요.");
+    Swal.fire({
+      text: '비밀번호 변경에 실패하였습니다. 다시 시도해주세요.',
+      icon: 'error'
+    })
   }
   modalStore.close();
   modalStore.setData = {};

@@ -3,7 +3,7 @@
 import {mapStores, storeToRefs} from 'pinia';
 import {useUserStore} from '@/stores/user.js';
 import {useMessageStore} from "@/stores/message.js";
-import VueSimpleAlert from "vue3-simple-alert";
+import Swal from "sweetalert2";
 import {useModalStore} from "@/stores/modal.js";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
@@ -27,7 +27,10 @@ const phone = ref('');
 
 
 if (params.type === 'oauth') {
-  VueSimpleAlert.alert("회원가입을 위해 추가 정보를 입력해주세요.");
+  Swal.fire({
+    text: '회원가입을 위해 추가 정보를 입력해주세요.',
+    icon: 'info'
+  })
 
   const result = await userStore.getOauthUserInfoFromSession();
   const sessionUser = result.data;
@@ -69,7 +72,10 @@ const signUp = async function () {
       form.name.focus();
       return;
     } else if (!phone) {
-      VueSimpleAlert.alert("연락처는 비어있을 수 없습니다.", "로그인", "info");
+      Swal.fire({
+        text: '연락처는 비어있을 수 없습니다.',
+        icon: 'warning'
+      })
       return;
     }
 
@@ -90,7 +96,10 @@ const signUp = async function () {
       form.identifier.focus();
       return;
     } else if (!emailDupCk) {
-      VueSimpleAlert.alert("이메일 중복 검사를 수행해주세요.");
+      Swal.fire({
+        text: '이메일 중복 검사를 수행해주세요.',
+        icon: 'warning'
+      })
       return;
     } else if (!nameCk) {
       form.name.focus();
@@ -99,7 +108,10 @@ const signUp = async function () {
       form.password.focus();
       return;
     } else if (!phone) {
-      VueSimpleAlert.alert("연락처는 비어있을 수 없습니다.", "로그인", "info");
+      Swal.fire({
+        text: '연락처는 비어있을 수 없습니다.',
+        icon: 'warning'
+      })
       return;
     }
 
@@ -115,7 +127,10 @@ const signUp = async function () {
     if (result) {
       router.push('/');
       // spinner
-      VueSimpleAlert.alert("회원가입을 축하합니다. 이메일 인증을 완료해주세요.");
+      Swal.fire({
+        text: '회원가입을 축하합니다. 이메일 인증을 완료해주세요.',
+        icon: 'success'
+      })
     }
   }
 }
@@ -146,10 +161,16 @@ async function validateIdentifierDuplication() {
 
   if (validated.count === 0) {
     emailDupCk = true;
-    VueSimpleAlert.alert("사용 가능한 이메일입니다.", "로그인", "info");
+    Swal.fire({
+      text: '사용 가능한 이메일입니다.',
+      icon: 'info'
+    })
   } else {
     emailDupCk = false;
-    VueSimpleAlert.alert("이미 가입된 이메일입니다.", "로그인", "info");
+    Swal.fire({
+      text: '이미 가입된 이메일입니다.',
+      icon: 'info'
+    })
   }
 }
 

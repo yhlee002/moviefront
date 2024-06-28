@@ -1,14 +1,13 @@
 <script setup>
 import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user.js";
-import VueSimpleAlert from "vue3-simple-alert";
 import {useNoticeStore} from "@/stores/notice.js";
-import UserCard from "@/components/sub/UserCardComponent.vue";
+import {useCommentStore} from "@/stores/comment.js";
 import {useBoardStore} from "@/stores/board.js";
 
+import Swal from 'sweetalert2'
+import UserCard from "@/components/sub/UserCardComponent.vue";
 import CommentItem from "@/components/sub/CommentItemComponent.vue";
-import {useCommentStore} from "@/stores/comment.js";
-import {ref} from "vue";
 
 const props = defineProps(['category']);
 const router = useRouter();
@@ -56,7 +55,10 @@ async function submitComment() {
       await commentStore.getCommentsByBoard(board.id, commentStore.currentPage, 20);
     }
   } else {
-    VueSimpleAlert.alert("댓글 내용을 입력해주세요.");
+    Swal.fire({
+      text: '댓글 내용을 입력해주세요.',
+      icon: 'warning'
+    });
   }
 }
 
@@ -65,17 +67,20 @@ async function modifyBoard() {
 }
 
 function deleteBoard() {
-  VueSimpleAlert.confirm("정말 삭제하시겠습니까?")
-      .then(async result => {
-        if (result) {
-          await store.deleteBoard(board.id);
-          router.push(`/${props.category}`)
-        }
-      })
+  Swal.fire({
+    text: '정말 삭제하시겠습니까?',
+    icon: 'question',
+    confirmButtonText: '확인',
+    cancelButtonText: '취소'
+  }).then(async result => {
+    if (result.isConfirmed) {
+      await store.deleteBoard(board.id);
+      router.push(`/${props.category}`)
+    }
+  })
 }
 
 async function go(path) {
-  // await router.push(path);
   location.href = path; // re-rendering을 위해 사용
 }
 </script>

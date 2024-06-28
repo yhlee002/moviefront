@@ -3,7 +3,7 @@
 import ModalTitle from "@/components/modal/ModalTitle.vue";
 import {ref} from "vue";
 import ValidationPhoneBody from "@/components/modal/sub/ValidationPhoneBody.vue";
-import VueSimpleAlert from "vue3-simple-alert";
+import Swal from 'sweetalert2';
 import {useUserStore} from "@/stores/user.js";
 import emitter from '@/eventBus/emitter.js';
 import {useModalStore} from "@/stores/modal.js";
@@ -54,13 +54,22 @@ async function sendCertificationEmail() {
     const result = await userStore.sendCertificationMail(email, 'FINDPASSWORD');
     // TODO. spinner
     if (result.data.status) {
-      VueSimpleAlert.alert("인증 링크를 담은 메일을 전송했습니다. 인증은 10분간 유효합니다.");
+      Swal.fire({
+        text: '인증 링크를 담은 메일을 전송했습니다. 인증은 10분간 유효합니다.',
+        icon: 'success'
+      })
       modalStore.close();
     } else {
-      VueSimpleAlert.alert("인증 메일을 전송에 실패했습니다. 다시 시도해주세요.");
+      Swal.fire({
+        text: '인증 메일을 전송에 실패했습니다. 다시 시도해주세요.',
+        icon: 'error'
+      })
     }
   } else {
-    VueSimpleAlert.alert("올바른 이메일 형식이 아닙니다.");
+    Swal.fire({
+      text: '올바른 이메일 형식이 아닙니다.',
+      icon: 'warning'
+    })
   }
 }
 

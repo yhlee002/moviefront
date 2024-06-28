@@ -4,7 +4,7 @@ import {useNoticeStore} from "@/stores/notice.js";
 import {useBoardStore} from "@/stores/board.js";
 import {ref} from "vue";
 import {useUserStore} from "@/stores/user.js";
-import VueSimpleAlert from "vue3-simple-alert";
+import Swal from 'sweetalert2';
 import {useRouter} from "vue-router";
 import {useMovieStore} from "@/stores/movie.js";
 
@@ -39,7 +39,6 @@ function updateBoardContent(value) {
 if (props.id) {
   await store.getBoard(props.id);
   updateBoard(Object.assign({}, store.currentBoard));
-  // document.getElementById('boardContent').innerHTML = board.value.content;
 }
 
 function openSelectMovieModal() {
@@ -48,10 +47,16 @@ function openSelectMovieModal() {
 
 function checkParams(board) {
   if (!board.title) {
-    VueSimpleAlert.alert("제목을 입력해주세요.");
+    Swal.fire({
+      text: '제목을 입력해주세요.',
+      icon: 'warning'
+    })
     return false;
   } else if (!board.content) {
-    VueSimpleAlert.alert("내용을 입력해주세요.");
+    Swal.fire({
+      text: '내용을 입력해주세요.',
+      icon: 'warning'
+    })
     return false;
   }
   return true;
@@ -67,7 +72,10 @@ async function submit() {
   if (result.data.count > 0) {
     router.push(`/${category}/${props.id}`);
   } else {
-    VueSimpleAlert.alert("오류가 발생했습니다.");
+    Swal.fire({
+      text: '오류가 발생했습니다.',
+      icon: 'error'
+    })
   }
 }
 
