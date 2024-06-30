@@ -96,6 +96,39 @@ function changeFontSize(action) {
   span.style.fontSize = action === 'increase' ? 'larger' : 'smaller';
   range.surroundContents(span);
 }
+
+// function changeFontSize2() {
+//   const selection = window.getSelection();
+//   if (!selection.rangeCount) return;
+//
+//   const value = window.event.target.value;
+//   const range = selection.getRangeAt(0);
+//   const text = range.toString();
+//
+//   let container;
+//   if (value.indexOf('제목') !== -1) {
+//     if (value === '제목1') {
+//       container = document.createElement('h2');
+//       // container.style.fontSize = '24px';
+//     } else if (value === '제목2') {
+//       container = document.createElement('h3');
+//     } else if (value === '제목3') {
+//       container = document.createElement('h4');
+//     }
+//   } else {
+//     container = document.createElement('span');
+//
+//     if (value === '본문1') {
+//       container.style.fontSize = '18px';
+//     } else if (value === '본문2') {
+//       container.style.fontSize = '16px';
+//     } else if (value === '본문3') {
+//       container.style.fontSize = '14px';
+//     }
+//   }
+//
+//   range.surroundContents(container);
+// }
 </script>
 
 <template>
@@ -134,7 +167,10 @@ function changeFontSize(action) {
                 <button type="button" @click="formatText('underline')"><span style="text-decoration: underline">a</span></button>
                 <button type="button" @click="changeFontSize('increase')" style="font-size: larger">F</button>
                 <button type="button" @click="changeFontSize('decrease')" style="font-size: smaller">F</button>
-                <button type="button" id="addImgBtn" value="image"></button>
+<!--                <select @change="changeFontSize2()">-->
+<!--                  <option v-for="size in ['제목1', '제목2', '제목3', '본문1', '본문2', '본문3']" :value="size" :key="size" :selected="size === '본문2'">{{size}}</option>-->
+<!--                </select>-->
+<!--                <button type="button" id="addImgBtn" value="image"></button>-->
               </div>
 
               <div id="boardContent" contenteditable="true" v-html="board.content"></div>
@@ -186,7 +222,8 @@ function changeFontSize(action) {
   flex-direction: row;
   justify-content: center;
   width: 100%;
-  height: 2rem;
+  height: 2.4rem;
+  padding: 0.2rem 0;
   background: #f2f2f2;
   border-radius: 2px 2px 0 0;
   border-bottom: 0.1rem solid #000000;
@@ -194,7 +231,9 @@ function changeFontSize(action) {
 
 .board-box > .board-editor-box > .board-option-box > button {
   width: 1.6rem;
-  margin-right: 0.2rem;
+  height: 2rem;
+  margin-right: 0.5rem;
+  background-color: transparent;
   border: transparent;
   box-shadow: none;
 }
@@ -214,6 +253,7 @@ function changeFontSize(action) {
   border-right: none;
   border-bottom: 1px solid #000000;
   outline-style: none;
+  font-size: 1rem;
 }
 
 #boardContent {

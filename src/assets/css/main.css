@@ -175,8 +175,9 @@ form .form-group input[type=password] { /* 해당 form에만 적용 */
 }
 
 .button-default {
-    width: 4rem;
+    min-width: 4rem;
     height: 2rem;
+    padding: 0 0.5rem;
 }
 
 .button-large {

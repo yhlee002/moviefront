@@ -22,7 +22,8 @@ export const useUserStore = defineStore('user', {
                 provider: null,
                 name: null,
                 profileImageUrl: null
-            }
+            },
+            currentPage: 1
         }
     },
     getters: {
@@ -63,9 +64,6 @@ export const useUserStore = defineStore('user', {
         clearState() {
             this.user = userDefault;
         },
-        clearSession() {
-            // sessionStorage.removeItem('user');
-        },
         async getUser() {
             await axios.get('/api/member/current')
                 .then(response => response.data)
@@ -81,37 +79,24 @@ export const useUserStore = defineStore('user', {
                     console.error(e);
                 })
         },
-        /**
-         *
-         * @param page
-         * @param size
-         * @param condition 객체 타입으로 한번에 한 쌍의 키(key), 값(value)만 존재. key에는 identifier|name|phone 가능(키워드 포함 검색)
-         * @returns {Promise<axios.AxiosResponse<any>|void>}
+        /* getUsers
+         * condition 객체 타입으로 한번에 한 쌍의 키(key), 값(value)만 존재. key에는 identifier|name|phone 가능(키워드 포함 검색)
          */
         async getUsers(page, size, condition) {
             let url = `/api/members?page=${page - 1}&size=${size}`;
             if (condition) {
                 url += `&${condition.key}=${condition.value}`;
             }
-            return (await axios.get(url, {
-                // params: {
-                //     page: page - 1,
-                //     size: size
-                // }
-            })
+            return (await axios.get(url)
                 .then(response => response.data)
                 .then(result => {
                     this.users = result.data;
+                    this.currentPage
                 })
                 .catch(e => {
                     console.error(e);
                 }));
         },
-        // addUserDataSession(user) {
-        //     sessionstorage.setItem("id", user.memNo);
-        //     sessionstorage.setItem("name", user.name);
-        //     sessionstorage.setItem("role", user.role);
-        // },
         async getSocialLoginUrl(provider) {
             return (await axios.get(`/api/member/oauth2-url?provider=${provider.toLowerCase()}`)).data;
         },
@@ -265,6 +250,20 @@ export const useUserStore = defineStore('user', {
             return (await axios.patch('/api/member/password', {
                 memNo: memNo,
                 password: password
+            })).data;
+        },
+        async deleteUser(memNo) {
+            return (await axios.delete(`/api/member/${memNo}`)).data;
+        },
+        async deleteUsers(memNoList) {
+            return (await axios.post(`/api/member/batch-delete`, {
+                memNoList: memNoList
+            })).data;
+        },
+        async updateMemberRole(memNo, role) {
+            return (await axios.patch('/api/member/role', {
+                memNo: memNo,
+                role: role
             })).data;
         }
     }

@@ -43,6 +43,28 @@ select {
     padding: 0 1rem;
 }
 
+/* table */
+table > thead > tr {
+    background-color: #f2f2f2;
+}
+
+table > tbody > tr:hover {
+    background-color: #f2f2f2;
+}
+
+table td, table th {
+    height: 2rem;
+    padding-left: 0.2rem;
+    padding-right: 0.2rem;
+}
+
+table, td, th {
+    /*border: 1px solid #f2f2f2;*/
+    border: 1px solid #dadada;
+    border-collapse: collapse;
+}
+
+
 /*nav {*/
 /*    width: 80%;*/
 /*    overflow: hidden;*/

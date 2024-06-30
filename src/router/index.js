@@ -11,6 +11,7 @@ import SignIn from "@/components/login/SignInComponent.vue";
 import SignUp from "@/components/login/SignUpComponent.vue";
 import Editor from "@/components/board/EditorComponent.vue";
 import UserProfile from "@/components/UserProfileComponent.vue";
+import AdminUser from "@/components/admin/AdminUserComponent.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,7 +19,15 @@ const router = createRouter({
         {
             path: '/admin',
             name: 'admin',
-            component: Admin
+            component: Admin,
+            children: [
+
+            ]
+        },
+        {
+            path: '/admin/user',
+            name: 'userList',
+            component: AdminUser
         },
         {
             path: '/',
