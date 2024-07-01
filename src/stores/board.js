@@ -7,6 +7,7 @@ export const useBoardStore = defineStore('board', {
             totalPages: 1,
             currentPage: 1,
             boardList: [],
+            totalItemCnt: 0,
             currentBoard: {},
             prevBoard: {},
             nextBoard: {},
@@ -53,10 +54,12 @@ export const useBoardStore = defineStore('board', {
                 .then(data => {
                     this.boardList = data.boardImpList;
                     this.totalPages = data.totalPageCnt;
+                    this.totalItemCnt = data.totalElementCnt;
+                    this.currentPage = data.currentPage;
                 });
         },
         async getBoard(id) {
-            await axios.get(`/api/imp/${id}`)
+            await axios.get(`/api/imps/${id}`)
                 .then(response => response.data)
                 .then(result => result.data)
                 .then(data => {
@@ -100,21 +103,21 @@ export const useBoardStore = defineStore('board', {
                 });
         },
         async saveBoard(board) {
-            return (await axios.post(`/api/imp`, board)
+            return (await axios.post(`/api/imps`, board)
                 .catch(e => {
                     console.error(e);
                     return e.response;
                 }));
         },
         async updateBoard(board) {
-            return (await axios.patch(`/api/imp`, board)
+            return (await axios.patch(`/api/imps`, board)
                 .catch(e => {
                     console.error(e);
                     return e.response;
                 }));
         },
         async updateBoardViews(boardId) {
-            return (await axios.patch('/api/imp/view', {
+            return (await axios.patch('/api/imps/views', {
                 id: boardId
             })
                 .catch(e => {
@@ -123,7 +126,7 @@ export const useBoardStore = defineStore('board', {
                 }));
         },
         async deleteBoard(boardId) {
-            return (await axios.delete(`/api/imp?boardId=${boardId}`)
+            return (await axios.delete(`/api/imps?boardId=${boardId}`)
                 .catch(e => {
                     console.error(e);
                     return e.response;

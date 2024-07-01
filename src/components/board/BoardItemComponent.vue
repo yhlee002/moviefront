@@ -20,6 +20,7 @@ const store = props.category === 'notice' ? useNoticeStore() : props.category ==
 store.updateBoardViews(id);
 await store.getBoard(id);
 const board = store.currentBoard;
+const loginUser = userStore.user;
 
 const regDate = new Date(board.regDate);
 const now = new Date();
@@ -142,15 +143,14 @@ async function go(path) {
             </div>
           </div>
 
-          <!-- TODO. 수정 필요 -->
           <!-- 댓글 -->
           <div v-if="category === 'board'" style="display: flex; flex-direction: column;">
             <p id="commentsBlockTitle">댓글</p>
             <div class="comment-write-form">
               <div class="comment-input-box">
                 <UserCard
-                    :member="{memNo: board.writerId, name: board.writerName,
-                  profileImage: board.writerProfileImage, role: board.writerRole}"
+                    :member="{memNo: loginUser.memNo, name: loginUser.name,
+                  profileImage: loginUser.profileImage, role: loginUser.role}"
                     :image-only="true"></UserCard>
                 <div style="margin: 0 1.4rem 0 0; height: 100%; border-right: 0.1rem solid #f2f2f2"></div>
                 <textarea id="commentInput" type="text" style="width: 100%; border: 0.1rem solid #f2f2f2;"></textarea>

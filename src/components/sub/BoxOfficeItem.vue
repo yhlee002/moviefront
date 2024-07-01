@@ -5,7 +5,7 @@ const modalStore = useModalStore();
 const props = defineProps(['movie']);
 
 let poster = '';
-const posters = props.movie.detail.posters;
+const posters = props.movie?.detail?.posters;
 if (posters) {
   poster = posters.split('|')[0];
 }
@@ -67,5 +67,6 @@ function openMovieDetailModal() {
   height: 1rem;
   display: inline;
   float: right;
+  margin-left: 0.2rem;
 }
 </style>

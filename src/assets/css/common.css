@@ -64,6 +64,15 @@ table, td, th {
     border-collapse: collapse;
 }
 
+button.carousel__prev, button.carousel__next {
+    background-color: #ffffff;
+    border-radius: var(--vc-nav-height);
+}
+
+button.carousel__pagination-button {
+    box-shadow: none;
+}
+
 
 /*nav {*/
 /*    width: 80%;*/

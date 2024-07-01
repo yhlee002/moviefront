@@ -27,9 +27,6 @@ export const useMovieStore = defineStore('movie', {
                     changeKeys: []
                 }
             },
-
-
-
         }
     },
     getters: {},
@@ -76,8 +73,6 @@ export const useMovieStore = defineStore('movie', {
                         this.configurations.images.profileSizes = data.profile_sizes;
                         this.configurations.images.stillSizes = data.still_sizes;
                         this.configurations.images.changeKeys = data.changeKeys;
-
-
                     }
                 })
                 .catch(e => console.error(e));

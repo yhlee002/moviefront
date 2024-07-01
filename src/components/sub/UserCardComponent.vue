@@ -13,11 +13,12 @@ member.profileImage = member.profileImage ?? '';
 <template>
   <div class="writer-box">
     <div v-if="member.profileImage" id="writerProfileImage">
-      <img v-if="member.role !== 'ROLE_ADMIN' && member.profileImage" :src="member.profileImage" alt="프로필 이미지"/>
+      <img v-if="member.profileImage && member.role !== 'ROLE_ADMIN'" :src="member.profileImage" alt="프로필 이미지"/>
     </div>
     <div v-if="!member.profileImage && member.role === 'ROLE_ADMIN'" id="writerProfileImage" class="admin_no_image">
     </div>
-    <div v-if="!member.profileImage && member.role !== 'ROLE_ADMIN'" id="writerProfileImage">{{ member.name ? member.name[0] : '' }}</div>
+    <div v-if="!member.profileImage && member.role !== 'ROLE_ADMIN'" id="writerProfileImage" class="user_no_image">
+    </div>
     <div id="writerData" v-if="!imageOnly">
       <p id="writerName">{{ member.name }}</p>
       <img id="writerRole" v-if="member.role === 'ROLE_USER'" src="@/assets/images/icons/icons8-check-48.png">
@@ -36,13 +37,9 @@ member.profileImage = member.profileImage ?? '';
 }
 
 .writer-box > div#writerProfileImage {
-  background: #cfcfcf;
-  color: #000000;
   width: 3rem;
   height: 3rem;
   border-radius: 3rem;
-  text-align: center;
-  line-height: 3rem;
   overflow: hidden;
 }
 

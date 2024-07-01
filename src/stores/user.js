@@ -15,15 +15,17 @@ const userDefault = {
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
-            user: {},
+            totalPages: 1,
+            currentPage: 1,
+            totalItemCnt: 0,
+            user: {}, // login user info
             users: [],
             profile: {
                 identifier: null,
                 provider: null,
                 name: null,
                 profileImageUrl: null
-            },
-            currentPage: 1
+            }
         }
     },
     getters: {
@@ -65,7 +67,7 @@ export const useUserStore = defineStore('user', {
             this.user = userDefault;
         },
         async getUser() {
-            await axios.get('/api/member/current')
+            await axios.get('/api/members/current')
                 .then(response => response.data)
                 .then(result => {
                     const data = result.data;
@@ -83,55 +85,33 @@ export const useUserStore = defineStore('user', {
          * condition 객체 타입으로 한번에 한 쌍의 키(key), 값(value)만 존재. key에는 identifier|name|phone 가능(키워드 포함 검색)
          */
         async getUsers(page, size, condition) {
-            let url = `/api/members?page=${page - 1}&size=${size}`;
+            let url = `/api/members/search?page=${page - 1}&size=${size}`;
             if (condition) {
                 url += `&${condition.key}=${condition.value}`;
             }
             return (await axios.get(url)
                 .then(response => response.data)
                 .then(result => {
-                    this.users = result.data;
-                    this.currentPage
+                    const data = result.data;
+                    this.totalPages = data.totalPageCnt;
+                    this.currentPage = page;
+                    this.totalItemCnt = data.totalElementCnt;
+                    this.users = data.memberList;
                 })
                 .catch(e => {
                     console.error(e);
                 }));
         },
-        async getSocialLoginUrl(provider) {
-            return (await axios.get(`/api/member/oauth2-url?provider=${provider.toLowerCase()}`)).data;
-        },
-        async getToken(provider, code, state) {
-            return (await axios.get(`/api/member/oauth2/${provider.toLowerCase()}?code=${code}&state=${state}`)).data;
-        },
         async getOauthUserInfoFromSession() {
-            return (await axios.get('/api/oauth2/userinfo')).data;
+            return (await axios.get('/api/members/oauth2/userinfo')).data;
         },
-        // async getSocialProfile(provider) {
-        //     return (await axios.get(`/api/member/oauth2/profile/${provider}`)).data;
-        // },
-        // async getSocialProfileFromServer() {
-        //     await axios.get(`/api/member/oauth2/profile-server`)
-        //         .then(response => response.data)
-        //         .then(result => {
-        //             const data = result.data;
-        //
-        //             this.profile.identifier = data.id;
-        //             this.profile.provider = data.provider;
-        //             this.profile.name = data.name;
-        //             this.profile.profileImageUrl = data.profileImageUrl;
-        //         });
-        // },
-        // async removeSocialProfile() {
-        //     await axios.delete('/api/member/oauth2/profile-server');
-        //     this.resetProfile();
-        // },
         resetProfile() {
             this.profile.id = null;
             this.profile.name = null;
             this.profile.profileImageUrl = null;
         },
         async login(loginData) {
-            return (await axios.post('/api/sign-in', loginData, {
+            return (await axios.post('/api/members/sign-in', loginData, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 }
@@ -141,7 +121,6 @@ export const useUserStore = defineStore('user', {
                         this.user = response.data;
                         sessionStorage.setItem('user', response.data);
                     }
-
                 })
                 .catch(e => {
                     console.error(e);
@@ -153,22 +132,19 @@ export const useUserStore = defineStore('user', {
                 }));
         },
         async loginCheck(loginData) {
-            return (await axios.post('/api/sign-in/check', loginData)).data.data;
-        },
-        async validateIdentifier(identifier) {
-            return (await axios.get(`/api/member?identifier=${identifier}`)).data;
+            return (await axios.post('/api/members/sign-in/check', loginData)).data.data;
         },
         async validateIdentifierWithProvider(identifier, provider) {
-            return (await axios.get(`/api/member?identifier=${identifier}&provider=${provider}`)).data;
+            return (await axios.get(`/api/members?identifier=${identifier}&provider=${provider}`)).data;
         },
         async validateName(name) {
-            return (await axios.get(`/api/member?name=${name}`)).data;
+            return (await axios.get(`/api/members?name=${name}`)).data;
         },
         async validatePhone(phone) {
-            return (await axios.get(`/api/member?phone=${phone}`)).data;
+            return (await axios.get(`/api/members?phone=${phone}`)).data;
         },
         async signUp(signUpData) {
-            return await axios.post('/api/member', signUpData)
+            return await axios.post('/api/members', signUpData)
                 .then(response => response.data)
                 .then(result => {
                     if (result.count === 1) {
@@ -189,13 +165,13 @@ export const useUserStore = defineStore('user', {
                 });
         },
         async sendCertificationMail(identifier, reason) {
-            return (await axios.post(`/api/cert-mail`, {
+            return (await axios.post(`/api/members/cert-mail`, {
                 identifier: identifier,
                 reason: reason
             })).data;
         },
         async validateCertificationMail(memNo, certKey) {
-            return (await axios.post(`/api/cert-mail/validation`, {
+            return (await axios.post(`/api/members/cert-mail/validation`, {
                 memNo: memNo,
                 certKey: certKey
             })
@@ -224,7 +200,7 @@ export const useUserStore = defineStore('user', {
                 }));
         },
         async sendCertificationMessage(phone) {
-            return await axios.post("/api/cert-message", {
+            return await axios.post("/api/members/cert-message", {
                 "phone": "+82" + phone
             })
                 .then(response => response.data)
@@ -241,27 +217,27 @@ export const useUserStore = defineStore('user', {
                 })
         },
         async validateCertificationMessage(phone, certKey) {
-            return (await axios.post("/api/cert-message/validation", {
+            return (await axios.post("/api/members/cert-message/validation", {
                 phone: "+82" + phone,
                 certKey: certKey
             })).data;
         },
         async updatePassword(memNo, password) {
-            return (await axios.patch('/api/member/password', {
+            return (await axios.patch('/api/members/password', {
                 memNo: memNo,
                 password: password
             })).data;
         },
         async deleteUser(memNo) {
-            return (await axios.delete(`/api/member/${memNo}`)).data;
+            return (await axios.delete(`/api/members/${memNo}`)).data;
         },
         async deleteUsers(memNoList) {
-            return (await axios.post(`/api/member/batch-delete`, {
+            return (await axios.post(`/api/members/batch-delete`, {
                 memNoList: memNoList
             })).data;
         },
         async updateMemberRole(memNo, role) {
-            return (await axios.patch('/api/member/role', {
+            return (await axios.patch('/api/members/role', {
                 memNo: memNo,
                 role: role
             })).data;

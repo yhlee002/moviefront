@@ -157,7 +157,7 @@ async function checkIdentifier() {
 async function validateIdentifierDuplication() {
   const email = identifier.value;
 
-  const validated = await userStore.validateIdentifier(email);
+  const validated = await userStore.validateIdentifierWithProvider(email, 'none');
 
   if (validated.count === 0) {
     emailDupCk = true;

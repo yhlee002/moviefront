@@ -94,7 +94,7 @@ commentStore.getComments(1, 10, null);
           </small>
         </div>
         <div class="block-content">
-          <ListComponent :list="userStore.listItems" :field-show="false" :view="false" :comment="false" category="user"
+          <ListComponent :list="userStore.listItems" :field-show="false" :view="false" :comment="false" category="admin/user"
                          seq-field="memNo"></ListComponent>
         </div>
       </div>

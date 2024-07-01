@@ -7,6 +7,7 @@ export const useNoticeStore = defineStore('notice', {
             totalPages: 1,
             currentPage: 1,
             boardList: [],
+            totalElementCnt: 0,
             currentBoard: {},
             prevBoard: {},
             nextBoard: {}
@@ -38,6 +39,8 @@ export const useNoticeStore = defineStore('notice', {
                 .then(data => {
                     this.boardList = data.boardNoticeList;
                     this.totalPages = data.totalPageCnt;
+                    this.totalItemCnt = data.totalElementCnt;
+                    this.currentPage = data.currentPage;
                 });
         },
         async getBoard(id) {

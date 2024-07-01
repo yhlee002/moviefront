@@ -5,7 +5,7 @@ import Logo from "@/components/fragment/LogoComponent.vue";
 const userStore = useUserStore();
 userStore.getUser();
 
-const logoutUrl = `http://${import.meta.env.VITE_APP_HOST}:8080/api/logout`;
+const logoutUrl = `http://${import.meta.env.VITE_APP_HOST}:8080/api/members/logout`;
 
 async function logout() {
   // const result = await userStore.logout();
@@ -43,12 +43,10 @@ async function logout() {
 
           <div class="user-image-box" v-if="userStore.isAuthenticated">
             <!-- profile image -->
-            <img class="profile_image" v-if="userStore.profileImage != null"
+            <img class="profile_image" v-if="userStore.profileImage"
                  :src="userStore.profileImage" alt="user profile image"/>
-            <img class="profile_image" v-if="!userStore.profileImage"
-                 src="@/assets/images/test-account-96.png" alt="user profile image">
-
-
+            <div class="profile_image user_no_image" v-if="!userStore.profileImage && !userStore.isAdmin"></div>
+            <div class="profile_image admin_no_image" v-if="!userStore.profileImage && userStore.isAdmin"></div>
             <span class="userbox-text" v-if="userStore.user != null">{{ userStore.user.name }}
           <span v-if="userStore.user.role ==='ROLE_ADMIN'" style="color: #c6c6c6; font-size: 0.8rem">(관리자)</span>
           </span>
