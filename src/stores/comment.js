@@ -36,7 +36,7 @@ export const useCommentStore = defineStore('comment', {
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
                         this.totalItemCnt = data.totalElementCnt;
-                        this.currentPage = data.currentPage;
+                        this.currentPage = data.currentPage + 1;
                     }
                 })
                 .catch(error => {
@@ -58,7 +58,7 @@ export const useCommentStore = defineStore('comment', {
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
                         this.totalItemCnt = data.totalElementCnt;
-                        this.currentPage = data.currentPage;
+                        this.currentPage = data.currentPage + 1;
                     }
                 })
                 .catch(error => {
@@ -80,7 +80,7 @@ export const useCommentStore = defineStore('comment', {
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
                         this.totalItemCnt = data.totalElementCnt;
-                        this.currentPage = data.currentPage;
+                        this.currentPage = data.currentPage + 1;
                     }
                 })
                 .catch(error => {

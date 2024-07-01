@@ -40,7 +40,7 @@ export const useNoticeStore = defineStore('notice', {
                     this.boardList = data.boardNoticeList;
                     this.totalPages = data.totalPageCnt;
                     this.totalItemCnt = data.totalElementCnt;
-                    this.currentPage = data.currentPage;
+                    this.currentPage = data.currentPage + 1;
                 });
         },
         async getBoard(id) {

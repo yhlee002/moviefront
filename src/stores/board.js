@@ -55,7 +55,7 @@ export const useBoardStore = defineStore('board', {
                     this.boardList = data.boardImpList;
                     this.totalPages = data.totalPageCnt;
                     this.totalItemCnt = data.totalElementCnt;
-                    this.currentPage = data.currentPage;
+                    this.currentPage = data.currentPage + 1;
                 });
         },
         async getBoard(id) {
