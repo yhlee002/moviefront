@@ -7,7 +7,7 @@ export const useNoticeStore = defineStore('notice', {
             totalPages: 1,
             currentPage: 1,
             boardList: [],
-            totalElementCnt: 0,
+            totalElements: 0,
             currentBoard: {},
             prevBoard: {},
             nextBoard: {}
@@ -39,12 +39,12 @@ export const useNoticeStore = defineStore('notice', {
                 .then(data => {
                     this.boardList = data.boardNoticeList;
                     this.totalPages = data.totalPageCnt;
-                    this.totalItemCnt = data.totalElementCnt;
+                    this.totalElements = data.totalElementCnt;
                     this.currentPage = data.currentPage + 1;
                 });
         },
         async getBoard(id) {
-            await axios.get(`/api/notice/${id}`)
+            await axios.get(`/api/notices/${id}`)
                 .then(response => response.data)
                 .then(result => result.data)
                 .then(data => {
@@ -54,19 +54,19 @@ export const useNoticeStore = defineStore('notice', {
                 });
         },
         async saveBoard(board) {
-            return (await axios.post(`/api/notice`, board)
+            return (await axios.post(`/api/notices`, board)
                 .catch(e => {
                     console.error(e);
                 })).data;
         },
         async updateBoard(board) {
-            return (await axios.patch(`/api/notice`, board)
+            return (await axios.patch(`/api/notices`, board)
                 .catch(e => {
                     console.error(e);
                 })).data;
         },
         async updateBoardViews(boardId) {
-            return (await axios.patch('/api/notice/view', {
+            return (await axios.patch('/api/notices/views', {
                 id: boardId
             })
                 .catch(e => {
@@ -75,7 +75,7 @@ export const useNoticeStore = defineStore('notice', {
                 }));
         },
         async deleteBoard(boardId) {
-            return (await axios.delete(`/api/notice?boardId=${boardId}`)
+            return (await axios.delete(`/api/notices?boardId=${boardId}`)
                 .catch(e => {
                     console.error(e);
                 })).data;

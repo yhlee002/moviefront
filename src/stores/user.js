@@ -17,7 +17,7 @@ export const useUserStore = defineStore('user', {
         return {
             totalPages: 1,
             currentPage: 1,
-            totalItemCnt: 0,
+            totalElements: 0,
             user: {}, // login user info
             users: [],
             profile: {
@@ -66,7 +66,10 @@ export const useUserStore = defineStore('user', {
         clearState() {
             this.user = userDefault;
         },
-        async getUser() {
+        async getUser(memNo) {
+          return (await axios.get(`/api/members/${memNo}`)).data;
+        },
+        async getCurrentUser() {
             await axios.get('/api/members/current')
                 .then(response => response.data)
                 .then(result => {
@@ -95,7 +98,7 @@ export const useUserStore = defineStore('user', {
                     const data = result.data;
                     this.totalPages = data.totalPageCnt;
                     this.currentPage = page;
-                    this.totalItemCnt = data.totalElementCnt;
+                    this.totalItems = data.totalElementCnt;
                     this.users = data.memberList;
                 })
                 .catch(e => {
@@ -239,6 +242,12 @@ export const useUserStore = defineStore('user', {
         async updateMemberRole(memNo, role) {
             return (await axios.patch('/api/members/role', {
                 memNo: memNo,
+                role: role
+            })).data;
+        },
+        async updateMultiMemberRole(memNoList, role) {
+            return (await axios.post('/api/members/multi-role', {
+                memNoList: memNoList,
                 role: role
             })).data;
         }

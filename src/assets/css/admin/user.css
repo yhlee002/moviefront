@@ -1,0 +1,92 @@
+.search-options {
+    margin-bottom: 2rem;
+}
+
+.search-options > h3,
+.search-results > h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.search-options > .search-options-main-box {
+    display: flex;
+}
+
+.search-options > .search-options-main-box > .search-options-group {
+    display: flex;
+    flex-direction: row;
+}
+
+@media(min-width: 840px) {
+    .search-options > .search-options-main-box {
+        flex-direction: row;
+    }
+}
+
+@media(max-width: 839px) {
+    .search-options > .search-options-main-box {
+        flex-direction: column;
+    }
+
+    .search-options > .search-options-main-box > .search-options-group {
+        margin-bottom: 0.4rem;
+    }
+}
+
+.search-options-box {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+}
+
+.search-options-box > .search-options-title {
+    margin: 0 0.5rem 0 1rem;
+    white-space: nowrap;
+}
+
+.search-options-box > .search-options-title:nth-child(1) {
+    margin-left: 0;
+}
+
+.search-options-box input,
+.search-options-box select {
+    margin-right: 1rem;
+    /* height: 2rem; */
+}
+
+#userList {
+    min-width: 30rem;
+    width: 100%;
+}
+
+#userList thead th {
+    cursor: pointer;
+    white-space: nowrap;
+    padding-right: 1.7rem;
+}
+
+#userList thead th:nth-child(1) {
+    padding: 0;
+}
+
+#userList > tbody > tr {
+    cursor: pointer;
+}
+
+#userList th, #userList td {
+    text-align: left;
+}
+
+#userList .user-list-checkbox {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+#userDetailModal {
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    border: 1px solid #b3b3b3;
+    box-shadow: 1px 1px 3px #cacaca;
+}

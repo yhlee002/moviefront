@@ -12,28 +12,32 @@ import SignUp from "@/components/login/SignUpComponent.vue";
 import Editor from "@/components/board/EditorComponent.vue";
 import UserProfile from "@/components/UserProfileComponent.vue";
 import AdminUser from "@/components/admin/AdminUserComponent.vue";
+import AdminUserDetail from "@/components/admin/AdminUserDetailComponent.vue";
+import AdminUserLoginLogs from "@/components/admin/AdminUserLoginLogsComponent.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
-            path: '/admin',
-            name: 'admin',
-            component: Admin,
-            children: [
-
-            ]
-        },
-        {
-            path: '/admin/user',
-            name: 'userList',
-            component: AdminUser
-        },
-        {
             path: '/',
             name: 'main',
             component: Main,
             children: [
+                {
+                    path: '/admin',
+                    name: 'admin',
+                    component: Admin,
+                    children: []
+                },
+                {
+                    path: '/admin/user',
+                    name: 'userList',
+                    component: AdminUser,
+                },
+                {
+                    path: '/admin/user/:id',
+                    component: AdminUserDetail,
+                },
                 {
                     path: '/search',
                     name: 'searchMovie',

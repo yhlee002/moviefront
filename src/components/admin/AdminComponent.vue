@@ -21,7 +21,6 @@ commentStore.getComments(1, 10, null);
 
 <template>
   <div id="adminPanel">
-
     <div class="admin-panel-block-1">
       <!-- Notices -->
       <div class="admin-panel-block-2">

@@ -7,7 +7,7 @@ export const useCommentStore = defineStore('comment', {
             comments: [],
             currentPage: 1,
             totalPages: 1,
-            totalItemCnt: 0
+            totalElements: 0
         }
     },
     getters: {
@@ -35,7 +35,7 @@ export const useCommentStore = defineStore('comment', {
                         const data = result.data;
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
-                        this.totalItemCnt = data.totalElementCnt;
+                        this.totalItems = data.totalElementCnt;
                         this.currentPage = data.currentPage + 1;
                     }
                 })
@@ -57,7 +57,7 @@ export const useCommentStore = defineStore('comment', {
                         const data = result.data;
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
-                        this.totalItemCnt = data.totalElementCnt;
+                        this.totalItems = data.totalElementCnt;
                         this.currentPage = data.currentPage + 1;
                     }
                 })
@@ -79,7 +79,7 @@ export const useCommentStore = defineStore('comment', {
                         const data = result.data;
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
-                        this.totalItemCnt = data.totalElementCnt;
+                        this.totalItems = data.totalElementCnt;
                         this.currentPage = data.currentPage + 1;
                     }
                 })

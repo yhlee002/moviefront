@@ -38,9 +38,14 @@ textarea {
     resize: none;
 }
 
-select {
+select:not(.swal2-select) {
     height: 2rem;
     padding: 0 1rem;
+}
+
+input {
+    height: 1.8rem;
+    padding: 0 0.5rem;
 }
 
 /* table */

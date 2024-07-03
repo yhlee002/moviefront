@@ -7,7 +7,7 @@ export const useMovieCommentStore = defineStore('movieComment', {
             comments: [],
             currentPage: 1,
             totalPages: 1,
-            totalItemCnt: 0
+            totalElements: 0
         }
     },
     getters: {
@@ -34,7 +34,7 @@ export const useMovieCommentStore = defineStore('movieComment', {
                 .then(data => {
                     this.comments = data.commentMovsList;
                     this.totalPages = data.totalPageCnt;
-                    this.totalItemCnt = data.totalElementCnt;
+                    this.totalElements = data.totalElementCnt;
                     this.currentPage = data.currentPage + 1;
 
                 })
@@ -56,7 +56,7 @@ export const useMovieCommentStore = defineStore('movieComment', {
                         const data = result.data;
                         this.comments = data.commentMovsList;
                         this.totalPages = data.totalPageCnt;
-                        this.totalItemCnt = data.totalElementCnt;
+                        this.totalElements = data.totalElementCnt;
                         this.currentPage = data.currentPage + 1;
                     }
                 })

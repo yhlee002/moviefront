@@ -7,7 +7,7 @@ export const useBoardStore = defineStore('board', {
             totalPages: 1,
             currentPage: 1,
             boardList: [],
-            totalItemCnt: 0,
+            totalElements: 0,
             currentBoard: {},
             prevBoard: {},
             nextBoard: {},
@@ -54,7 +54,7 @@ export const useBoardStore = defineStore('board', {
                 .then(data => {
                     this.boardList = data.boardImpList;
                     this.totalPages = data.totalPageCnt;
-                    this.totalItemCnt = data.totalElementCnt;
+                    this.totalItems = data.totalElementCnt;
                     this.currentPage = data.currentPage + 1;
                 });
         },

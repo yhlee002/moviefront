@@ -3,7 +3,7 @@ import {useUserStore} from '@/stores/user.js';
 import Logo from "@/components/fragment/LogoComponent.vue";
 
 const userStore = useUserStore();
-userStore.getUser();
+userStore.getCurrentUser();
 
 const logoutUrl = `http://${import.meta.env.VITE_APP_HOST}:8080/api/members/logout`;
 
