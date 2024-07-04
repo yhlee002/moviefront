@@ -2,9 +2,12 @@
 import '@/assets/css/admin/user.css';
 import {ref, watch} from "vue";
 import Swal from "sweetalert2";
-import {useUserStore} from "@/stores/user";
+import {useUserStore} from "@/stores/user.js";
 import {useRouter} from "vue-router";
 import AdminUserLoginLogsComponent from "@/components/admin/AdminUserLoginLogsComponent.vue";
+import AdminUserBoardComponent from "@/components/admin/AdminUserBoardComponent.vue";
+import AdminUserCommentComponent from "@/components/admin/AdminUserCommentComponent.vue";
+import AdminUserNoticeComponent from "@/components/admin/AdminUserNoticeComponent.vue";
 
 const router = useRouter();
 let id = ref(router.currentRoute.value.params.id);
@@ -37,6 +40,7 @@ function changeUserRole() {
     icon: 'question',
     confirmButtonText: '확인',
     cancelButtonText: '취소',
+    showCancelButton: true
   }).then(async result => {
     if (result.isConfirmed) {
       const response = await userStore.updateMemberRole(member.value.memNo, afterRole);
@@ -67,7 +71,7 @@ function deleteUserInfo() {
     icon: 'question',
     confirmButtonText: '확인',
     cancelButtonText: '취소',
-    showCancelButton: true,
+    showCancelButton: true
   }).then(async result => {
     if (result.isConfirmed) {
       const result = await userStore.deleteUser();
@@ -94,8 +98,35 @@ function activeTab(idx) {
   contents[idx].classList.add('active');
 }
 
-function modifyUserInfo() {
+function modifyModeOn() {
   if (!editMode.value) editMode.value = true;
+}
+
+function modifyUserInfo() {
+  Swal.fire({
+    text: '변경사항을 저장하시겠습니까?',
+    icon: 'question',
+    confirmButtonText: '확인',
+    cancelButtonText: '취소',
+    showCancelButton: true
+  }).then(async result => {
+    if (result.isConfirmed) {
+      const result = await userStore.updateUser(member.value);
+
+      if (result.data) {
+        Swal.fire({
+          text: '성공적으로 수정하였습니다.',
+          icon: 'success'
+        })
+
+        const res = await userStore.getUser(id.value);
+        member.value = res.data;
+
+        editMode.value = false;
+      }
+    }
+  })
+
 }
 
 </script>
@@ -122,13 +153,23 @@ function modifyUserInfo() {
     </tr>
     <tr>
       <td class="table-column-cell" style="width: 5rem;">이름</td>
-      <td>{{ member.name }}</td>
+      <td v-if="!editMode">{{ member.name }}</td>
+      <td v-if="editMode"><input type="text" v-model="member.name"/></td>
       <td class="table-column-cell" style="width: 4rem;">권한</td>
       <td style="width: 4rem;">{{ member.role.substring('ROLE_'.length) }}</td>
       <td class="table-column-cell" style="width: 5rem;">인증 여부</td>
-      <td>{{ member.certification }}</td>
+      <td v-if="!editMode">{{ member.certification }}</td>
+      <td v-if="editMode">
+        <select v-model="member.certification">
+          <option value="Y">Y</option>
+          <option value="N">N</option>
+        </select>
+      </td>
       <td class="table-column-cell" style="width: 4rem;">연락처</td>
-      <td colspan="2">{{ member.phone }}</td>
+      <td v-if="!editMode" colspan="2">{{member.phone}}</td>
+      <td v-if="editMode" colspan="2">
+        <input type="tel" v-model="member.phone"/>
+      </td>
     </tr>
     <tr>
       <td class="table-column-cell">작성한 글 수</td>
@@ -142,7 +183,8 @@ function modifyUserInfo() {
   </table>
 
   <div class="button-box" style="align-self: end;">
-    <button class="button-default" type="button" @click="modifyUserInfo()">수정</button>
+    <button v-if="!editMode" class="button-default" type="button" @click="modifyModeOn()">수정</button>
+    <button v-if="editMode" class="button-default" type="button" @click="modifyUserInfo()">완료</button>
     <button class="button-default" type="button" @click="changeUserRole()">권한 변경</button>
     <button class="button-default" type="button" @click="deleteUserInfo()">삭제</button>
   </div>
@@ -155,18 +197,18 @@ function modifyUserInfo() {
     </ul>
 
     <div id="userDetailTabContents">
+      <div id="userDetailTab0" class="user-detail-tab">
+        <AdminUserNoticeComponent :memNo="id"></AdminUserNoticeComponent>
+      </div>
+
       <div id="userDetailTab1" class="user-detail-tab active">
         <!-- 작성한 글 -->
-        <table>
-
-        </table>
+        <AdminUserBoardComponent :memNo="id"></AdminUserBoardComponent>
       </div>
 
       <div id="userDetailTab2" class="user-detail-tab">
         <!-- 작성한 댓글 -->
-        <table>
-
-        </table>
+        <AdminUserCommentComponent :memNo="id"></AdminUserCommentComponent>
       </div>
 
       <div id="userDetailTab3" class="user-detail-tab">
@@ -176,8 +218,6 @@ function modifyUserInfo() {
     </div>
   </div>
 
-
-
 </template>
 
 <style scoped>
@@ -186,6 +226,12 @@ function modifyUserInfo() {
   width: 100%;
   min-width: 300px;
   border: 1px solid #f2f2f2;
+}
+
+#userDetailTable input[readonly] {
+  background-color: transparent;
+  border: none;
+  outline: none;
 }
 
 #userDetailTable .table-column-cell {
@@ -222,9 +268,5 @@ function modifyUserInfo() {
 
 #userDetailTabContents .user-detail-tab.active {
   display: flex;
-}
-
-#loginLogs, #loginLogsTable {
-  width: 100%;
 }
 </style>

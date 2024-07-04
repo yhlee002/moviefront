@@ -1,7 +1,7 @@
 <script setup>
 import '@/assets/css/admin/user.css';
 
-import {useUserStore} from "@/stores/user";
+import {useUserStore} from "@/stores/user.js";
 import Swal from 'sweetalert2';
 import {ref, watch} from "vue";
 import SortingComponent from "@/components/icon/SortingComponent.vue";

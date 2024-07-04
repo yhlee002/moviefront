@@ -14,6 +14,7 @@ import UserProfile from "@/components/UserProfileComponent.vue";
 import AdminUser from "@/components/admin/AdminUserComponent.vue";
 import AdminUserDetail from "@/components/admin/AdminUserDetailComponent.vue";
 import AdminUserLoginLogs from "@/components/admin/AdminUserLoginLogsComponent.vue";
+import AdminUserDetailContainer from "@/components/admin/AdminUserDetailContainer.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,7 +37,7 @@ const router = createRouter({
                 },
                 {
                     path: '/admin/user/:id',
-                    component: AdminUserDetail,
+                    component: AdminUserDetailContainer,
                 },
                 {
                     path: '/search',

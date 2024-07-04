@@ -126,6 +126,8 @@ commentStore.getComments(1, 10, null);
 #adminPanel .block-content {
   height: 350px;
   overflow: hidden;
+  background-color: rgb(181 166 149 / 33%);
+  border-radius: 1rem;
 }
 
 @media (min-width: 1290px) {
@@ -178,8 +180,13 @@ commentStore.getComments(1, 10, null);
     flex-direction: column;
   }
 
+  #adminPanel .admin-panel-block-2 {
+    margin-bottom: 1rem;
+  }
+
   #adminPanel .block-content {
     width: 100%;
+    height: fit-content;
   }
 }
 </style>

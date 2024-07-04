@@ -63,6 +63,16 @@ table td, table th {
     padding-right: 0.2rem;
 }
 
+table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+table th {
+    white-space: nowrap;
+}
+
 table, td, th {
     /*border: 1px solid #f2f2f2;*/
     border: 1px solid #dadada;

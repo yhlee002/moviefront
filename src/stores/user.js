@@ -98,7 +98,7 @@ export const useUserStore = defineStore('user', {
                     const data = result.data;
                     this.totalPages = data.totalPageCnt;
                     this.currentPage = page;
-                    this.totalItems = data.totalElementCnt;
+                    this.totalElements = data.totalElementCnt;
                     this.users = data.memberList;
                 })
                 .catch(e => {
@@ -231,14 +231,6 @@ export const useUserStore = defineStore('user', {
                 password: password
             })).data;
         },
-        async deleteUser(memNo) {
-            return (await axios.delete(`/api/members/${memNo}`)).data;
-        },
-        async deleteUsers(memNoList) {
-            return (await axios.post(`/api/members/batch-delete`, {
-                memNoList: memNoList
-            })).data;
-        },
         async updateMemberRole(memNo, role) {
             return (await axios.patch('/api/members/role', {
                 memNo: memNo,
@@ -249,6 +241,34 @@ export const useUserStore = defineStore('user', {
             return (await axios.post('/api/members/multi-role', {
                 memNoList: memNoList,
                 role: role
+            })).data;
+        },
+        async updateUser(user) {
+            return (await axios.patch(`/api/members/`, {
+                memNo: user.memNo,
+                name: user.name,
+                phone: user.phone,
+                certification: user.certification,
+                profileImage: user.profileImage
+            }))
+        },
+        async deleteUser(memNo) {
+            return (await axios.delete(`/api/members/flag?memNo=${memNo}`)).data;
+        },
+        async deleteUsers(memNoList) {
+            return (await axios.post(`/api/members/flag/batch-delete`, {
+                memNoList: memNoList
+            })).data;
+        },
+        // 영구 삭제
+        async deleteUserPermanently(memNo) {
+            return (await axios.delete(`/api/members?memNo=${memNo}`)
+                    .catch(e => console.error(e))
+            ).data;
+        },
+        async deleteUsersPermanently(memNoList) {
+            return (await axios.post(`/api/members/batch-delete`, {
+                memNoList: memNoList
             })).data;
         }
     }

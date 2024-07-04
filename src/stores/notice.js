@@ -53,6 +53,23 @@ export const useNoticeStore = defineStore('notice', {
                     this.nextBoard = data.nextBoard;
                 });
         },
+        async getBoardsByMemNo(memNo, page, size) {
+            await axios.get(`/api/notices/members`, {
+                params: {
+                    memNo: memNo,
+                    page: page - 1,
+                    size: size,
+                }
+            })
+                .then(response => response.data)
+                .then(result => result.data)
+                .then(data => {
+                    this.boardList = data.boardNoticeList;
+                    this.totalPages = data.totalPageCnt;
+                    this.totalElements = data.totalElementCnt;
+                    this.currentPage = data.currentPage + 1;
+                });
+        },
         async saveBoard(board) {
             return (await axios.post(`/api/notices`, board)
                 .catch(e => {
@@ -75,10 +92,26 @@ export const useNoticeStore = defineStore('notice', {
                 }));
         },
         async deleteBoard(boardId) {
-            return (await axios.delete(`/api/notices?boardId=${boardId}`)
+            return (await axios.delete(`/api/notices/flag?boardId=${boardId}`)
                 .catch(e => {
                     console.error(e);
                 })).data;
+        },
+        async deleteBoards(boardIds) {
+            return (await axios.post(`/api/notices/flag/batch-delete`, {
+                ids: boardIds
+            })).data;
+        },
+        // 영구 삭제
+        async deleteBoardPermanently(commentId) {
+            return (await axios.delete(`/api/notices?commentId=${commentId}`)
+                    .catch(e => console.error(e))
+            ).data;
+        },
+        async deleteBoardsPermanently(commentIds) {
+            return (await axios.post(`/api/notices/batch-delete`, {
+                ids: commentIds
+            })).data;
         }
     }
 })

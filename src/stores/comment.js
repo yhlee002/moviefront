@@ -35,7 +35,7 @@ export const useCommentStore = defineStore('comment', {
                         const data = result.data;
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
-                        this.totalItems = data.totalElementCnt;
+                        this.totalElements = data.totalElementCnt;
                         this.currentPage = data.currentPage + 1;
                     }
                 })
@@ -57,7 +57,7 @@ export const useCommentStore = defineStore('comment', {
                         const data = result.data;
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
-                        this.totalItems = data.totalElementCnt;
+                        this.totalElements = data.totalElementCnt;
                         this.currentPage = data.currentPage + 1;
                     }
                 })
@@ -79,7 +79,7 @@ export const useCommentStore = defineStore('comment', {
                         const data = result.data;
                         this.comments = data.commentImpsList;
                         this.totalPages = data.totalPageCnt;
-                        this.totalItems = data.totalElementCnt;
+                        this.totalElements = data.totalElementCnt;
                         this.currentPage = data.currentPage + 1;
                     }
                 })
@@ -104,9 +104,25 @@ export const useCommentStore = defineStore('comment', {
             ).data;
         },
         async deleteComment(commentId) {
+            return (await axios.delete(`/api/comments/imps/flag?commentId=${commentId}`)
+                    .catch(e => console.error(e))
+            ).data;
+        },
+        async deleteComments(commentIds) {
+            return (await axios.post(`/api/comments/imps/flag/batch-delete`, {
+                ids: commentIds
+            })).data;
+        },
+        // 영구 삭제
+        async deleteCommentPermanently(commentId) {
             return (await axios.delete(`/api/comments/imps?commentId=${commentId}`)
                     .catch(e => console.error(e))
             ).data;
+        },
+        async deleteCommentsPermanently(commentIds) {
+            return (await axios.post(`/api/comments/batch-delete`, {
+                ids: commentIds
+            })).data;
         }
     }
 })

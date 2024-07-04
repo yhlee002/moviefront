@@ -54,7 +54,24 @@ export const useBoardStore = defineStore('board', {
                 .then(data => {
                     this.boardList = data.boardImpList;
                     this.totalPages = data.totalPageCnt;
-                    this.totalItems = data.totalElementCnt;
+                    this.totalElements = data.totalElementCnt;
+                    this.currentPage = data.currentPage + 1;
+                });
+        },
+        async getBoardsByMemNo(memNo, page, size) {
+            await axios.get(`/api/imps/members`, {
+                params: {
+                    memNo: memNo,
+                    page: page - 1,
+                    size: size,
+                }
+            })
+                .then(response => response.data)
+                .then(result => result.data)
+                .then(data => {
+                    this.boardList = data.boardImpList;
+                    this.totalPages = data.totalPageCnt;
+                    this.totalElements = data.totalElementCnt;
                     this.currentPage = data.currentPage + 1;
                 });
         },
@@ -126,11 +143,27 @@ export const useBoardStore = defineStore('board', {
                 }));
         },
         async deleteBoard(boardId) {
-            return (await axios.delete(`/api/imps?boardId=${boardId}`)
+            return (await axios.delete(`/api/imps/flag?boardId=${boardId}`)
                 .catch(e => {
                     console.error(e);
                     return e.response;
                 }));
+        },
+        async deleteBoards(boardIds) {
+            return (await axios.post(`/api/imps/flag/batch-delete`, {
+                ids: boardIds
+            })).data;
+        },
+        // 영구 삭제
+        async deleteBoardPermanently(commentId) {
+            return (await axios.delete(`/api/imps?commentId=${commentId}`)
+                    .catch(e => console.error(e))
+            ).data;
+        },
+        async deleteBoardsPermanently(commentIds) {
+            return (await axios.post(`/api/imps/batch-delete`, {
+                ids: commentIds
+            })).data;
         }
     }
 })

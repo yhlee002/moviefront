@@ -81,6 +81,7 @@ const seqField = props.seqField ?? 'id';
   align-items: center;
   justify-content: center;
   border-bottom: 0.1rem solid #f2f2f2;
+  padding: 0 0.5rem;
 }
 
 .list-item-box > ul.list-item-group > li > a {
