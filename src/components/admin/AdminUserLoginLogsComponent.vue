@@ -27,6 +27,9 @@ const logs = logStore.logs;
         <!--                <td>{{log.memberIdentifier}}</td>-->
         <td>{{ log.result }}</td>
       </tr>
+      <tr v-if="logs.length === 0">
+        <td colspan="3" style="text-align: center;">로그인 기록이 존재하지 않습니다.</td>
+      </tr>
       </tbody>
     </table>
   </div>

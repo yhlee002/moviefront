@@ -8,6 +8,8 @@ import AdminUserLoginLogsComponent from "@/components/admin/AdminUserLoginLogsCo
 import AdminUserBoardComponent from "@/components/admin/AdminUserBoardComponent.vue";
 import AdminUserCommentComponent from "@/components/admin/AdminUserCommentComponent.vue";
 import AdminUserNoticeComponent from "@/components/admin/AdminUserNoticeComponent.vue";
+import {useBoardStore} from "@/stores/board";
+import {useCommentStore} from "@/stores/comment";
 
 const router = useRouter();
 let id = ref(router.currentRoute.value.params.id);
@@ -19,6 +21,14 @@ if (!id.value) {
 }
 const response = await userStore.getUser(id.value);
 const member = ref(response.data);
+const memberOrigin = response.data;
+
+const boardStore = useBoardStore();
+const commentStore = useCommentStore();
+await boardStore.getBoardsByMemNo(id.value, 1, 15);
+await commentStore.getCommentsByMember(id.value, 1, 15);
+const boardCnt = boardStore.totalElements;
+const commentCnt = commentStore.totalElements;
 
 watch(() => id, async (newVal, oldVal) => {
   const response = await userStore.getUser(newVal);
@@ -88,6 +98,7 @@ function deleteUserInfo() {
 function activeTab(idx) {
   const lis = document.querySelectorAll('#userDetailTabIdxs li.user-detail-tab-index');
   const contents = document.querySelectorAll('#userDetailTabContents div.user-detail-tab');
+  const activeContent = document.querySelector('#userDetailTab' + idx);
 
   for (let i = 0; i < lis.length; i++) {
     lis[i].classList.remove('active');
@@ -95,7 +106,8 @@ function activeTab(idx) {
   }
 
   lis[idx].classList.add('active');
-  contents[idx].classList.add('active');
+
+  activeContent.classList.add('active');
 }
 
 function modifyModeOn() {
@@ -103,6 +115,16 @@ function modifyModeOn() {
 }
 
 function modifyUserInfo() {
+  if (!checkParams()) {
+    Swal.fire({
+      text: '변경사항이 없습니다',
+      icon: 'warning'
+    })
+
+    changeEditMode()
+    return;
+  }
+
   Swal.fire({
     text: '변경사항을 저장하시겠습니까?',
     icon: 'question',
@@ -126,7 +148,13 @@ function modifyUserInfo() {
       }
     }
   })
+  function checkParams() {
+    if (memberOrigin.name !== member.value.name) return true;
+    if (memberOrigin.phone !== member.value.phone) return true;
+    if (memberOrigin.certification !== member.value.certification) return true;
 
+    return false;
+  }
 }
 
 </script>
@@ -168,14 +196,14 @@ function modifyUserInfo() {
       <td class="table-column-cell" style="width: 4rem;">연락처</td>
       <td v-if="!editMode" colspan="2">{{member.phone}}</td>
       <td v-if="editMode" colspan="2">
-        <input type="tel" v-model="member.phone"/>
+        <input type="text" v-model="member.phone"/>
       </td>
     </tr>
     <tr>
       <td class="table-column-cell">작성한 글 수</td>
-      <td></td>
+      <td>{{boardCnt}}</td>
       <td class="table-column-cell" colspan="2">작성한 댓글 수</td>
-      <td></td>
+      <td>{{commentCnt}}</td>
       <td class="table-column-cell">회원가입일자</td>
       <td colspan="2">{{ member.regDate }}</td>
 
@@ -191,9 +219,10 @@ function modifyUserInfo() {
 
   <div id="userDetailDatas">
     <ul id="userDetailTabIdxs">
-      <li class="user-detail-tab-index active" @click="activeTab(0)">작성한 글</li>
-      <li class="user-detail-tab-index" @click="activeTab(1)">작성한 댓글</li>
-      <li class="user-detail-tab-index" @click="activeTab(2)">로그인 기록</li>
+      <li class="user-detail-tab-index" @click="activeTab(0)">작성한 공지</li>
+      <li class="user-detail-tab-index active" @click="activeTab(1)">작성한 글</li>
+      <li class="user-detail-tab-index" @click="activeTab(2)">작성한 댓글</li>
+      <li class="user-detail-tab-index" @click="activeTab(3)">로그인 기록</li>
     </ul>
 
     <div id="userDetailTabContents">
