@@ -2,6 +2,9 @@
 import {useBoardStore} from "@/stores/board.js";
 import Swal from "sweetalert2";
 import {ref} from "vue";
+import {useRouter} from "vue-router";
+
+const router = useRouter()
 
 const boardStore = useBoardStore();
 const props = defineProps(['memNo']);
@@ -52,6 +55,9 @@ async function deleteBoards() {
   })
 }
 
+function goBoardPage(id) {
+  router.push(`/board/${id}`)
+}
 </script>
 
 <template>
@@ -72,7 +78,9 @@ async function deleteBoards() {
           <input :value="board.id" type="checkbox"/>
         </td>
         <td>{{ board.id }}</td>
-        <td>{{ board.title }}</td>
+        <td>
+          <span @click="goBoardPage(board.id)" style="cursor:pointer;">{{ board.title }}</span>
+        </td>
         <td>{{ board.regDate }}</td>
       </tr>
       <tr v-if="boards.length === 0">

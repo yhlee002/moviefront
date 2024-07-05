@@ -356,6 +356,9 @@ function certificationToKorean(certification) {
                 <td>{{ certificationToKorean(member.certification) }}</td>
                 <td>{{ member.regDate.slice(0, 10).replaceAll('-', '.') }}</td>
               </tr>
+              <tr v-if="list.length === 0">
+                <td colspan="8" style="text-align: center;">조건에 해당하는 회원이 존재하지 않습니다.</td>
+              </tr>
               </tbody>
             </table>
           </div>

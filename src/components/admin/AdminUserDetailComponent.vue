@@ -10,6 +10,7 @@ import AdminUserCommentComponent from "@/components/admin/AdminUserCommentCompon
 import AdminUserNoticeComponent from "@/components/admin/AdminUserNoticeComponent.vue";
 import {useBoardStore} from "@/stores/board";
 import {useCommentStore} from "@/stores/comment";
+import UserImageComponent from "@/components/icon/UserImageComponent.vue";
 
 const router = useRouter();
 let id = ref(router.currentRoute.value.params.id);
@@ -167,7 +168,8 @@ function modifyUserInfo() {
   <table id="userDetailTable">
     <tr>
       <td rowspan="3" style="width: 6rem; height: 8rem; overflow: hidden;">
-        <img style="width: 6rem; height: 6rem;" :src="member.profileImage"/>
+        <UserImageComponent :profileImage="member.profileImage" :role="member.role"
+        width="6rem" height="6rem"></UserImageComponent>
       </td>
       <td class="table-column-cell" style="width: 6rem;">식별번호</td>
       <td style="width: 8rem;">{{ member.memNo }}</td>
@@ -251,7 +253,7 @@ function modifyUserInfo() {
 
 <style scoped>
 #userDetailTable {
-  margin: 2rem 0;
+  margin: 1rem 0;
   width: 100%;
   min-width: 300px;
   border: 1px solid #f2f2f2;

@@ -2,6 +2,9 @@
 import {useCommentStore} from "@/stores/comment.js";
 import Swal from "sweetalert2";
 import {ref} from "vue";
+import {useRouter} from "vue-router";
+
+const router = useRouter()
 
 const commentStore = useCommentStore();
 const props = defineProps(['memNo']);
@@ -51,6 +54,10 @@ async function deleteComments() {
     }
   })
 }
+
+function goBoardPage(id) {
+  router.push(`/board/${id}`)
+}
 </script>
 
 <template>
@@ -72,8 +79,12 @@ async function deleteComments() {
           <input :value="comment.id" type="checkbox"/>
         </td>
         <td>{{ comment.id }}</td>
-        <td>{{ comment.content }}</td>
-        <td>{{ comment.boardTitle }}</td>
+        <td>
+          <span @click="goBoardPage(comment.boardId)" style="cursor:pointer;">{{ comment.content }}</span>
+        </td>
+        <td>
+          <span @click="goBoardPage(comment.boardId)" style="cursor:pointer;">{{ comment.boardTitle }}</span>
+        </td>
         <td style="width: 11rem;">{{ comment.regDate }}</td>
       </tr>
       <tr v-if="comments.length === 0">

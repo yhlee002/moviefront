@@ -126,7 +126,7 @@ commentStore.getComments(1, 10, null);
 #adminPanel .block-content {
   height: 350px;
   overflow: hidden;
-  background-color: rgb(181 166 149 / 33%);
+  //background-color: rgb(181 166 149 / 33%);
   border-radius: 1rem;
 }
 
