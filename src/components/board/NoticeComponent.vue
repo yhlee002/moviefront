@@ -7,23 +7,41 @@ import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user.js";
 import {ref, watch} from "vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
+import {useBoardStore} from "@/stores/board";
+
+const props = defineProps(['page']);
 
 const router = useRouter();
 const userStore = useUserStore();
 const noticeStore = useNoticeStore();
 
-await noticeStore.getBoards(noticeStore.currentPage, 15, null, null);
+if (props.page) {
+  noticeStore.currentPage = props.page;
+} else {
+  noticeStore.currentPage = 1;
+}
 
-// noticeStore.getTotalPages();
+watch(() => props.page, async (newVal, oldVal) => {
+  if (newVal) {
+    noticeStore.currentPage = newVal;
+  } else {
+    noticeStore.currentPage = 1;
+  }
+
+  await noticeStore.getBoards(noticeStore.currentPage, 10, null, null);
+});
+
+await noticeStore.getBoards(noticeStore.currentPage, 10, null, null);
+
 const query = ref("");
 const condition = ref("titleOrContent");
 const orderBy = ref("recent");
 
 watch(orderBy, (newVal) => {
   if (newVal === 'recent') {
-    noticeStore.getBoards(noticeStore.currentPage, 15, null, null)
+    noticeStore.getBoards(noticeStore.currentPage, 10, null, null)
   } else {
-    noticeStore.getBoards(noticeStore.currentPage, 15, null, newVal);
+    noticeStore.getBoards(noticeStore.currentPage, 10, null, newVal);
   }
 
   query.value = "";
@@ -37,7 +55,7 @@ function enter() {
 }
 
 async function search(query) {
-  await boardStore.getBoards(1, 15, query, condition.value);
+  await boardStore.getBoards(1, 10, query, condition.value);
 }
 
 function writeNewPost() {
@@ -61,11 +79,13 @@ function writeNewPost() {
                   <img src="@/assets/images/icons/icons8-pencil-48.png" alt="작성하기">
                   작성하기</button>
 
-                <select id="noticeSearchConditionSelect" v-model="condition">
-                  <option value="titleOrContent" selected>제목 또는 내용</option>
-                  <option value="writerName">작성자</option>
-                </select>
-                <input id="noticeSearchInput" v-model="query" @keydown="enter()" type="text" placeholder="검색">
+                <div style="display: flex;">
+                  <select id="noticeSearchConditionSelect" v-model="condition">
+                    <option value="titleOrContent" selected>제목 또는 내용</option>
+                    <option value="writerName">작성자</option>
+                  </select>
+                  <input id="noticeSearchInput" v-model="query" @keydown="enter()" type="text" placeholder="검색">
+                </div>
 
                 <select v-model="orderBy">
                   <option value="recent" selected>최신순</option>
@@ -73,7 +93,7 @@ function writeNewPost() {
                 </select>
               </div>
 
-              <div class="block-horizontal-line"></div>
+<!--              <div class="block-horizontal-line"></div>-->
 
               <ListComponent category="notice" :list="noticeStore.listItems" :comment="false" :recommended="false"></ListComponent>
               <Pagenation :pages="noticeStore.totalPages" :page="noticeStore.currentPage"></Pagenation>

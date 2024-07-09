@@ -9,7 +9,7 @@ import PagenationComponent from "@/components/sub/PagenationComponent.vue";
 import AdminUserDetailComponent from "@/components/admin/AdminUserDetailComponent.vue";
 
 const userStore = useUserStore();
-await userStore.getUsers(1, 15, null);
+await userStore.getUsers(1, 10, null);
 const list = ref(userStore.users);
 const currentMember = ref({
   memNo: '',
@@ -225,7 +225,7 @@ function changeMultiUserRole() {
         });
       } else {
         // 회원 정보 목록 다시 조회
-        await userStore.getUsers(1, 15, null);
+        await userStore.getUsers(1, 10, null);
 
         Swal.fire({
           text: '권한 변경에 성공했습니다.',

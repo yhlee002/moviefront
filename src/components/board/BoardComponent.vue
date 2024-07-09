@@ -7,11 +7,30 @@ import Pagenation from "@/components/sub/PagenationComponent.vue";
 import {useRouter} from "vue-router";
 import {ref, watch} from "vue";
 
+const props = defineProps(['page']);
 
 const router = useRouter();
 const boardStore = useBoardStore();
 
-await boardStore.getBoards(boardStore.currentPage, 15, null, null);
+
+if (props.page) {
+  boardStore.currentPage = Number(props.page);
+} else {
+  boardStore.currentPage = 1;
+}
+
+watch(() => props.page, async (newVal, oldVal) => {
+  if (newVal) {
+    boardStore.currentPage = Number(newVal);
+  } else {
+    boardStore.currentPage = 1;
+  }
+
+  await boardStore.getBoards(boardStore.currentPage, 10, null, null);
+
+});
+
+await boardStore.getBoards(boardStore.currentPage, 10, null, null);
 await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
@@ -21,9 +40,9 @@ const orderBy = ref("recent");
 
 watch(orderBy, async (newVal) => {
   if (newVal === 'recent') {
-    await boardStore.getBoards(boardStore.currentPage, 15, null, null)
+    await boardStore.getBoards(boardStore.currentPage, 10, null, null)
   } else {
-    await boardStore.getBoards(boardStore.currentPage, 15, null, null, newVal);
+    await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
   }
 
   query.value = "";
@@ -39,7 +58,7 @@ function enter() {
 async function search(query) {
   // const condition = document.getElementById('boardSearchConditionSelect').value;
   orderBy.value = "recent";
-  await boardStore.getBoards(1, 15, query, condition.value);
+  await boardStore.getBoards(1, 10, query, condition.value);
 }
 
 function writeNewPost() {
@@ -69,10 +88,9 @@ function writeNewPost() {
                 <div v-if="boardStore.mostPopularBoards.length > 0">
                   <ListComponent :list="boardStore.mostPopularBoards"
                                  :field-show="false" category="board"
-                                 :subTitleShow="false" :recommended="false" :view="false"
-                                 :comment="false"></ListComponent>
+                                 :subTitleShow="false" :recommended="true" :view="false"
+                                 :comment="false" :regDateShow="false"></ListComponent>
                 </div>
-
               </div>
 
               <div class="board-side-block-item">
@@ -85,13 +103,13 @@ function writeNewPost() {
                 <div v-if="boardStore.mostSeenBoards.length > 0">
                   <ListComponent :list="boardStore.mostSeenBoards"
                                  :field-show="false" category="board"
-                                 :subTitleShow="false" :recommended="false" :view="false"
-                                 :comment="false"></ListComponent>
+                                 :subTitleShow="false" :recommended="false" :view="true"
+                                 :comment="false" :regDateShow="false"></ListComponent>
                 </div>
               </div>
             </div>
 
-            <div class="board-vertical-line"></div>
+<!--            <div class="board-vertical-line"></div>-->
 
             <!-- Board List -->
             <div id="boardList">
@@ -117,7 +135,7 @@ function writeNewPost() {
                 </select>
               </div>
 
-              <div class="block-horizontal-line"></div>
+<!--              <div class="block-horizontal-line"></div>-->
 
               <ListComponent category="board" :list="boardStore.listItems" :recommended="true"></ListComponent>
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>

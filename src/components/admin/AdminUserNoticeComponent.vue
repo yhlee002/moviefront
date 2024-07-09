@@ -9,7 +9,7 @@ const router = useRouter()
 const noticeStore = useNoticeStore();
 const props = defineProps(['memNo']);
 
-await noticeStore.getBoardsByMemNo(props.memNo, 1, 15);
+await noticeStore.getBoardsByMemNo(props.memNo, 1, 10);
 const boards = ref(noticeStore.boardList);
 
 async function deleteBoards() {
@@ -43,7 +43,7 @@ async function deleteBoards() {
           icon: 'success'
         })
 
-        await noticeStore.getBoardsByMemNo(props.memNo, noticeStore.currentPage, 15);
+        await noticeStore.getBoardsByMemNo(props.memNo, noticeStore.currentPage, 10);
         boards.value = noticeStore.boardList;
       } else {
         Swal.fire({

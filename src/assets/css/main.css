@@ -178,6 +178,7 @@ form .form-group input[type=password] { /* 해당 form에만 적용 */
     min-width: 4rem;
     height: 2rem;
     padding: 0 0.5rem;
+    white-space: nowrap;
 }
 
 .button-large {
@@ -252,16 +253,15 @@ button.submit { /* .form-box form button.submit */
     background-size: 1rem;
 }
 
-.button-report-minimalize {
+.button-menu-minimalize {
     color: #ffffff;
-    background-color: #c11717;
-    border: 0.1rem solid #8f1010;
-    border-radius: 0.1rem;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
 
-    background-image: url("@/assets/images/icons/icons8-siren-48.png");
+    background-image: url("@/assets/images/icons/icons8-menu-32.png");
     background-repeat: no-repeat;
     background-position: center;
-    /*background-size: cover;*/
     background-size: 1rem;
 }
 
@@ -306,5 +306,5 @@ div.user_no_image {
     background-image: url("@/assets/images/icons/icons8-customer-100.png") !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    background-size: 2rem !important;
+    background-size: 100% !important;
 }

@@ -89,7 +89,7 @@ function searchMovie() {
             <a class="more" href="/notice">더보기</a>
           </div>
           <div>
-            <ListComponent category="notice" :list="noticeStore.boardList" :field-show="false"></ListComponent>
+            <ListComponent category="notice" :list="noticeStore.boardList" :field-show="false" :comment="false" :sub-title-show="false"></ListComponent>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ function searchMovie() {
             <a class="more" href="/board">더보기</a>
           </div>
           <div>
-            <ListComponent category="board" :list="boardStore.boardList" :field-show="false"></ListComponent>
+            <ListComponent category="board" :list="boardStore.boardList" :field-show="false" :sub-title-show="false"></ListComponent>
           </div>
         </div>
       </div>
@@ -130,5 +130,25 @@ function searchMovie() {
 .movie-search-box > .movie-search > input[type=text] {
   width: 20rem;
   padding: 0.4rem
+}
+
+@media(min-width: 1097px) {
+  #index_boards .inner {
+    flex-direction: row;
+  }
+}
+
+@media(max-width: 1096px) {
+  #index_boards .inner {
+    flex-direction: column;
+  }
+
+  #index_boards .inner .inner-block:not(.inner-block:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  #index_boards .block-vertical-line {
+    margin: 0;
+  }
 }
 </style>

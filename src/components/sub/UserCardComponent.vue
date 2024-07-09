@@ -16,7 +16,7 @@ member.profileImage = member.profileImage ?? '';
     <UserImageComponent :profileImage="member.profileImage" :role="member.role"></UserImageComponent>
     <div id="writerData" v-if="!imageOnly">
       <p id="writerName">{{ member.name }}</p>
-      <img id="writerRole" v-if="member.role === 'ROLE_USER'" src="@/assets/images/icons/icons8-check-48.png">
+<!--      <img id="writerRole" v-if="member.role === 'ROLE_USER'" src="@/assets/images/icons/icons8-check-48.png">-->
     </div>
   </div>
 </template>

@@ -1,45 +1,107 @@
 <script setup>
 import {useRouter} from "vue-router";
+import {ref, watch} from "vue";
 
 const router = useRouter();
 const props = defineProps(['pages', 'page']);
 
-const pages = props.pages; // total pages
-const page = props.page; // current page
+const pages = ref(props.pages); // total pages
+const page = ref(props.page); // current page
+let showPages = ref([]); // page list
 
-const showPages = [1, 2, 3, 4]; // pagenation show pages
+watch(() => props.page, (newVal, oldVal) => {
+  page.value = newVal;
+  updateShowPages(pages.value, newVal);
+})
+
+watch(() => props.pages, (newVal, oldVal) => {
+  pages.value = newVal;
+})
+
+updateShowPages(pages.value, page.value);
+
+function updateShowPages(pages, page) {
+  showPages.value = [];
+
+  if (page <= 5) {
+    for (let i = 1; i <= 5; i++) {
+      showPages.value.push(i);
+      if (i + 1 > pages) return;
+    }
+  } else {
+    const nth = Math.abs(page % 5); // 배열의 자신의 위치값
+    const idx = nth === 0 ? 5 : nth;
+    const start = page - (idx - 1);
+
+    for (let i = start; i <= start + 4; i++) {
+      showPages.value.push(i);
+      if (i + 1 > pages) return;
+    }
+  }
+}
+
+function getPage(page) {
+  const path = router.currentRoute.value.path;
+  router.push(`${path}?page=${page}`)
+}
 
 function goPrevPage() {
-  // if (page > 1) location.href = router.getRoutes();
-  console.log('이전 페이지로 이동');
+  const path = router.currentRoute.value.path;
+  const startPage = getStartPage(page.value);
+  const newVal = startPage - 1;
+
+  if (newVal >= 1) router.push(`${path}?page=${newVal}`)
+
+  function getStartPage(page) {
+    if (page <= 5) {
+      return 1;
+    } else {
+      const nth = Math.abs(page % 5);
+      const idx = nth === 0 ? 5 : nth; // 배열의 자신의 위치값
+      return page - (idx - 1);
+    }
+  }
 }
 
 function goNextPage() {
-  // if (page < pages) location.href = router.getRoutes();
-  console.log('다음 페이지로 이동');
+  const path = router.currentRoute.value.path;
+  const endPage = getEndPage(page.value);
+  const newVal = endPage + 1;
+
+  if (newVal <= pages.value) router.push(`${path}?page=${newVal}`)
+
+  function getEndPage(page) {
+    if (page <= 5) {
+      return 5;
+    } else {
+      const nth = Math.abs(page % 5);
+      const idx = nth === 0 ? 5 : nth; // 배열의 자신의 위치값
+      return page + (5 - idx);
+    }
+  }
 }
+
 </script>
 
 <template>
   <div class="pagenation-box">
     <div class="prev-button">
-<!--      <img v-if="showPages[0] > 1" src="@/assets/images/icons/icons8-left-arrow-50.png" alt="이전 페이지">-->
-<!--      <img v-if="showPages[0] === 1" src="@/assets/images/icons/icons8-left-arrow-50-gray.png" alt="이전 페이지">-->
       <button class="image-button" type="button" @click="goPrevPage()" :disabled="showPages[0] === 1"></button>
     </div>
     <div>
       <ul class="pagenation-page-list">
-        <li :style="showPages[0] === 1 ? {'color': 'gray', 'cursor': 'default'} : {}">...</li>
-        <li v-for="idx in showPages" :key="idx" :class="idx === page? 'current-page' : ''">{{ idx }}</li>
-        <li v-if="showPages[showPages.length - 1] > 1">...</li>
+        <!--        <li :style="showPages[0] === 1 ? {'color': 'gray', 'cursor': 'default'} : {}">...</li>-->
+        <!--        <li v-for="idx in showPages" :key="idx" :class="idx === page? 'current-page' : ''">{{ idx }}</li>-->
+        <!--        <li v-if="showPages[showPages.length - 1] > 1">...</li>-->
+
+        <li v-for="idx in showPages" :key="idx" @click="getPage(idx)"
+            :class="idx === page? 'current-page' : ''">{{ idx }}
+        </li>
       </ul>
     </div>
     <div class="next-button">
-<!--      <img v-if="showPages[showPages.length - 1] < pages[pages.length - 1]"-->
-<!--           src="@/assets/images/icons/icons8-right-arrow-50.png" alt="다음 페이지">-->
-<!--      <img v-if="showPages[showPages.length - 1] >= pages[pages.length - 1]"-->
-<!--           src="@/assets/images/icons/icons8-right-arrow-50-gray.png" alt="다음 페이지">-->
-      <button class="image-button" type="button" @click="goNextPage()" :disabled="showPages[showPages.length - 1] >= pages[pages.length - 1]"></button>
+      <button class="image-button" type="button" @click="goNextPage()"
+              :disabled="showPages[showPages.length - 1] === pages"></button>
     </div>
   </div>
 </template>
@@ -48,7 +110,7 @@ function goNextPage() {
 .pagenation-box {
   display: flex;
   justify-content: space-between;
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 
 .pagenation-box ul.pagenation-page-list > li {
@@ -76,23 +138,23 @@ function goNextPage() {
   background-color: transparent;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
 }
 
 .pagenation-box > .prev-button > button {
-  background-image: url("@/assets/images/icons/icons8-left-arrow-50.png");
+  background-image: url("@/assets/images/icons/pagenation/icons8-back-to-50.png");
 }
 
 .pagenation-box > .prev-button > button:disabled {
-  background-image: url("@/assets/images/icons/icons8-left-arrow-50-gray.png");
+  background-image: url("@/assets/images/icons/pagenation/icons8-back-to-gray-50.png");
 }
 
 .pagenation-box > .next-button > button {
-  background-image: url("@/assets/images/icons/icons8-right-arrow-50.png");
+  background-image: url("@/assets/images/icons/pagenation/icons8-next-page-50.png");
 }
 
 .pagenation-box > .next-button > button:disabled {
-  background-image: url("@/assets/images/icons/icons8-right-arrow-50-gray.png");
+  background-image: url("@/assets/images/icons/pagenation/icons8-next-page-gray-50.png");
 }
 
 .pagenation-box .pagenation-page-list {

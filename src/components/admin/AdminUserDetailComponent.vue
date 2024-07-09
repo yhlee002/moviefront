@@ -26,8 +26,8 @@ const memberOrigin = response.data;
 
 const boardStore = useBoardStore();
 const commentStore = useCommentStore();
-await boardStore.getBoardsByMemNo(id.value, 1, 15);
-await commentStore.getCommentsByMember(id.value, 1, 15);
+await boardStore.getBoardsByMemNo(id.value, 1, 10);
+await commentStore.getCommentsByMember(id.value, 1, 10);
 const boardCnt = boardStore.totalElements;
 const commentCnt = commentStore.totalElements;
 

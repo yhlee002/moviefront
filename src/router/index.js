@@ -53,7 +53,8 @@ const router = createRouter({
                 {
                     path: '/notice',
                     name: 'boardNotice',
-                    component: Notice
+                    component: Notice,
+                    props: route => ({page: route.query.page})
                 },
                 {
                     path: '/notice/:id',
@@ -64,7 +65,8 @@ const router = createRouter({
                 {
                     path: '/board',
                     name: 'boardImp',
-                    component: Board
+                    component: Board,
+                    props: route => ({page: route.query.page})
                 },
                 {
                     path: '/board/:id',

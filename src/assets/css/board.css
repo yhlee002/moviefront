@@ -1,5 +1,9 @@
-#boardList, #noticeList {
+#boardList {
     margin: 0 2rem;
+}
+
+#noticeList {
+    width: 100%;
 }
 
 #boardSearchInput, #noticeSearchInput {
@@ -32,9 +36,14 @@
 }
 
 @media (min-width: 1024px) {
-    #boardSearchInput, #noticeSearchInput {
+    #noticeSearchInput {
         width: 30rem;
         min-width: 20rem;
+    }
+
+    #boardSearchInput {
+        width: 20rem;
+        min-width: 10rem;
     }
 
     .board-main-block {
@@ -43,9 +52,18 @@
     }
 
     .board-side-block {
-        width: 20%;
+        width: 30%;
         height: 100%;
         min-width: 167px;
+    }
+
+    .board-side-block .list-item-box ul.list-item-group li a .list-item-etc {
+        width: fit-content;
+        min-width: 2.5rem;
+    }
+
+    #boardList {
+        width: 70%;
     }
 }
 
@@ -82,7 +100,7 @@
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
-    padding-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .board-options > button {

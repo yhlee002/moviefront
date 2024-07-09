@@ -40,13 +40,6 @@ function deleteComment(commentId) {
   })
 }
 
-// TODO. 미구현 기능(신고 기능)
-function reportComment(commentId) {
-  Swal.fire({
-    text: '아직 구현되지 않은 기능입니다.',
-    icon: 'info'
-  });
-}
 </script>
 
 <template>
@@ -68,7 +61,6 @@ function reportComment(commentId) {
     <div class="comment-option-box">
       <button class="button-modify-minimalize" type="button" @click="changeCommentUpdateForm"></button>
       <button class="button-delete-minimalize" type="button" @click="deleteComment"></button>
-      <button class="button-report-minimalize" type="button" @click="reportComment"></button>
     </div>
   </div>
 </template>

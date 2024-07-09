@@ -9,7 +9,7 @@ const router = useRouter()
 const commentStore = useCommentStore();
 const props = defineProps(['memNo']);
 
-await commentStore.getCommentsByMember(props.memNo, 1, 15);
+await commentStore.getCommentsByMember(props.memNo, 1, 10);
 const comments = ref(commentStore.comments);
 
 async function deleteComments() {
@@ -43,7 +43,7 @@ async function deleteComments() {
           icon: 'success'
         })
 
-        await commentStore.getCommentsByMember(props.memNo, commentStore.currentPage, 15);
+        await commentStore.getCommentsByMember(props.memNo, commentStore.currentPage, 10);
         comments.value = commentStore.comments;
       } else {
         Swal.fire({

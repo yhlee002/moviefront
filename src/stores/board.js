@@ -90,7 +90,7 @@ export const useBoardStore = defineStore('board', {
                 params: {
                     page: 0,
                     size: size,
-                    condition: 'recommended'
+                    orderby: 'recommended',
                 }
             })
                 .then(response => response.data)
@@ -107,7 +107,7 @@ export const useBoardStore = defineStore('board', {
                 params: {
                     page: 0,
                     size: size,
-                    condition: 'views'
+                    orderby: 'views'
                 }
             })
                 .then(response => response.data)

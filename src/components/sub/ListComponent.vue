@@ -1,30 +1,57 @@
 <script setup>
-const props = defineProps(['list', 'category', 'fieldShow', 'subTitleShow', 'view', 'comment', 'recommended', 'seqField']);
+const props = defineProps(['list', 'category', 'fieldShow', 'subTitleShow', 'regDateShow', 'view', 'comment', 'recommended', 'seqField']);
 
 const fieldShow = props.fieldShow ?? true;
 const subTitleShow = props.subTitleShow ?? true;
+const regDateShow = props.regDateShow ?? true;
 const view = props.view ?? true;
 const comment = props.comment ?? true;
 const recommended = props.recommended ?? false;
 const seqField = props.seqField ?? 'id';
+
+function getHowOldRegDate(regDateOrigin) {
+  let writeTime;
+  const regDate = new Date(regDateOrigin);
+  const now = new Date();
+
+  const millisecond = now - regDate;
+  if (millisecond / 1000 < 60) {
+    writeTime = Math.floor(millisecond / 1000) + '초'; // n초
+
+  } else if (millisecond / (60 * 1000) < 60) {
+    writeTime = Math.floor(millisecond / (60 * 1000)) + '분';
+  } else if (millisecond / (60 * 60 * 1000) < 24) {
+    writeTime = Math.floor(millisecond / (60 * 60 * 1000)) + '시간';
+  } else if (millisecond / (24 * 60 * 60 * 1000) < 30) {
+    writeTime = Math.floor(millisecond / (24 * 60 * 60 * 1000)) + '일';
+  } else if (millisecond / (30 * 24 * 60 * 60 * 1000) < 365) {
+    writeTime = Math.floor(millisecond / (30 * 24 * 60 * 60 * 1000)) + '달';
+  } else if (millisecond / (365 * 30 * 24 * 60 * 60 * 1000) < 365) {
+    writeTime = Math.floor(millisecond / (30 * 24 * 60 * 60 * 1000)) + '년';
+  }
+  return writeTime += '전';
+}
 </script>
 
 <template>
-<!--  <div class="list-item-field-box" v-if="fieldShow">-->
-<!--    <ul class="list-item-field-group">-->
-<!--      <li><p class="list-item-fields">제목</p></li>-->
-<!--      <li><p class="list-item-fields">작성자</p></li>-->
-<!--      <li><p class="list-item-fields">조회수</p></li>-->
-<!--    </ul>-->
-<!--  </div>-->
+  <!--  <div class="list-item-field-box" v-if="fieldShow">-->
+  <!--    <ul class="list-item-field-group">-->
+  <!--      <li><p class="list-item-fields">제목</p></li>-->
+  <!--      <li><p class="list-item-fields">작성자</p></li>-->
+  <!--      <li><p class="list-item-fields">조회수</p></li>-->
+  <!--    </ul>-->
+  <!--  </div>-->
   <div :id="`list-item-${item[seqField]}`" class="list-item-box" v-for="item in props.list" :key="item[seqField]">
     <ul class="list-item-group">
       <li>
         <router-link :to="`/${category}/${item[seqField]}`" style="justify-content: space-between;">
           <p class="list-item-title">{{ item.title }}</p>
+          <p class="list-item-regDate" v-if="regDateShow">
+            {{ getHowOldRegDate(item.regDate) }}
+          </p>
           <p class="list-item-subtitle" v-if="subTitleShow">{{ item.subTitle }}</p> <!-- board/notice : writerName -->
 
-          <div class="list-item-etc">
+          <div class="list-item-etc" v-if="view || comment || recommended">
             <div class="list-icons" v-if="view">
               <img src="@/assets/images/icons/icons8-eye-48.png" alt="조회수"/>
               <p class="list-item-views">{{ item.views }}</p>
@@ -118,16 +145,22 @@ const seqField = props.seqField ?? 'id';
   text-align: center;
 }
 
+.list-item-box > ul.list-item-group li p.list-item-regDate {
+  width: fit-content;
+  padding: 0 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .list-item-box > ul.list-item-group li div.list-item-etc {
-  /*
-min-width: 10rem;
-max-width: 14rem;
-   */
   display: flex;
+  min-width: 7rem;
   /*
   width: 10%;
    */
   width: fit-content;
+  justify-content: end;
 }
 
 .list-icons {

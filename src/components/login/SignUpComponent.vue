@@ -353,7 +353,7 @@ emitter.on('phone-validation', param => {
               </div>
 
               <ul class="button-box">
-                <input class="button-large" @click="resetMessage()" type="reset" name="signup-form-reset" value="초기화">
+                <input v-if="params.type !== 'oauth'" class="button-large" @click="resetMessage()" type="reset" name="signup-form-reset" value="초기화">
                 <button class="button-large submit" type="button" name="submit"
                         @click="signUp()">확인
                 </button>
