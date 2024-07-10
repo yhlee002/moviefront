@@ -212,7 +212,7 @@ function modifyUserInfo() {
     </tr>
   </table>
 
-  <div class="button-box" style="align-self: end;">
+  <div class="button-box" style="align-self: end; margin-bottom: 1rem;">
     <button v-if="!editMode" class="button-default" type="button" @click="modifyModeOn()">수정</button>
     <button v-if="editMode" class="button-default" type="button" @click="modifyUserInfo()">완료</button>
     <button class="button-default" type="button" @click="changeUserRole()">권한 변경</button>
