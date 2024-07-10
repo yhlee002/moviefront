@@ -28,10 +28,10 @@ async function logout() {
             <router-link to="/admin">관리자 페이지</router-link>
           </li>
           <li>
-            <router-link to="/notice">공지사항</router-link>
+            <router-link to="/notices">공지사항</router-link>
           </li>
           <li>
-            <router-link to="/board">감상 후기</router-link>
+            <router-link to="/boards">감상 후기</router-link>
           </li>
         </ul>
         <!-- User Info -->
@@ -55,7 +55,7 @@ async function logout() {
             <router-link to="/mypage" v-if="userStore.isAuthenticated" style="margin-right: 3px">내정보</router-link>
         </span>
         <span>
-          <p style="cursor: pointer;" @click="logout()">로그아웃</p>
+          <span style="cursor: pointer;" @click="logout()">로그아웃</span>
         </span>
             <form id="logout" :action="logoutUrl" method="POST"></form>
           </div>

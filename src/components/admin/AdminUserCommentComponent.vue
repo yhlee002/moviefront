@@ -56,7 +56,7 @@ async function deleteComments() {
 }
 
 function goBoardPage(id) {
-  router.push(`/board/${id}`)
+  router.push(`/boards/${id}`)
 }
 </script>
 

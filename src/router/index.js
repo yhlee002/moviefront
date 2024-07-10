@@ -12,8 +12,6 @@ import SignUp from "@/components/login/SignUpComponent.vue";
 import Editor from "@/components/board/EditorComponent.vue";
 import UserProfile from "@/components/UserProfileComponent.vue";
 import AdminUser from "@/components/admin/AdminUserComponent.vue";
-import AdminUserDetail from "@/components/admin/AdminUserDetailComponent.vue";
-import AdminUserLoginLogs from "@/components/admin/AdminUserLoginLogsComponent.vue";
 import AdminUserDetailContainer from "@/components/admin/AdminUserDetailContainer.vue";
 
 const router = createRouter({
@@ -31,12 +29,12 @@ const router = createRouter({
                     children: []
                 },
                 {
-                    path: '/admin/user',
+                    path: '/admin/users',
                     name: 'userList',
                     component: AdminUser,
                 },
                 {
-                    path: '/admin/user/:id',
+                    path: '/admin/users/:id',
                     component: AdminUserDetailContainer,
                 },
                 {
@@ -51,25 +49,25 @@ const router = createRouter({
                     component: Preview
                 },
                 {
-                    path: '/notice',
+                    path: '/notices',
                     name: 'boardNotice',
                     component: Notice,
                     props: route => ({page: route.query.page})
                 },
                 {
-                    path: '/notice/:id',
+                    path: '/notices/:id',
                     name: 'singleBoardNotice',
                     component: BoardItem,
                     props: {category: 'notice'} // true
                 },
                 {
-                    path: '/board',
+                    path: '/boards',
                     name: 'boardImp',
                     component: Board,
                     props: route => ({page: route.query.page})
                 },
                 {
-                    path: '/board/:id',
+                    path: '/boards/:id',
                     name: 'singleBoardImp',
                     component: BoardItem,
                     props: {category: 'board'}
@@ -81,7 +79,7 @@ const router = createRouter({
                     props: route => ({id: route.query.id, category: route.query.category})
                 },
                 {
-                    path: '/user/:id',
+                    path: '/users/:id',
                     name: 'user',
                     component: User,
                     props: true

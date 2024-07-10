@@ -56,7 +56,7 @@ async function deleteBoards() {
 }
 
 function goBoardPage(id) {
-  router.push(`/notice/${id}`)
+  router.push(`/notices/${id}`)
 }
 
 </script>

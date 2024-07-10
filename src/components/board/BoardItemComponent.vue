@@ -94,8 +94,8 @@ async function go(path) {
           <div class="breadcrumb">
             <!--            <div class="breadcrumb-line breadcrumb-line-1"></div>-->
             <span class="breadcrumb-item">
-              <router-link v-if="props.category === 'notice'" to="/notice">공지사항</router-link>
-              <router-link v-if="props.category === 'board'" to="/board">감상 후기</router-link>
+              <router-link v-if="props.category === 'notice'" to="/notices">공지사항</router-link>
+              <router-link v-if="props.category === 'board'" to="/boards">감상 후기</router-link>
             </span>
             <div class="breadcrumb-line breadcrumb-line-2"></div>
           </div>

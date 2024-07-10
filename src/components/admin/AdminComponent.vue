@@ -27,7 +27,7 @@ commentStore.getComments(1, 10, null);
         <div class="block-title" style="display: flex; justify-content: space-between; align-content: center;">
           <h3>공지사항 게시글 관리</h3>
           <small>
-            <router-link to="/admin/notice">더보기</router-link>
+            <router-link to="/admin/notices">더보기</router-link>
           </small>
         </div>
         <div class="block-content">
@@ -89,11 +89,11 @@ commentStore.getComments(1, 10, null);
         <div class="block-title">
           <h3>회원 관리</h3>
           <small>
-            <router-link to="/admin/user">더보기</router-link>
+            <router-link to="/admin/users">더보기</router-link>
           </small>
         </div>
         <div class="block-content">
-          <ListComponent :list="userStore.listItems" :field-show="false" :view="false" :comment="false" category="admin/user"
+          <ListComponent :list="userStore.listItems" :field-show="false" :view="false" :comment="false" category="admin/users"
                          seq-field="memNo"></ListComponent>
         </div>
       </div>

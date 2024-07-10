@@ -86,7 +86,7 @@ function searchMovie() {
         <div class="content">
           <div class="block-title-box">
             <h2 class="block-title">공지사항</h2>
-            <a class="more" href="/notice">더보기</a>
+            <a class="more" href="/notices">더보기</a>
           </div>
           <div>
             <ListComponent category="notice" :list="noticeStore.boardList" :field-show="false" :comment="false" :sub-title-show="false"></ListComponent>
