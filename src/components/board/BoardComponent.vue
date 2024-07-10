@@ -62,7 +62,7 @@ async function search(query) {
 }
 
 function writeNewPost() {
-  router.push("/newpost?category=board");
+  router.push("/newpost?category=boards");
 }
 </script>
 
