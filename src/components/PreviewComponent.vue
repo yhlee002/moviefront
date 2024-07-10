@@ -89,7 +89,7 @@ function searchMovie() {
             <a class="more" href="/notices">더보기</a>
           </div>
           <div>
-            <ListComponent category="notice" :list="noticeStore.boardList" :field-show="false" :comment="false" :sub-title-show="false"></ListComponent>
+            <ListComponent category="notices" :list="noticeStore.boardList" :field-show="false" :comment="false" :sub-title-show="false"></ListComponent>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ function searchMovie() {
             <a class="more" href="/board">더보기</a>
           </div>
           <div>
-            <ListComponent category="board" :list="boardStore.boardList" :field-show="false" :sub-title-show="false"></ListComponent>
+            <ListComponent category="boards" :list="boardStore.boardList" :field-show="false" :sub-title-show="false"></ListComponent>
           </div>
         </div>
       </div>

@@ -31,7 +31,7 @@ commentStore.getComments(1, 10, null);
           </small>
         </div>
         <div class="block-content">
-          <ListComponent :list="noticeStore.listItems" :field-show="false" category="notice"
+          <ListComponent :list="noticeStore.listItems" :field-show="false" category="notices"
                          :comment="false"></ListComponent>
         </div>
       </div>
@@ -45,7 +45,7 @@ commentStore.getComments(1, 10, null);
           </small>
         </div>
         <div class="block-content">
-          <ListComponent :list="boardStore.listItems" :field-show="false" category="board"></ListComponent>
+          <ListComponent :list="boardStore.listItems" :field-show="false" category="boards"></ListComponent>
         </div>
       </div>
     </div>
@@ -62,8 +62,7 @@ commentStore.getComments(1, 10, null);
           </small>
         </div>
         <div class="block-content">
-          <ListComponent :list="movieCommentStore.listItems" :field-show="false" category="movie"
-                         seq-field="movieCd"></ListComponent>
+          <ListComponent :list="movieCommentStore.listItems" :field-show="false" category="movies" seq-field="movieCd"></ListComponent>
         </div>
       </div>
 
@@ -77,7 +76,7 @@ commentStore.getComments(1, 10, null);
         </div>
         <div class="block-content">
           <ListComponent :list="commentStore.listItems" :field-show="false" :view="false" :comment="false"
-                         category="board" seq-field="boardId"></ListComponent>
+                         category="boards" seq-field="boardId"></ListComponent>
         </div>
       </div>
     </div>

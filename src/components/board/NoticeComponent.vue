@@ -95,7 +95,7 @@ function writeNewPost() {
 
 <!--              <div class="block-horizontal-line"></div>-->
 
-              <ListComponent category="notice" :list="noticeStore.listItems" :comment="false" :recommended="false"></ListComponent>
+              <ListComponent category="notices" :list="noticeStore.listItems" :comment="false" :recommended="false"></ListComponent>
               <Pagenation :pages="noticeStore.totalPages" :page="noticeStore.currentPage"></Pagenation>
 
             </div>

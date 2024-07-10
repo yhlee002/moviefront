@@ -87,7 +87,7 @@ function writeNewPost() {
                 </small>
                 <div v-if="boardStore.mostPopularBoards.length > 0">
                   <ListComponent :list="boardStore.mostPopularBoards"
-                                 :field-show="false" category="board"
+                                 :field-show="false" category="boards"
                                  :subTitleShow="false" :recommended="true" :view="false"
                                  :comment="false" :regDateShow="false"></ListComponent>
                 </div>
@@ -102,7 +102,7 @@ function writeNewPost() {
                 </small>
                 <div v-if="boardStore.mostSeenBoards.length > 0">
                   <ListComponent :list="boardStore.mostSeenBoards"
-                                 :field-show="false" category="board"
+                                 :field-show="false" category="boards"
                                  :subTitleShow="false" :recommended="false" :view="true"
                                  :comment="false" :regDateShow="false"></ListComponent>
                 </div>
@@ -137,7 +137,7 @@ function writeNewPost() {
 
 <!--              <div class="block-horizontal-line"></div>-->
 
-              <ListComponent category="board" :list="boardStore.listItems" :recommended="true"></ListComponent>
+              <ListComponent category="boards" :list="boardStore.listItems" :recommended="true"></ListComponent>
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>
           </div>
