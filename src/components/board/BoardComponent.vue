@@ -4,8 +4,8 @@ import '@/assets/css/board.css'
 import {useBoardStore} from '@/stores/board.js';
 import ListComponent from "@/components/sub/ListComponent.vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
-import {useRouter} from "vue-router";
-import {getCurrentInstance, onBeforeUpdate, ref, watch} from "vue";
+import {RouterView, useRouter} from "vue-router";
+import {getCurrentInstance, onBeforeUpdate, onUpdated, ref, watch} from "vue";
 
 const props = defineProps(['page']);
 
@@ -27,24 +27,23 @@ await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value
 await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
-console.log('초기 페이지네이션 정보', {
-  '현재 page': props.page,
-  'boards': boardStore.boardList.length,
-  'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
-})
-
 onBeforeUpdate(() => {
-  console.info('업데이트 예정 - page', props.page)
-
   const vnodeProps = getCurrentInstance()?.vnode.props;
-  console.log('page', props.page, vnodeProps.page)
+  console.info('page', `${props.page} -> ${vnodeProps.page}`)
 })
 
-watch(orderBy, async (newVal) => {
+onUpdated(() => {
+  console.info('component 업데이트 완료', props.page);
+  renderCnt.value += 1;
+})
+
+watch(orderBy, async (newVal, oldVal) => {
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
 
   query.value = "";
   condition.value = "titleOrContent";
+
+  renderCnt.value += 1;
 });
 
 watch(() => props.page, async (newVal, oldVal) => {
@@ -125,8 +124,6 @@ function writeNewPost() {
               </div>
             </div>
 
-<!--            <div class="board-vertical-line"></div>-->
-
             <!-- Board List -->
             <div id="boardList">
               <!-- Function Buttons -->
@@ -151,9 +148,12 @@ function writeNewPost() {
                 </select>
               </div>
 
-<!--              <div class="block-horizontal-line"></div>-->
-
-              <ListComponent category="boards" :list="boardStore.listItems" :recommended="true" :key="renderCnt"></ListComponent>
+              <Suspense>
+                <ListComponent category="boards" :list="boardStore.listItems" :recommended="true" :key="renderCnt"></ListComponent>
+                <template #fallback>
+                  Loading...
+                </template>
+              </Suspense>
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>
           </div>
