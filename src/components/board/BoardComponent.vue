@@ -5,7 +5,7 @@ import {useBoardStore} from '@/stores/board.js';
 import ListComponent from "@/components/sub/ListComponent.vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
 import {useRouter} from "vue-router";
-import {ref, watch} from "vue";
+import {getCurrentInstance, onBeforeUpdate, ref, watch} from "vue";
 
 const props = defineProps(['page']);
 
@@ -33,29 +33,12 @@ console.log('초기 페이지네이션 정보', {
   'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
 })
 
-watch(() => props, async (newVal, oldVal) => {
-  const page = newVal.page;
-  const oldPage = oldVal.page;
+onBeforeUpdate(() => {
+  console.info('업데이트 예정 - page', props.page)
 
-  if (page !== oldPage) {
-    if (page) {
-      boardStore.currentPage = Number(newVal);
-    } else {
-      boardStore.currentPage = 1;
-    }
-
-    await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
-
-    console.log('업데이트 페이지네이션 정보', {
-      '현재 page': boardStore.currentPage,
-      'boards': boardStore.boardList.length,
-      'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
-    })
-
-    renderCnt.value += 1;
-  }
-
-}, {deep: true})
+  const vnodeProps = getCurrentInstance()?.vnode.props;
+  console.log('page', props.page, vnodeProps.page)
+})
 
 watch(orderBy, async (newVal) => {
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
@@ -64,23 +47,23 @@ watch(orderBy, async (newVal) => {
   condition.value = "titleOrContent";
 });
 
-// watch(() => props.page, async (newVal, oldVal) => {
-//   if (newVal) {
-//     boardStore.currentPage = Number(newVal);
-//   } else {
-//     boardStore.currentPage = 1;
-//   }
-//
-//   await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
-//
-//   console.log('업데이트 페이지네이션 정보', {
-//     '현재 page': boardStore.currentPage,
-//     'boards': boardStore.boardList.length,
-//     'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
-//   })
-//
-//   renderCnt.value += 1;
-// });
+watch(() => props.page, async (newVal, oldVal) => {
+  if (newVal) {
+    boardStore.currentPage = Number(newVal);
+  } else {
+    boardStore.currentPage = 1;
+  }
+
+  await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
+
+  console.log('업데이트 페이지네이션 정보', {
+    '현재 page': boardStore.currentPage,
+    'boards': boardStore.boardList.length,
+    'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
+  })
+
+  renderCnt.value += 1;
+});
 
 function enter() {
   if (window.event.keyCode === 13) {

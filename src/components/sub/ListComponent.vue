@@ -33,13 +33,6 @@ function getHowOldRegDate(regDateOrigin) {
   }
   return writeTime += '전';
 }
-
-watch(() => props.list, (newVal, oldVal) => {
-  console.info('업데이트 된 목록 정보', {
-    '카테고리': props.category,
-    '업데이트 된 목록': newVal
-  });
-})
 </script>
 
 <template>
