@@ -15,7 +15,7 @@ const id = router.currentRoute.value.params.id;
 
 const userStore = useUserStore();
 const commentStore = useCommentStore();
-const store = props.category === 'notice' ? useNoticeStore() : props.category === 'board' ? useBoardStore() : null;
+const store = props.category === 'notices' ? useNoticeStore() : props.category === 'boards' ? useBoardStore() : null;
 
 store.updateBoardViews(id);
 await store.getBoard(id);

@@ -58,7 +58,7 @@ const router = createRouter({
                     path: '/notices/:id',
                     name: 'singleBoardNotice',
                     component: BoardItem,
-                    props: {category: 'notice'} // true
+                    props: {category: 'notices'} // true
                 },
                 {
                     path: '/boards',
@@ -70,7 +70,7 @@ const router = createRouter({
                     path: '/boards/:id',
                     name: 'singleBoardImp',
                     component: BoardItem,
-                    props: {category: 'board'}
+                    props: {category: 'boards'}
                 },
                 {
                     path: '/newpost',

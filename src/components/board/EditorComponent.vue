@@ -137,8 +137,8 @@ function changeFontSize(action) {
       <div class="inner-block">
         <div class="content">
           <div class="block-title-box">
-            <h2 class="block-title" v-if="category === 'notice'">공지사항</h2>
-            <h2 class="block-title" v-if="category === 'board'">감상 후기</h2>
+            <h2 class="block-title" v-if="category === 'notices'">공지사항</h2>
+            <h2 class="block-title" v-if="category === 'boards'">감상 후기</h2>
           </div>
 
           <!-- Board -->
@@ -148,7 +148,7 @@ function changeFontSize(action) {
               <input id="boardTitle" type="text" v-model="board.title" placeholder="제목을 입력해주세요.">
             </div>
 
-            <div v-if="category === 'board'">
+            <div v-if="category === 'boards'">
               <p style="margin-bottom: 0.4rem;">영화</p>
               <div>
 <!--                <input type="text" @click="openSelectMovieModal()" readonly>-->
