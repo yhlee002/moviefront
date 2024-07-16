@@ -27,6 +27,12 @@ await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value
 await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
+console.log('초기 페이지네이션 정보', {
+  '현재 page': props.page,
+  'boards': boardStore.boardList.length,
+  'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
+})
+
 watch(orderBy, async (newVal) => {
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
 
@@ -42,6 +48,13 @@ watch(() => props.page, async (newVal, oldVal) => {
   }
 
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
+
+  console.log('업데이트 페이지네이션 정보', {
+    '현재 page': boardStore.currentPage,
+    'boards': boardStore.boardList.length,
+    'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
+  })
+
   renderCnt.value += 1;
 });
 

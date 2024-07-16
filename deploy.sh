@@ -1,6 +1,6 @@
+sudo nginx -t
 sudo nginx -s reload
 
-sudo systemctl retart nginx
-
-sudo systemctl status nginx
+sudo service nginx restart
+sudo service nginx status
 
