@@ -12,6 +12,10 @@ const props = defineProps(['page']);
 const router = useRouter();
 const boardStore = useBoardStore();
 
+const renderCnt = ref(0);
+const query = ref("");
+const condition = ref("titleOrContent");
+const orderBy = ref("recent");
 
 if (props.page) {
   boardStore.currentPage = Number(props.page);
@@ -19,35 +23,26 @@ if (props.page) {
   boardStore.currentPage = 1;
 }
 
-await boardStore.getBoards(boardStore.currentPage, 10, null, null);
+await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
 await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
-const query = ref("");
-const condition = ref("titleOrContent");
-const orderBy = ref("recent");
-
 watch(orderBy, async (newVal) => {
-  if (newVal === 'recent') {
-    await boardStore.getBoards(boardStore.currentPage, 10, null, null)
-  } else {
-    await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
-  }
+  await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
 
   query.value = "";
   condition.value = "titleOrContent";
 });
 
 watch(() => props.page, async (newVal, oldVal) => {
-  console.log('page', newVal);
-
   if (newVal) {
     boardStore.currentPage = Number(newVal);
   } else {
     boardStore.currentPage = 1;
   }
 
-  await boardStore.getBoards(newVal, 10, null, null);
+  await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
+  renderCnt.value += 1;
 });
 
 function enter() {
@@ -138,7 +133,7 @@ function writeNewPost() {
 
 <!--              <div class="block-horizontal-line"></div>-->
 
-              <ListComponent category="boards" :list="boardStore.listItems" :recommended="true"></ListComponent>
+              <ListComponent category="boards" :list="boardStore.listItems" :recommended="true" :key="renderCnt"></ListComponent>
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>
           </div>

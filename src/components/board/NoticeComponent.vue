@@ -15,6 +15,11 @@ const router = useRouter();
 const userStore = useUserStore();
 const noticeStore = useNoticeStore();
 
+const renderCnt = ref(0);
+const query = ref("");
+const condition = ref("titleOrContent");
+const orderBy = ref("recent");
+
 if (props.page) {
   noticeStore.currentPage = props.page;
 } else {
@@ -33,16 +38,8 @@ watch(() => props.page, async (newVal, oldVal) => {
 
 await noticeStore.getBoards(noticeStore.currentPage, 10, null, null);
 
-const query = ref("");
-const condition = ref("titleOrContent");
-const orderBy = ref("recent");
-
 watch(orderBy, (newVal) => {
-  if (newVal === 'recent') {
-    noticeStore.getBoards(noticeStore.currentPage, 10, null, null)
-  } else {
     noticeStore.getBoards(noticeStore.currentPage, 10, null, newVal);
-  }
 
   query.value = "";
   condition.value = "titleOrContent";
@@ -55,7 +52,7 @@ function enter() {
 }
 
 async function search(query) {
-  await boardStore.getBoards(1, 10, query, condition.value);
+  await noticeStore.getBoards(1, 10, query, condition.value);
 }
 
 function writeNewPost() {
@@ -95,7 +92,8 @@ function writeNewPost() {
 
 <!--              <div class="block-horizontal-line"></div>-->
 
-              <ListComponent category="notices" :list="noticeStore.listItems" :comment="false" :recommended="false"></ListComponent>
+              <ListComponent category="notices" :list="noticeStore.listItems" :key="renderCnt"
+                             :comment="false" :recommended="false"></ListComponent>
               <Pagenation :pages="noticeStore.totalPages" :page="noticeStore.currentPage"></Pagenation>
 
             </div>
