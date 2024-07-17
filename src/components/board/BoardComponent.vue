@@ -27,17 +27,17 @@ await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value
 await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
-onBeforeUpdate(() => {
-  const vnodeProps = getCurrentInstance()?.vnode.props;
-  console.info('page', `${props.page} -> ${vnodeProps.page}`)
-})
+// onBeforeUpdate(() => {
+//   const vnodeProps = getCurrentInstance()?.vnode.props;
+//   console.info('page', `${props.page} -> ${vnodeProps.page}`)
+// })
 
 onUpdated(() => {
   console.info('component 업데이트 완료', props.page);
 })
 
 watch(orderBy, async (newVal, oldVal) => {
-  console.info('orderBy watch 발동', newVal);
+  console.info('orderBy watch 발동', `${oldVal} -> ${newVal}`);
 
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
 
@@ -48,7 +48,7 @@ watch(orderBy, async (newVal, oldVal) => {
 });
 
 watch(() => props.page, async (newVal, oldVal) => {
-  console.info('props.page watch 발동', newVal);
+  console.info('props.page watch 발동', `${oldVal} -> ${newVal}`);
 
   if (newVal) {
     boardStore.currentPage = Number(newVal);
