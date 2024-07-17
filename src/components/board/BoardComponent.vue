@@ -34,7 +34,6 @@ onBeforeUpdate(() => {
 
 onUpdated(() => {
   console.info('component 업데이트 완료', props.page);
-  renderCnt.value += 1;
 })
 
 watch(orderBy, async (newVal, oldVal) => {
