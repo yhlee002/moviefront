@@ -27,13 +27,13 @@ await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value
 await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
-// onBeforeUpdate(() => {
-//   const vnodeProps = getCurrentInstance()?.vnode.props;
-//   console.info('page', `${props.page} -> ${vnodeProps.page}`)
-// })
+onBeforeUpdate(() => {
+  const vnodeProps = getCurrentInstance()?.vnode.props;
+  console.info('page', `${props.page} -> ${vnodeProps.page}`)
+})
 
 onUpdated(() => {
-  console.info('component 업데이트 완료', props.page);
+  console.info('component 업데이트 완료');
 })
 
 watch(orderBy, async (newVal, oldVal) => {
@@ -56,7 +56,7 @@ watch(() => props.page, async (newVal, oldVal) => {
     boardStore.currentPage = 1;
   }
 
-  boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
+  await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
 
   console.log('업데이트 페이지네이션 정보', {
     '현재 page': boardStore.currentPage,
