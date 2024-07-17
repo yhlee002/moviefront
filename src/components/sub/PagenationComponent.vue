@@ -3,22 +3,15 @@ import {useRouter} from "vue-router";
 import {ref, watch} from "vue";
 
 const router = useRouter();
-const props = defineProps(['pages', 'page']);
+const props = defineProps(['pages', 'page']); // total pages, current page
 
-const pages = ref(props.pages); // total pages
-const page = ref(props.page); // current page
 let showPages = ref([]); // page list
 
 watch(() => props.page, (newVal, oldVal) => {
-  page.value = newVal;
-  updateShowPages(pages.value, newVal);
+  updateShowPages(props.pages, newVal);
 })
 
-watch(() => props.pages, (newVal, oldVal) => {
-  pages.value = newVal;
-})
-
-updateShowPages(pages.value, page.value);
+updateShowPages(props.pages, props.page);
 
 function updateShowPages(pages, page) {
   showPages.value = [];
@@ -42,13 +35,12 @@ function updateShowPages(pages, page) {
 
 function getPage(page) {
   const path = router.currentRoute.value.path;
-  // router.push(`${path}?page=${page}`)
-  router.push({name: path, params: {page: page}});
+  router.push(`${path}?page=${page}`)
 }
 
 function goPrevPage() {
   const path = router.currentRoute.value.path;
-  const startPage = getStartPage(page.value);
+  const startPage = getStartPage(props.page);
   const newVal = startPage - 1;
 
   if (newVal >= 1) router.push(`${path}?page=${newVal}`)
@@ -66,10 +58,10 @@ function goPrevPage() {
 
 function goNextPage() {
   const path = router.currentRoute.value.path;
-  const endPage = getEndPage(page.value);
+  const endPage = getEndPage(props.page);
   const newVal = endPage + 1;
 
-  if (newVal <= pages.value) router.push(`${path}?page=${newVal}`)
+  if (newVal <= props.pages) router.push(`${path}?page=${newVal}`)
 
   function getEndPage(page) {
     if (page <= 5) {

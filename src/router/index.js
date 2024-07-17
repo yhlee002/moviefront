@@ -64,7 +64,7 @@ const router = createRouter({
                     path: '/boards',
                     name: 'boardImp',
                     component: Board,
-                    props: true // route => ({page: route.query.page})
+                    props: route => ({page: route.query.page})
                 },
                 {
                     path: '/boards/:id',

@@ -29,7 +29,7 @@ await boardStore.getWeeklyViewTopBoards(5);
 
 onBeforeUpdate(() => {
   const vnodeProps = getCurrentInstance()?.vnode.props;
-  console.info('page', `${props.page} -> ${vnodeProps.page}`)
+  // console.info('page', `${props.page} -> ${vnodeProps.page}`)
 })
 
 onUpdated(() => {
