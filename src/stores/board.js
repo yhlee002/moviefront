@@ -46,7 +46,7 @@ export const useBoardStore = defineStore('board', {
                     size: size,
                     query: query,
                     condition: condition,
-                    orderBy: orderBy
+                    orderby: orderBy
                 }
             })
                 .then(response => response.data)
@@ -91,6 +91,7 @@ export const useBoardStore = defineStore('board', {
                     page: 0,
                     size: size,
                     orderby: 'recommended',
+                    datelimit: true
                 }
             })
                 .then(response => response.data)
@@ -107,7 +108,8 @@ export const useBoardStore = defineStore('board', {
                 params: {
                     page: 0,
                     size: size,
-                    orderby: 'views'
+                    orderby: 'views',
+                    datelimit: true
                 }
             })
                 .then(response => response.data)
@@ -118,6 +120,16 @@ export const useBoardStore = defineStore('board', {
                 .catch(e => {
                     console.error(e);
                 });
+        },
+        async getBoardRecommendedByUser(boardId, memNo) {
+            return (await axios.get('/api/imps/recommended', {
+                boardId: boardId,
+                memNo: memNo,
+            })
+                .catch(e => {
+                    console.error(e);
+                    return e.response;
+                }));
         },
         async saveBoard(board) {
             return (await axios.post(`/api/imps`, board)
@@ -136,6 +148,17 @@ export const useBoardStore = defineStore('board', {
         async updateBoardViews(boardId) {
             return (await axios.patch('/api/imps/views', {
                 id: boardId
+            })
+                .catch(e => {
+                    console.error(e);
+                    return e.response;
+                }));
+        },
+        async updateBoardRecommended(boardId, memNo, value) {
+            return (await axios.patch('/api/imps/recommended', {
+                boardId: boardId,
+                memNo: memNo,
+                recommended: value
             })
                 .catch(e => {
                     console.error(e);

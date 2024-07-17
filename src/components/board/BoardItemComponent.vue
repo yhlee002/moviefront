@@ -8,6 +8,7 @@ import {useBoardStore} from "@/stores/board.js";
 import Swal from 'sweetalert2'
 import UserCard from "@/components/sub/UserCardComponent.vue";
 import CommentItem from "@/components/sub/CommentItemComponent.vue";
+import {ref} from "vue";
 
 const props = defineProps(['category']);
 const router = useRouter();
@@ -21,6 +22,13 @@ store.updateBoardViews(id);
 await store.getBoard(id);
 const board = store.currentBoard;
 const loginUser = userStore.user;
+
+const recommended = ref(false);
+if (props.category === 'boards') {
+  // 로그인 유저가 해당 글을 추천했는지 조회
+  const result = store.getBoardRecommendedByUser(board.id, loginUser.memNo);
+  recommended.value = result.data;
+}
 
 const regDate = new Date(board.regDate);
 const now = new Date();
@@ -63,6 +71,26 @@ async function submitComment() {
   }
 }
 
+async function recommendBoard() {
+  if (!loginUser || !loginUser.memNo) {
+    Swal.fire({
+      text: '로그인 후 이용 가능합니다. 로그인하시겠습니까?',
+      icon: 'question',
+      confirmButtonText: '확인',
+      cancelButtonText: '취소',
+      showCancelButton: true
+    }).then(async result => {
+      if (result.isConfirmed) {
+        router.push(`/sign-in`)
+      }
+    })
+  } else {
+    const result = await store.updateBoardRecommended(board.id, loginUser.memNo);
+    if (result.data) recommended.value = true;
+    else recommended.value = false;
+  }
+}
+
 async function modifyBoard() {
   router.push(`/newpost?id=${board.id}&category=${props.category}`);
 }
@@ -72,7 +100,8 @@ function deleteBoard() {
     text: '정말 삭제하시겠습니까?',
     icon: 'question',
     confirmButtonText: '확인',
-    cancelButtonText: '취소'
+    cancelButtonText: '취소',
+    showCancelButton: true
   }).then(async result => {
     if (result.isConfirmed) {
       await store.deleteBoard(board.id);
@@ -134,10 +163,17 @@ async function go(path) {
             </div>
 
             <div class="button-box">
-              <button class="button-large icon-button submit" type="button" @click="modifyBoard">
+              <button class="button-large icon-button"
+                      v-if="category === 'boards' && board.writerId !== loginUser.memNo"
+                      type="button" @click="recommendBoard">
+                <img src="@/assets/images/icons/icons8-heart-30.png" alt="추천"/>추천
+              </button>
+              <button class="button-large icon-button submit" v-if="board.writerId === loginUser.memNo"
+                      type="button" @click="modifyBoard">
                 <img src="@/assets/images/icons/icons8-pencil-48.png" alt="수정"/>수정
               </button>
-              <button class="button-large button-gray icon-button" type="button" @click="deleteBoard">
+              <button class="button-large button-gray icon-button" v-if="board.writerId === loginUser.memNo"
+                      type="button" @click="deleteBoard">
                 <img src="@/assets/images/icons/icons8-trash-48.png" alt="삭제"/>삭제
               </button>
             </div>

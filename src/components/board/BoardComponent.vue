@@ -34,7 +34,7 @@ await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value
 await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
-watch(() => orderBy, async (newVal, oldVal) => {
+watch(orderBy, async (newVal, oldVal) => {
   console.info('orderBy watch 발동', `${oldVal} -> ${newVal}`);
 
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);

@@ -3,7 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 
 const userDefault = {
-    id: null,
+    memNo: null,
     identifier: null,
     name: null,
     phone: null,

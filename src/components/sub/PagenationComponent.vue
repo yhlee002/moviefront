@@ -1,17 +1,27 @@
 <script setup>
 import {useRouter} from "vue-router";
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 
 const router = useRouter();
 const props = defineProps(['category', 'pages', 'page']); // total pages, current page
 
 let showPages = ref([]); // page list
 
-watch(() => props.page, (newVal, oldVal) => {
-  updateShowPages(props.pages, newVal);
+// watch(() => props.page, (newVal, oldVal) => {
+//   updateShowPages(props.pages, newVal);
+// })
+
+const page = computed(() => {
+  const nanable = Number(props.page || '1')
+  return isNaN(nanable) ? 1 : nanable
 })
 
-updateShowPages(props.pages, props.page);
+watch(page, (newPage) => {
+      updateShowPages(props.pages, newPage);
+    }, {immediate: true}
+)
+
+updateShowPages(props.pages, page.value);
 
 function updateShowPages(pages, page) {
   showPages.value = [];
@@ -36,7 +46,6 @@ function updateShowPages(pages, page) {
 function getPage(page) {
   const path = router.currentRoute.value.path;
   router.push({path: path, query: {page: page}, force: true});
-  // window.location.href = `${path}?page=${page}`;
 }
 
 function goPrevPage() {
@@ -84,9 +93,13 @@ function goNextPage() {
     </div>
     <div>
       <ul class="pagenation-page-list">
-        <li v-for="idx in showPages" :key="idx" @click="getPage(idx)"
-            :class="idx === page? 'current-page' : ''">{{ idx }}
-        </li>
+        <!--        <li v-for="idx in showPages" :key="idx" @click="getPage(idx)"-->
+        <!--            :class="idx === page? 'current-page' : ''">{{ idx }}-->
+        <!--        </li>-->
+        <router-link v-for="idx in showPages" :key="`page-${idx}`"
+                     :to="{ name: category, query: { page: idx }, force: true }">
+          <li :class="idx === page? 'current-page' : ''">{{ idx }}</li>
+        </router-link>
       </ul>
     </div>
     <div class="next-button">
@@ -103,13 +116,14 @@ function goNextPage() {
   margin: 2rem 0;
 }
 
-.pagenation-box ul.pagenation-page-list > li {
+.pagenation-box ul.pagenation-page-list li {
   padding: 0 0.2rem;
   margin: 0 0.3rem;
   cursor: pointer;
+  color: #000000;
 }
 
-.pagenation-box ul.pagenation-page-list > li.current-page {
+.pagenation-box ul.pagenation-page-list li.current-page {
   color: #2553a7;
   font-weight: bold;
 }
