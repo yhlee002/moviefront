@@ -30,7 +30,7 @@ const router = createRouter({
                 },
                 {
                     path: '/admin/users',
-                    name: 'userList',
+                    name: 'users',
                     component: AdminUser,
                 },
                 {
@@ -50,25 +50,25 @@ const router = createRouter({
                 },
                 {
                     path: '/notices',
-                    name: 'boardNotice',
+                    name: 'notices',
                     component: Notice,
                     props: route => ({page: route.query.page})
                 },
                 {
                     path: '/notices/:id',
-                    name: 'singleBoardNotice',
+                    name: 'notice',
                     component: BoardItem,
                     props: {category: 'notices'} // true
                 },
                 {
                     path: '/boards',
-                    name: 'boardImp',
+                    name: 'boards',
                     component: Board,
                     props: route => ({page: route.query.page})
                 },
                 {
                     path: '/boards/:id',
-                    name: 'singleBoardImp',
+                    name: 'Board',
                     component: BoardItem,
                     props: {category: 'boards'}
                 },
