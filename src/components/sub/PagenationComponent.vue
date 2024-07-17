@@ -42,7 +42,8 @@ function updateShowPages(pages, page) {
 
 function getPage(page) {
   const path = router.currentRoute.value.path;
-  router.push(`${path}?page=${page}`)
+  // router.push(`${path}?page=${page}`)
+  router.push({name: path, params: {page: page}});
 }
 
 function goPrevPage() {
