@@ -155,12 +155,7 @@ function writeNewPost() {
                 </select>
               </div>
 
-              <Suspense>
-                <ListComponent category="boards" :list="boardStore.listItems" :recommended="true" :key="renderCnt"></ListComponent>
-                <template #fallback>
-                  Loading...
-                </template>
-              </Suspense>
+              <ListComponent category="boards" :list="boardStore.listItems" :recommended="true" :key="renderCnt"></ListComponent>
               <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>
           </div>

@@ -35,6 +35,7 @@ const router = createRouter({
                 },
                 {
                     path: '/admin/users/:id',
+                    name: 'user',
                     component: AdminUserDetailContainer,
                 },
                 {
