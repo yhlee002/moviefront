@@ -36,7 +36,9 @@ onUpdated(() => {
   console.info('component 업데이트 완료');
 })
 
-watch(orderBy, async (newVal, oldVal) => {
+watch(() => {
+  return orderBy;
+}, async (newVal, oldVal) => {
   console.info('orderBy watch 발동', `${oldVal} -> ${newVal}`);
 
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
@@ -47,7 +49,9 @@ watch(orderBy, async (newVal, oldVal) => {
   renderCnt.value += 1;
 });
 
-watch(() => props.page, async (newVal, oldVal) => {
+watch(() => {
+  return props.page;
+}, async (newVal, oldVal) => {
   console.info('props.page watch 발동', `${oldVal} -> ${newVal}`);
 
   if (newVal) {
