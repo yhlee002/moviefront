@@ -37,6 +37,8 @@ onUpdated(() => {
 })
 
 watch(orderBy, async (newVal, oldVal) => {
+  console.info('orderBy watch 발동', newVal);
+
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
 
   query.value = "";
@@ -46,13 +48,15 @@ watch(orderBy, async (newVal, oldVal) => {
 });
 
 watch(() => props.page, async (newVal, oldVal) => {
+  console.info('props.page watch 발동', newVal);
+
   if (newVal) {
     boardStore.currentPage = Number(newVal);
   } else {
     boardStore.currentPage = 1;
   }
 
-  await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
+  boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
 
   console.log('업데이트 페이지네이션 정보', {
     '현재 page': boardStore.currentPage,
