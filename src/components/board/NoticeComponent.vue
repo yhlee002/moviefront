@@ -94,7 +94,7 @@ function writeNewPost() {
 
               <ListComponent category="notices" :list="noticeStore.listItems" :key="renderCnt"
                              :comment="false" :recommended="false"></ListComponent>
-              <Pagenation :pages="noticeStore.totalPages" :page="noticeStore.currentPage"></Pagenation>
+              <Pagenation category="notices" :pages="noticeStore.totalPages" :page="noticeStore.currentPage"></Pagenation>
 
             </div>
           </div>

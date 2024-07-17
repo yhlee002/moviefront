@@ -7,6 +7,7 @@ import {ref, watch} from "vue";
 import SortingComponent from "@/components/icon/SortingComponent.vue";
 import PagenationComponent from "@/components/sub/PagenationComponent.vue";
 import AdminUserDetailComponent from "@/components/admin/AdminUserDetailComponent.vue";
+import Pagenation from "@/components/sub/PagenationComponent.vue";
 
 const userStore = useUserStore();
 await userStore.getUsers(1, 10, null);
@@ -368,7 +369,7 @@ function certificationToKorean(certification) {
             <button class="button-default" type="button" @click="deleteMultiUserInfo()">삭제</button>
           </div>
 
-          <PagenationComponent :pages="userStore.totalPages" :page="userStore.currentPage"></PagenationComponent>
+          <PagenationComponent category="admin/users" :pages="userStore.totalPages" :page="userStore.currentPage"></PagenationComponent>
 
           <div id="userDetailModal" v-show="modalShow">
             <AdminUserDetailComponent v-if="currentMember.memNo" :memNo="currentMember.memNo"></AdminUserDetailComponent>

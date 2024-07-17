@@ -3,7 +3,7 @@ import {useRouter} from "vue-router";
 import {ref, watch} from "vue";
 
 const router = useRouter();
-const props = defineProps(['pages', 'page']); // total pages, current page
+const props = defineProps(['category', 'pages', 'page']); // total pages, current page
 
 let showPages = ref([]); // page list
 
@@ -35,7 +35,7 @@ function updateShowPages(pages, page) {
 
 function getPage(page) {
   const path = router.currentRoute.value.path;
-  router.push(`${path}?page=${page}`)
+  router.push({path: path, query: {page: page}, force: true});
   // window.location.href = `${path}?page=${page}`;
 }
 
@@ -84,10 +84,6 @@ function goNextPage() {
     </div>
     <div>
       <ul class="pagenation-page-list">
-        <!--        <li :style="showPages[0] === 1 ? {'color': 'gray', 'cursor': 'default'} : {}">...</li>-->
-        <!--        <li v-for="idx in showPages" :key="idx" :class="idx === page? 'current-page' : ''">{{ idx }}</li>-->
-        <!--        <li v-if="showPages[showPages.length - 1] > 1">...</li>-->
-
         <li v-for="idx in showPages" :key="idx" @click="getPage(idx)"
             :class="idx === page? 'current-page' : ''">{{ idx }}
         </li>

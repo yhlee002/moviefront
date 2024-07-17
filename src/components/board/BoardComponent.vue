@@ -17,33 +17,24 @@ const query = ref("");
 const condition = ref("titleOrContent");
 const orderBy = ref("recent");
 
-const page = computed(() => {
+const pageNum = computed(() => {
   const nanable = Number(props.page || "1");
+  console.log('반환될 값', isNaN(nanable) ? 1 : nanable);
   return isNaN(nanable) ? 1 : nanable;
 });
+// boardStore.currentPage = pageNum.value;
 
-// if (props.page) {
-//   boardStore.currentPage = Number(props.page);
-// } else {
-//   boardStore.currentPage = 1;
-// }
+if (props.page) {
+  boardStore.currentPage = Number(props.page);
+} else {
+  boardStore.currentPage = 1;
+}
 
 await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
 await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
-onBeforeUpdate(() => {
-  const vnodeProps = getCurrentInstance()?.vnode.props;
-  // console.info('page', `${props.page} -> ${vnodeProps.page}`)
-})
-
-onUpdated(() => {
-  console.info('component 업데이트 완료');
-})
-
-watch(() => {
-  return orderBy;
-}, async (newVal, oldVal) => {
+watch(() => orderBy, async (newVal, oldVal) => {
   console.info('orderBy watch 발동', `${oldVal} -> ${newVal}`);
 
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
@@ -54,45 +45,31 @@ watch(() => {
   renderCnt.value += 1;
 });
 
-// watch(() => {
-//   return props.page;
-// }, async (newVal, oldVal) => {
-//   console.info('props.page watch 발동', `${oldVal} -> ${newVal}`);
-//
-//   if (newVal) {
-//     boardStore.currentPage = Number(newVal);
-//   } else {
-//     boardStore.currentPage = 1;
-//   }
-//
-//   await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
-//
-//   console.log('업데이트 페이지네이션 정보', {
-//     '현재 page': boardStore.currentPage,
-//     'boards': boardStore.boardList.length,
-//     'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
-//   })
-//
-//   renderCnt.value += 1;
-// });
+watch(() => props.page, async (newVal, oldVal) => {
+  console.info('props.page watch 발동', `${oldVal} -> ${newVal}`);
 
-watch(
-    page, async (newPage) => {
-      console.info('props.page watch 발동');
+  if (newVal) {
+    boardStore.currentPage = Number(newVal);
+  } else {
+    boardStore.currentPage = 1;
+  }
+  // boardStore.currentPage = pageNum.value;
 
-      boardStore.currentPage = newPage;
-      await boardStore.getBoards(newPage, 10, null, null, orderBy.value);
+  await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
 
-      console.log('업데이트 페이지네이션 정보', {
-        '현재 page': boardStore.currentPage,
-        'boards': boardStore.boardList.length,
-        'boards 첫 번째 요소 식별번호': boardStore.boardList[0]?.id ?? '없음'
-      })
-    },
-    {
-      immediate: true,
-    },
-);
+  renderCnt.value += 1;
+});
+
+// watch(() => page, async (newPage) => {
+//       console.info('props.page watch 발동');
+//
+//       boardStore.currentPage = newPage.value;
+//       await boardStore.getBoards(newPage.value, 10, null, null, orderBy.value);
+//
+//       renderCnt.value += 1;
+//     },
+//     {immediate: true}
+// );
 
 function enter() {
   if (window.event.keyCode === 13) {
@@ -180,7 +157,7 @@ function writeNewPost() {
 
               <ListComponent category="boards" :list="boardStore.listItems" :recommended="true"
                              :key="renderCnt"></ListComponent>
-              <Pagenation :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
+              <Pagenation category="boards" :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>
             </div>
           </div>
 
