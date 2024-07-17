@@ -58,7 +58,7 @@ watch(() => props.page, async (newVal, oldVal) => {
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
 
   renderCnt.value += 1;
-});
+}, {immediate: true});
 
 // watch(() => page, async (newPage) => {
 //       console.info('props.page watch 발동');
