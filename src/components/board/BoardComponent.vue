@@ -153,15 +153,6 @@ function writeNewPost() {
                 </select>
               </div>
 
-              <!-- 임시 -->
-              <div>
-                <ul>
-                  <li v-for="item in boardStore.boardList" :key="item.id">
-                    {{item.title}}
-                  </li>
-                </ul>
-              </div>
-
               <ListComponent category="boards" :list="boardStore.listItems" :recommended="true"
                              :key="renderCnt"></ListComponent>
               <Pagenation category="boards" :pages="boardStore.totalPages" :page="boardStore.currentPage"></Pagenation>

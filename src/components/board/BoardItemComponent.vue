@@ -151,7 +151,7 @@ async function go(path) {
               <h2 id="boardTitle" v-text="board.title"></h2>
             </div>
 
-            <!--            <div v-if="props.category === 'board'">-->
+            <!--            <div v-if="props.category === 'boards'">-->
             <!--              <p>영화</p>-->
             <!--              <div>-->
             <!--                <p></p>-->
@@ -180,7 +180,7 @@ async function go(path) {
           </div>
 
           <!-- 댓글 -->
-          <div v-if="category === 'board'" style="display: flex; flex-direction: column;">
+          <div v-if="category === 'boards'" style="display: flex; flex-direction: column;">
             <p id="commentsBlockTitle">댓글</p>
             <div class="comment-write-form">
               <div class="comment-input-box">

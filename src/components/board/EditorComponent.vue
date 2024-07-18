@@ -19,7 +19,7 @@ const modalStore = useModalStore();
 const props = defineProps(['id', 'category']);
 
 const category = props.category;
-const store = category === 'notice' ? noticeStore : category === 'board' ? boardStore : null;
+const store = category === 'notices' ? noticeStore : category === 'boards' ? boardStore : null;
 
 const board = ref({
   id: '',
