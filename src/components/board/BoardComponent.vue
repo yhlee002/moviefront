@@ -22,13 +22,13 @@ const pageNum = computed(() => {
   console.log('반환될 값', isNaN(nanable) ? 1 : nanable);
   return isNaN(nanable) ? 1 : nanable;
 });
-// boardStore.currentPage = pageNum.value;
+boardStore.currentPage = pageNum.value;
 
-if (props.page) {
-  boardStore.currentPage = Number(props.page);
-} else {
-  boardStore.currentPage = 1;
-}
+// if (props.page) {
+//   boardStore.currentPage = Number(props.page);
+// } else {
+//   boardStore.currentPage = 1;
+// }
 
 await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
 await boardStore.getWeeklyRecommendedTopBoards(5);
@@ -45,31 +45,31 @@ watch(orderBy, async (newVal, oldVal) => {
   renderCnt.value += 1;
 });
 
-watch(() => props.page, async (newVal, oldVal) => {
-  console.info('props.page watch 발동', `${oldVal} -> ${newVal}`);
-
-  if (newVal) {
-    boardStore.currentPage = Number(newVal);
-  } else {
-    boardStore.currentPage = 1;
-  }
-  // boardStore.currentPage = pageNum.value;
-
-  await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
-
-  renderCnt.value += 1;
-}, {immediate: true});
-
-// watch(() => page, async (newPage) => {
-//       console.info('props.page watch 발동');
+// watch(() => props.page, async (newVal, oldVal) => {
+//   console.info('props.page watch 발동', `${oldVal} -> ${newVal}`);
 //
-//       boardStore.currentPage = newPage.value;
-//       await boardStore.getBoards(newPage.value, 10, null, null, orderBy.value);
+//   if (newVal) {
+//     boardStore.currentPage = Number(newVal);
+//   } else {
+//     boardStore.currentPage = 1;
+//   }
+//   // boardStore.currentPage = pageNum.value;
 //
-//       renderCnt.value += 1;
-//     },
-//     {immediate: true}
-// );
+//   await boardStore.getBoards(boardStore.currentPage, 10, null, null, orderBy.value);
+//
+//   renderCnt.value += 1;
+// }, {immediate: true});
+
+watch(pageNum, async (newPage) => {
+      console.info('props.page watch 발동');
+
+      boardStore.currentPage = newPage;
+      await boardStore.getBoards(newPage, 10, null, null, orderBy.value);
+
+      // renderCnt.value += 1;
+    },
+    {immediate: true}
+);
 
 function enter() {
   if (window.event.keyCode === 13) {

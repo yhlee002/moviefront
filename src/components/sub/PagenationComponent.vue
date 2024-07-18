@@ -96,10 +96,12 @@ function goNextPage() {
         <!--        <li v-for="idx in showPages" :key="idx" @click="getPage(idx)"-->
         <!--            :class="idx === page? 'current-page' : ''">{{ idx }}-->
         <!--        </li>-->
-        <router-link v-for="idx in showPages" :key="`page-${idx}`"
-                     :to="{ name: category, query: { page: idx }, force: true }">
-          <li :class="idx === page? 'current-page' : ''">{{ idx }}</li>
-        </router-link>
+        <li v-for="idx in showPages" :key="`page-${idx}`" :class="idx === page? 'current-page' : ''">
+          <router-link :to="{ name: category, query: { page: idx }, force: true }">
+            {{ idx }}
+          </router-link>
+        </li>
+
       </ul>
     </div>
     <div class="next-button">
