@@ -156,7 +156,7 @@ function writeNewPost() {
               <!-- 임시 -->
               <div>
                 <ul>
-                  <li v-for="item in boardStore.listItems" :key="item.id">
+                  <li v-for="item in boardStore.boardList" :key="item.id">
                     {{item.title}}
                   </li>
                 </ul>

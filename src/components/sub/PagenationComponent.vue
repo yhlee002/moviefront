@@ -93,15 +93,15 @@ function goNextPage() {
     </div>
     <div>
       <ul class="pagenation-page-list">
-        <!--        <li v-for="idx in showPages" :key="idx" @click="getPage(idx)"-->
-        <!--            :class="idx === page? 'current-page' : ''">{{ idx }}-->
-        <!--        </li>-->
-        <li v-for="idx in showPages" :key="`page-${idx}`" :class="idx === page? 'current-page' : ''">
-          <router-link :to="{ name: 'boards', query: { page: idx }, force: true }">
-            {{ idx }}
-          </router-link>
+        <li v-for="idx in showPages" :key="`page-${idx}`" @click="getPage(idx)"
+            :class="idx === page? 'current-page' : ''">{{ idx }}
         </li>
-
+        <!--        <router-link v-for="idx in showPages" :key="`page-${idx}`"-->
+        <!--                     :to="{ name: category, query: { page: idx }, force: true }">-->
+        <!--          <li :class="idx === page? 'current-page' : ''">-->
+        <!--            {{ idx }}-->
+        <!--          </li>-->
+        <!--        </router-link>-->
       </ul>
     </div>
     <div class="next-button">
