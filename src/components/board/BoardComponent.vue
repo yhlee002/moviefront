@@ -35,8 +35,6 @@ await boardStore.getWeeklyRecommendedTopBoards(5);
 await boardStore.getWeeklyViewTopBoards(5);
 
 watch(orderBy, async (newVal, oldVal) => {
-  console.info('orderBy watch 발동', `${oldVal} -> ${newVal}`);
-
   await boardStore.getBoards(boardStore.currentPage, 10, null, null, newVal);
 
   query.value = "";
@@ -66,7 +64,7 @@ watch(pageNum, async (newPage) => {
       boardStore.currentPage = newPage;
       await boardStore.getBoards(newPage, 10, null, null, orderBy.value);
 
-      // renderCnt.value += 1;
+      renderCnt.value += 1;
     },
     {immediate: true}
 );
@@ -153,6 +151,15 @@ function writeNewPost() {
                   <option value="comments">댓글순</option>
                   <option value="views">조회순</option>
                 </select>
+              </div>
+
+              <!-- 임시 -->
+              <div>
+                <ul>
+                  <li v-for="item in boardStore.listItems" :key="item.id">
+                    {{item.title}}
+                  </li>
+                </ul>
               </div>
 
               <ListComponent category="boards" :list="boardStore.listItems" :recommended="true"
