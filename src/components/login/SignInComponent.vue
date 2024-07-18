@@ -221,4 +221,14 @@ async function socialLogin(provider) {
   background: url("@/assets/images/kakao-xs.png") no-repeat;
   background-size: 100% 100%;
 }
+
+#rememberme-box {
+  display: flex;
+  width: fit-content;
+  align-items: center;
+}
+
+#rememberme-box label {
+  width: fit-content;
+}
 </style>

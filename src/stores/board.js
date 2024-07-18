@@ -121,11 +121,28 @@ export const useBoardStore = defineStore('board', {
                     console.error(e);
                 });
         },
-        async getBoardRecommendedByUser(boardId, memNo) {
-            return (await axios.get('/api/imps/recommended', {
-                boardId: boardId,
-                memNo: memNo,
+        async getRecommendedBoardByMemNo(memNo, page, size) {
+            return (await axios.get(`/api/imps/recommended`, {
+                params: {
+                    page: page - 1,
+                    size: size,
+                    memNo: memNo
+                }
             })
+                .catch(e => {
+                    console.error(e);
+                    return e.response;
+                }));
+        },
+        async isRecommendedByUser(boardId, memNo) {
+            return (await axios.get(`/api/imps/recommended/exists?boardId=${boardId}&memNo=${memNo}`)
+                .catch(e => {
+                    console.error(e);
+                    return e.response;
+                }));
+        },
+        async getBoardrecommendedCount(boardId) {
+            return (await axios.get(`/api/imps/recommended/count?boardId=${boardId}`)
                 .catch(e => {
                     console.error(e);
                     return e.response;
@@ -158,7 +175,7 @@ export const useBoardStore = defineStore('board', {
             return (await axios.patch('/api/imps/recommended', {
                 boardId: boardId,
                 memNo: memNo,
-                recommended: value
+                value: value
             })
                 .catch(e => {
                     console.error(e);

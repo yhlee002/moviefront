@@ -179,11 +179,17 @@ form .form-group input[type=password] { /* 해당 form에만 적용 */
     height: 2rem;
     padding: 0 0.5rem;
     white-space: nowrap;
+    background-color: #ffffff;
+    border: 1px solid #a8a8a8;
+    border-radius: 2rem;
 }
 
 .button-large {
     width: 6rem;
     height: 2.4rem;
+    background-color: #ffffff;
+    border: 1px solid #a8a8a8;
+    border-radius: 2rem;
 }
 
 .button-box {
@@ -198,7 +204,8 @@ button.submit { /* .form-box form button.submit */
     color: #FFFFFF;
     background-color: #ff7c14;
     border: 0.1rem solid #f67b1a;
-    border-radius: 0.1rem;
+    border-radius: 2rem;
+    /*border-radius: 0.1rem;*/
 }
 
 .icon-button {

@@ -32,11 +32,13 @@ const router = createRouter({
                     path: '/admin/users',
                     name: 'users',
                     component: AdminUser,
+                    props: route => ({page: route.query.page})
                 },
                 {
                     path: '/admin/users/:id',
-                    name: 'user',
+                    name: 'userDetail',
                     component: AdminUserDetailContainer,
+                    // props: true
                 },
                 {
                     path: '/search',
@@ -57,7 +59,7 @@ const router = createRouter({
                 },
                 {
                     path: '/notices/:id',
-                    name: 'notice',
+                    name: 'noticeDetail',
                     component: BoardItem,
                     props: {category: 'notices'} // true
                 },
@@ -69,7 +71,7 @@ const router = createRouter({
                 },
                 {
                     path: '/boards/:id',
-                    name: 'Board',
+                    name: 'boardDetail',
                     component: BoardItem,
                     props: {category: 'boards'}
                 },
@@ -81,7 +83,7 @@ const router = createRouter({
                 },
                 {
                     path: '/users/:id',
-                    name: 'user',
+                    name: 'userPopup',
                     component: User,
                     props: true
                 },

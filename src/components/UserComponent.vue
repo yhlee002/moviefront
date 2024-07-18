@@ -3,6 +3,7 @@
 </script>
 
 <template>
+  <!-- User Info Popup -->
 
 </template>
 

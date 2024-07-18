@@ -19,7 +19,6 @@ const orderBy = ref("recent");
 
 const pageNum = computed(() => {
   const nanable = Number(props.page || "1");
-  console.log('반환될 값', isNaN(nanable) ? 1 : nanable);
   return isNaN(nanable) ? 1 : nanable;
 });
 boardStore.currentPage = pageNum.value;

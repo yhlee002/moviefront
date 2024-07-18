@@ -8,7 +8,7 @@ import {useBoardStore} from "@/stores/board.js";
 import Swal from 'sweetalert2'
 import UserCard from "@/components/sub/UserCardComponent.vue";
 import CommentItem from "@/components/sub/CommentItemComponent.vue";
-import {ref} from "vue";
+import {ref, watch} from "vue";
 
 const props = defineProps(['category']);
 const router = useRouter();
@@ -24,11 +24,19 @@ const board = store.currentBoard;
 const loginUser = userStore.user;
 
 const recommended = ref(false);
+const recommendedCnt = ref(0);
 if (props.category === 'boards') {
   // 로그인 유저가 해당 글을 추천했는지 조회
-  const result = store.getBoardRecommendedByUser(board.id, loginUser.memNo);
-  recommended.value = result.data;
+  const result = await store.isRecommendedByUser(board.id, loginUser.memNo);
+  if (result.data) {
+    recommended.value = result.data.data;
+  }
 }
+
+watch(recommended, async (newVal) => {
+  const result = await store.isRecommendedByUser(board.id);
+  recommendedCnt.value = result.data.data;
+})
 
 const regDate = new Date(board.regDate);
 const now = new Date();
@@ -85,8 +93,9 @@ async function recommendBoard() {
       }
     })
   } else {
-    const result = await store.updateBoardRecommended(board.id, loginUser.memNo);
-    if (result.data) recommended.value = true;
+    const value = !recommended.value;
+    const result = await store.updateBoardRecommended(board.id, loginUser.memNo, value);
+    if (result.data.data?.id) recommended.value = true;
     else recommended.value = false;
   }
 }
@@ -163,19 +172,29 @@ async function go(path) {
             </div>
 
             <div class="button-box">
-              <button class="button-large icon-button"
-                      v-if="category === 'boards' && board.writerId !== loginUser.memNo"
-                      type="button" @click="recommendBoard">
-                <img src="@/assets/images/icons/icons8-heart-30.png" alt="추천"/>추천
-              </button>
-              <button class="button-large icon-button submit" v-if="board.writerId === loginUser.memNo"
-                      type="button" @click="modifyBoard">
-                <img src="@/assets/images/icons/icons8-pencil-48.png" alt="수정"/>수정
-              </button>
-              <button class="button-large button-gray icon-button" v-if="board.writerId === loginUser.memNo"
-                      type="button" @click="deleteBoard">
-                <img src="@/assets/images/icons/icons8-trash-48.png" alt="삭제"/>삭제
-              </button>
+              <ul class="board-options">
+                <li v-if="board.writerId !== loginUser.memNo">
+                  <button @click="recommendBoard" :class="recommended ? 'recommended' : ''">
+                    <img src="@/assets/images/icons/icons8-heart-30.png" alt="추천"/>
+                    <!--                    추천-->
+                    <span>{{ recommendedCnt }}</span>
+                  </button>
+                </li>
+
+                <li v-if="board.writerId === loginUser.memNo">
+                  <button @click="modifyBoard">
+                    <!--                    <img src="@/assets/images/icons/icons8-pencil-48.png" alt="수정"/>-->
+                    수정
+                  </button>
+                </li>
+
+                <li v-if="board.writerId === loginUser.memNo">
+                  <button @click="deleteBoard">
+                    <!--                    <img src="@/assets/images/icons/icons8-trash-48.png" alt="삭제"/>-->
+                    삭제
+                  </button>
+                </li>
+              </ul>
             </div>
           </div>
 
@@ -189,11 +208,12 @@ async function go(path) {
                   profileImage: loginUser.profileImage, role: loginUser.role}"
                     :image-only="true"></UserCard>
                 <div style="margin: 0 1.4rem 0 0; height: 100%; border-right: 0.1rem solid #f2f2f2"></div>
-                <textarea id="commentInput" type="text" style="width: 100%; border: 0.1rem solid #f2f2f2;"></textarea>
+                <div contenteditable="true" id="commentInput" type="text"
+                     style="width: 100%; border: 0.1rem solid #f2f2f2; padding: 1rem;"></div>
               </div>
 
               <div style="display: flex; justify-content: end; margin-top: 0.5rem">
-                <button class="button-default submit" @click="submitComment()" type="button">작성</button>
+                <button class="button-default" @click="submitComment()" type="button">작성</button>
               </div>
             </div>
 
@@ -202,7 +222,7 @@ async function go(path) {
               <div v-if="commentStore.comments.length === 0">
                 <div
                     style="border: 0.1rem solid #f2f2f2; border-radius: 2px; display: flex; justify-content: center; align-items: center;">
-                  <p>작성된 댓글이 없습니다.</p>
+                  <p style="margin: 1rem 0;">작성된 댓글이 없습니다.</p>
                 </div>
               </div>
               <CommentItem v-for="comment in commentStore.comments" :key="comment" :comment="comment"></CommentItem>
@@ -211,7 +231,7 @@ async function go(path) {
 
           <div style="display: flex; flex-direction: column">
             <ul>
-              <li style="display: flex;">
+              <li style="display: flex; margin-bottom: 0.5rem;">
                 <div style="margin-right: 1rem;">이전글</div>
                 <p style="cursor: pointer;" v-if="store.prevBoard" @click="go(`/${category}/${store.prevBoard.id}`)">
                   {{ store.prevBoard.title }}</p>
@@ -339,7 +359,7 @@ async function go(path) {
   flex-direction: column;
   width: calc(100% - 2rem);
   border: 0.1rem solid #f2f2f2;
-  border-radius: 1rem;
+  border-radius: 2px; /*1rem;*/
   margin-bottom: 1rem;
   padding: 1rem;
 }
@@ -353,5 +373,47 @@ async function go(path) {
 
 .comment-box {
   padding: 2rem 0;
+}
+
+.board-options {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  height: fit-content;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid #f2f2f2;
+  align-items: center;
+}
+
+.board-options li {
+  height: fit-content;
+  width: fit-content;
+}
+
+.board-options li:not(li:last-child) {
+  border-right: 1px solid #f2f2f2;
+}
+
+.board-options li button {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0.5rem 0.5rem;
+  display: flex;
+}
+
+.board-options li button.recommended img {
+  opacity: 1;
+}
+
+.board-options li button img {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0.7;
+}
+
+.board-options li button span {
+  margin: 0 0.2rem;
 }
 </style>

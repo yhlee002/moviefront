@@ -11,6 +11,7 @@ import AdminUserNoticeComponent from "@/components/admin/AdminUserNoticeComponen
 import {useBoardStore} from "@/stores/board";
 import {useCommentStore} from "@/stores/comment";
 import UserImageComponent from "@/components/icon/UserImageComponent.vue";
+import AdminUserBoardRecommendedComponent from "@/components/admin/AdminUserBoardRecommendedComponent.vue";
 
 const router = useRouter();
 let id = ref(router.currentRoute.value.params.id);
@@ -223,8 +224,9 @@ function modifyUserInfo() {
     <ul id="userDetailTabIdxs">
       <li class="user-detail-tab-index" @click="activeTab(0)">작성한 공지</li>
       <li class="user-detail-tab-index active" @click="activeTab(1)">작성한 글</li>
-      <li class="user-detail-tab-index" @click="activeTab(2)">작성한 댓글</li>
-      <li class="user-detail-tab-index" @click="activeTab(3)">로그인 기록</li>
+      <li class="user-detail-tab-index" @click="activeTab(2)">추천한 글</li>
+      <li class="user-detail-tab-index" @click="activeTab(3)">작성한 댓글</li>
+      <li class="user-detail-tab-index" @click="activeTab(4)">로그인 기록</li>
     </ul>
 
     <div id="userDetailTabContents">
@@ -238,11 +240,15 @@ function modifyUserInfo() {
       </div>
 
       <div id="userDetailTab2" class="user-detail-tab">
+        <AdminUserBoardRecommendedComponent :memNo="id"></AdminUserBoardRecommendedComponent>
+      </div>
+
+      <div id="userDetailTab3" class="user-detail-tab">
         <!-- 작성한 댓글 -->
         <AdminUserCommentComponent :memNo="id"></AdminUserCommentComponent>
       </div>
 
-      <div id="userDetailTab3" class="user-detail-tab">
+      <div id="userDetailTab4" class="user-detail-tab">
         <!-- 로그인 기록 -->
         <AdminUserLoginLogsComponent :memNo="id"></AdminUserLoginLogsComponent>
       </div>

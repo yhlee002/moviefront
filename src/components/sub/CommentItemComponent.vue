@@ -1,10 +1,14 @@
 <script setup>
 import UserCard from "@/components/sub/UserCardComponent.vue";
 import Swal from 'sweetalert2';
+import {useUserStore} from "@/stores/user";
 
 const props = defineProps(['comment']);
-
 const comment = props.comment;
+
+const userStore = useUserStore();
+await userStore.getCurrentUser();
+const loginUser = userStore.user;
 
 function changeCommentUpdateForm(commentId) {
   const inputs = document.getElementsByClassName(`board_item_comments`);
@@ -59,8 +63,10 @@ function deleteComment(commentId) {
 
     <!-- Comment Options -->
     <div class="comment-option-box">
-      <button class="button-modify-minimalize" type="button" @click="changeCommentUpdateForm"></button>
-      <button class="button-delete-minimalize" type="button" @click="deleteComment"></button>
+      <button v-if="loginUser.memNo === comment.writerId"
+              class="button-modify-minimalize" type="button" @click="changeCommentUpdateForm"></button>
+      <button v-if="loginUser.memNo === comment.writerId"
+              class="button-delete-minimalize" type="button" @click="deleteComment"></button>
     </div>
   </div>
 </template>
