@@ -97,7 +97,7 @@ function goNextPage() {
         <!--            :class="idx === page? 'current-page' : ''">{{ idx }}-->
         <!--        </li>-->
         <li v-for="idx in showPages" :key="`page-${idx}`" :class="idx === page? 'current-page' : ''">
-          <router-link :to="{ name: category, query: { page: idx }, force: true }">
+          <router-link :to="{ name: 'boards', query: { page: idx }, force: true }">
             {{ idx }}
           </router-link>
         </li>
