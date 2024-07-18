@@ -93,14 +93,13 @@ function goNextPage() {
     </div>
     <div>
       <ul class="pagenation-page-list">
-<!--        <li v-for="idx in showPages" :key="`page-${idx}`" @click="getPage(idx)"-->
-<!--            :class="idx === page? 'current-page' : ''">{{ idx }}-->
-<!--        </li>-->
-        <router-link v-for="idx in showPages" :key="`page-${idx}`"
+        <!--        <li v-for="idx in showPages" :key="`page-${idx}`" @click="getPage(idx)"-->
+        <!--            :class="idx === page? 'current-page' : ''">{{ idx }}-->
+        <!--        </li>-->
+
+        <router-link v-for="idx in showPages" :key="`page-${idx}`" :class="idx === page? 'current-page' : ''"
                      :to="{ name: category, query: { page: idx }, force: true }">
-          <li :class="idx === page? 'current-page' : ''">
-            {{ idx }}
-          </li>
+          {{ idx }}
         </router-link>
       </ul>
     </div>
@@ -118,14 +117,14 @@ function goNextPage() {
   margin: 2rem 0;
 }
 
-.pagenation-box ul.pagenation-page-list li {
+.pagenation-box ul.pagenation-page-list a {
   padding: 0 0.2rem;
   margin: 0 0.3rem;
   cursor: pointer;
   color: #000000;
 }
 
-.pagenation-box ul.pagenation-page-list li.current-page {
+.pagenation-box ul.pagenation-page-list a.current-page {
   color: #2553a7;
   font-weight: bold;
 }
