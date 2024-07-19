@@ -78,8 +78,7 @@
 }
 
 #userList .user-list-checkbox {
-    display: flex;
-    justify-content: center;
+    text-align: center;
     align-content: center;
 }
 

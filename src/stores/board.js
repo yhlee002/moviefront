@@ -121,7 +121,7 @@ export const useBoardStore = defineStore('board', {
                     console.error(e);
                 });
         },
-        async getRecommendedBoardByMemNo(memNo, page, size) {
+        async getRecommendedBoardByUser(memNo, page, size) {
             return (await axios.get(`/api/imps/recommended`, {
                 params: {
                     page: page - 1,

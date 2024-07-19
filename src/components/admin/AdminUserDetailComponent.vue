@@ -284,6 +284,9 @@ function modifyUserInfo() {
   height: 2rem;
   padding: 0 1rem;
   cursor: pointer;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 #userDetailTabIdxs li.user-detail-tab-index:hover {

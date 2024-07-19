@@ -13,6 +13,8 @@ import Editor from "@/components/board/EditorComponent.vue";
 import UserProfile from "@/components/UserProfileComponent.vue";
 import AdminUser from "@/components/admin/AdminUserComponent.vue";
 import AdminUserDetailContainer from "@/components/admin/AdminUserDetailContainer.vue";
+import AdminBoard from "@/components/admin/AdminBoardComponent.vue";
+import AdminNotice from "@/components/admin/AdminNoticeComponent.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +41,18 @@ const router = createRouter({
                     name: 'userDetail',
                     component: AdminUserDetailContainer,
                     // props: true
+                },
+                {
+                    path: '/admin/boards',
+                    name: 'adminBoards',
+                    component: AdminBoard,
+                    props: route => ({page: route.query.page, memNo: route.query.memNo})
+                },
+                {
+                    path: '/admin/notices',
+                    name: 'adminNotices',
+                    component: AdminNotice,
+                    props: route => ({page: route.query.page, memNo: route.query.memNo})
                 },
                 {
                     path: '/search',

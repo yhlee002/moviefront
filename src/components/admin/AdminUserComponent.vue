@@ -3,15 +3,20 @@ import '@/assets/css/admin/user.css';
 
 import {useUserStore} from "@/stores/user.js";
 import Swal from 'sweetalert2';
-import {ref, watch} from "vue";
+import {computed, ref, watch} from "vue";
 import SortingComponent from "@/components/icon/SortingComponent.vue";
 import PagenationComponent from "@/components/sub/PagenationComponent.vue";
 import AdminUserDetailComponent from "@/components/admin/AdminUserDetailComponent.vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
-
+const props = defineProps(['page'])
 const userStore = useUserStore();
-await userStore.getUsers(1, 10, null);
-const list = ref(userStore.users);
+
+const page = computed(() => {
+  const nanable = Number(props.page || "1");
+  return isNaN(nanable) ? 1 : nanable;
+});
+const updateCnt = ref(0);
+const list = ref([]);
 const currentMember = ref({
   memNo: '',
   identifier: '',
@@ -21,24 +26,11 @@ const currentMember = ref({
   certification: '',
   role: ''
 });
-
 const searchOption = ref({
   role: 'ALL',
   certification: 'ALL',
   provider: 'ALL',
 }); // condition: 'identifier'
-
-watch(searchOption, (newVal, oldVal) => {
-  list.value = userStore.users.slice();
-  for (let key in newVal) {
-    if (newVal[key] !== 'ALL') {
-      list.value = list.value.filter(item => item[key] === newVal[key]);
-    }
-  }
-}, {deep: true});
-
-const searchCondition = ref('identifier');
-
 const sorting = ref({
   memNo: {
     enabled: false,
@@ -69,6 +61,33 @@ const sorting = ref({
     type: 'desc'
   },
 });
+const searchCondition = ref('identifier');
+const keyword = ref('');
+const modalShow = ref(false);
+
+await getUserList(searchCondition.value, keyword.value);
+
+async function getUserList(option, keyword) {
+  list.value = [];
+  const result = await userStore.findUserByKeyword(page.value, 10, option, keyword);
+  if (result.data?.memberList) {
+    list.value = result.data.memberList;
+  }
+}
+
+watch(searchOption, async (newVal, oldVal) => {
+  changeModalShow(false);
+  await getUserList();
+  changeSearchOptions(newVal);
+}, {deep: true});
+
+function changeSearchOptions(options, list) {
+  for (let key in options) {
+    if (options[key] !== 'ALL') {
+      list.value = list.value.filter(item => item[key] === options[key]);
+    }
+  }
+}
 
 function changeSortingType(name) {
   const current = sorting.value[name];
@@ -83,19 +102,27 @@ function changeSortingType(name) {
 }
 
 watch(sorting, (newVal, oldVal) => {
+  const columns = getSortingColumns(newVal);
+  sortingResult(columns, list.value);
+}, {deep: true});
+
+function getSortingColumns(sortingObj) {
   const columns = {};
-  for (let key in newVal) {
-    if (newVal[key].enabled) {
-      columns[key] = newVal[key].type;
+  for (let key in sortingObj) {
+    if (sortingObj[key].enabled) {
+      columns[key] = sortingObj[key].type;
     }
   }
+  return columns;
+}
 
+function sortingResult(columns, list) {
   if (Object.keys(columns).length === 0) {
-    list.value = userStore.users.slice();
+    list.value = list.value.slice();
   } else {
     multiSort(list.value, columns);
   }
-}, {deep: true});
+}
 
 function multiSort(data, columns) {
   const comparer = (a, b) => {
@@ -116,7 +143,7 @@ function multiSort(data, columns) {
       } else {
         result = ascending(a[column], b[column]);
       }
-      return result *= ( order === 'desc' ? -1 : 1);
+      return result *= (order === 'desc' ? -1 : 1);
     }
     // result;
   }
@@ -143,17 +170,33 @@ function multiSort(data, columns) {
   data.sort(comparer);
 }
 
-const modalShow = ref(false);
-function changeModalShow() {
-  modalShow.value = !modalShow.value;
+function enterEvent() {
+  if (window.event.keyCode === 13) {
+    search(searchCondition.value, keyword.value);
+  }
 }
 
-function showModal(memNo) {
+async function search(option, keyword) {
+  await getUserList(option, keyword);
+
+  changeSearchOptions(searchOption.value);
+
+  const columns = getSortingColumns(searchOption.value);
+  sortingResult(columns);
+}
+
+function changeModalShow(value) {
+  if (value !== null && value !== undefined) modalShow.value = value;
+  else modalShow.value = !modalShow.value;
+}
+
+function showUserDetail(memNo) {
   if (currentMember.value.memNo !== memNo) {
     if (!modalShow.value) changeModalShow();
 
     const user = userStore.users.find(u => u.memNo === memNo);
     currentMember.value = user;
+    updateCnt.value += 1;
   } else {
     changeModalShow();
   }
@@ -188,7 +231,7 @@ function deleteMultiUserInfo() {
 function changeMultiUserRole() {
   const inputs = document.querySelectorAll('.user-list-checkbox input[type=checkbox]:checked');
   let memNoList = [];
-  for(let input of inputs) {
+  for (let input of inputs) {
     memNoList.push(input.value);
   }
 
@@ -309,7 +352,7 @@ function certificationToKorean(certification) {
                     <option value="identifier">아이디</option>
                     <option value="name">이름</option>
                   </select>
-                  <input id="searchMemberInput" type="text" placeholder="검색"/>
+                  <input id="searchMemberInput" v-model="keyword" @keydown="enterEvent" placeholder="검색"/>
                 </div>
               </div>
             </div>
@@ -322,36 +365,43 @@ function certificationToKorean(certification) {
               <tr>
                 <th style="width: 3rem;"></th>
                 <th @click="changeSortingType('memNo')">식별번호
-                  <SortingComponent type='number' :enabled="sorting.memNo.enabled" :value="sorting.memNo.type"></SortingComponent>
+                  <SortingComponent type='number' :enabled="sorting.memNo.enabled"
+                                    :value="sorting.memNo.type"></SortingComponent>
                 </th>
                 <th @click="changeSortingType('identifier')">아이디
-                  <SortingComponent type='text' :enabled="sorting.identifier.enabled" :value="sorting.identifier.type"></SortingComponent>
+                  <SortingComponent type='text' :enabled="sorting.identifier.enabled"
+                                    :value="sorting.identifier.type"></SortingComponent>
                 </th>
                 <th @click="changeSortingType('provider')">소셜 로그인
-                  <SortingComponent type='text' :enabled="sorting.provider.enabled" :value="sorting.provider.type"></SortingComponent>
+                  <SortingComponent type='text' :enabled="sorting.provider.enabled"
+                                    :value="sorting.provider.type"></SortingComponent>
                 </th>
                 <th @click="changeSortingType('name')">이름
-                  <SortingComponent type='text' :enabled="sorting.name.enabled" :value="sorting.name.type"></SortingComponent>
+                  <SortingComponent type='text' :enabled="sorting.name.enabled"
+                                    :value="sorting.name.type"></SortingComponent>
                 </th>
                 <th @click="changeSortingType('role')">권한
-                  <SortingComponent type='text' :enabled="sorting.role.enabled" :value="sorting.role.type"></SortingComponent>
+                  <SortingComponent type='text' :enabled="sorting.role.enabled"
+                                    :value="sorting.role.type"></SortingComponent>
                 </th>
                 <th @click="changeSortingType('certification')">인증 여부
-                  <SortingComponent type='text' :enabled="sorting.certification.enabled" :value="sorting.certification.type"></SortingComponent>
+                  <SortingComponent type='text' :enabled="sorting.certification.enabled"
+                                    :value="sorting.certification.type"></SortingComponent>
                 </th>
                 <th @click="changeSortingType('regDate')">가입일자
-                  <SortingComponent type='number' :enabled="sorting.regDate.enabled" :value="sorting.regDate.type"></SortingComponent>
+                  <SortingComponent type='number' :enabled="sorting.regDate.enabled"
+                                    :value="sorting.regDate.type"></SortingComponent>
                 </th>
               </tr>
               </thead>
               <tbody>
-              <tr v-for="member in list" :key="`admin_user_${member.memNo}`" @click="showModal(member.memNo)">
+              <tr v-for="member in list" :key="`admin_user_${member.memNo}`" @click="showUserDetail(member.memNo)">
                 <td class="user-list-checkbox" style="border-collapse: collapse;">
                   <input type="checkbox" :value="member.memNo">
                 </td>
                 <td>{{ member.memNo }}</td>
                 <td>{{ member.identifier }}</td>
-                <td>{{ providerToKorean(member.provider)}}</td>
+                <td>{{ providerToKorean(member.provider) }}</td>
                 <td>{{ member.name }}</td>
                 <td>{{ roleToKorean(member.role) }}</td>
                 <td>{{ certificationToKorean(member.certification) }}</td>
@@ -369,56 +419,12 @@ function certificationToKorean(certification) {
             <button class="button-default" type="button" @click="deleteMultiUserInfo()">삭제</button>
           </div>
 
-          <PagenationComponent category="admin/users" :pages="userStore.totalPages" :page="userStore.currentPage"></PagenationComponent>
+          <PagenationComponent category="admin/users" :pages="userStore.totalPages"
+                               :page="userStore.currentPage"></PagenationComponent>
 
           <div id="userDetailModal" v-show="modalShow">
-            <AdminUserDetailComponent v-if="currentMember.memNo" :memNo="currentMember.memNo"></AdminUserDetailComponent>
-<!--            <div class="block-title-box">-->
-<!--              <h3 class="block-title">상세 회원 정보</h3>-->
-<!--            </div>-->
-
-<!--            <table id="userDetailTable">-->
-<!--              <tr>-->
-<!--                <td rowspan="3" style="width: 6rem; height: 8rem; overflow: hidden;">-->
-<!--                  <img style="width: 6rem; height: 6rem;" :src="currentMember.profileImage"/>-->
-<!--                </td>-->
-<!--                <td class="table-column-cell" style="width: 6rem;">식별번호</td>-->
-<!--                <td style="width: 8rem;">{{ currentMember.memNo }}</td>-->
-<!--                <td class="table-column-cell" style="width: 4rem;">아이디</td>-->
-<!--                <td colspan="3" style="width: 12rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">-->
-<!--                  {{ currentMember.identifier }}-->
-<!--                </td>-->
-<!--                <td class="table-column-cell" style="width: 7rem">소셜 로그인</td>-->
-<!--                <td colspan="2">{{ currentMember.provider }}</td>-->
-
-<!--              </tr>-->
-<!--              <tr>-->
-<!--                <td class="table-column-cell" style="width: 5rem;">이름</td>-->
-<!--                <td>{{ currentMember.name }}</td>-->
-<!--                <td class="table-column-cell" style="width: 4rem;">권한</td>-->
-<!--                <td style="width: 4rem;">{{ currentMember.role.substring('ROLE_'.length) }}</td>-->
-<!--                <td class="table-column-cell" style="width: 5rem;">인증 여부</td>-->
-<!--                <td>{{ currentMember.certification }}</td>-->
-<!--                <td class="table-column-cell" style="width: 4rem;">연락처</td>-->
-<!--                <td colspan="2">{{ currentMember.phone }}</td>-->
-<!--              </tr>-->
-<!--              <tr>-->
-<!--                <td class="table-column-cell">작성한 글 수</td>-->
-<!--                <td></td>-->
-<!--                <td class="table-column-cell" colspan="2">작성한 댓글 수</td>-->
-<!--                <td></td>-->
-<!--                <td class="table-column-cell">회원가입일자</td>-->
-<!--                <td colspan="2">{{ currentMember.regDate }}</td>-->
-
-<!--              </tr>-->
-<!--            </table>-->
-
-<!--            <div class="button-box" style="align-self: end;">-->
-<!--              <button class="button-default" type="button" @click="modifyUserInfo()">수정</button>-->
-<!--              <button class="button-default" type="button" @click="showLoginLog()">로그인 기록</button>-->
-<!--              <button class="button-default" type="button" @click="changeUserRole()">권한 변경</button>-->
-<!--              <button class="button-default" type="button" @click="deleteUserInfo()">삭제</button>-->
-<!--            </div>-->
+            <AdminUserDetailComponent v-if="currentMember.memNo" :memNo="currentMember.memNo"
+                                      :key="updateCnt"></AdminUserDetailComponent>
           </div>
 
         </div>

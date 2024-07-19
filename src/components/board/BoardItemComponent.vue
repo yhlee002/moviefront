@@ -27,16 +27,24 @@ const recommended = ref(false);
 const recommendedCnt = ref(0);
 if (props.category === 'boards') {
   // 로그인 유저가 해당 글을 추천했는지 조회
+  getRecommendedByCurrentUser();
+}
+
+watch(recommended, async (newVal) => {
+  await getRecommendedCount();
+})
+
+async function getRecommendedByCurrentUser() {
   const result = await store.isRecommendedByUser(board.id, loginUser.memNo);
   if (result.data) {
     recommended.value = result.data.data;
   }
 }
 
-watch(recommended, async (newVal) => {
-  const result = await store.isRecommendedByUser(board.id);
+async function getRecommendedCount() {
+  const result = await store.getBoardrecommendedCount(board.id);
   recommendedCnt.value = result.data.data;
-})
+}
 
 const regDate = new Date(board.regDate);
 const now = new Date();
@@ -63,36 +71,26 @@ writeTime += '전';
 await commentStore.getCommentsByBoard(board.id, commentStore.currentPage);
 
 async function submitComment() {
-  const input = document.getElementById('commentInput');
-  const value = input.value;
-  if (value) {
-    const result = await commentStore.saveComment(board.id, userStore.user.memNo, value);
-    if (result.data) {
-      input.value = '';
-      await commentStore.getCommentsByBoard(board.id, commentStore.currentPage, 20);
+  if (userStore.checkLogin()) {
+    const input = document.getElementById('commentInput');
+    const value = input.value;
+    if (value) {
+      const result = await commentStore.saveComment(board.id, userStore.user.memNo, value);
+      if (result.data) {
+        input.value = '';
+        await commentStore.getCommentsByBoard(board.id, commentStore.currentPage, 20);
+      }
+    } else {
+      Swal.fire({
+        text: '댓글 내용을 입력해주세요.',
+        icon: 'warning'
+      });
     }
-  } else {
-    Swal.fire({
-      text: '댓글 내용을 입력해주세요.',
-      icon: 'warning'
-    });
   }
 }
 
 async function recommendBoard() {
-  if (!loginUser || !loginUser.memNo) {
-    Swal.fire({
-      text: '로그인 후 이용 가능합니다. 로그인하시겠습니까?',
-      icon: 'question',
-      confirmButtonText: '확인',
-      cancelButtonText: '취소',
-      showCancelButton: true
-    }).then(async result => {
-      if (result.isConfirmed) {
-        router.push(`/sign-in`)
-      }
-    })
-  } else {
+  if (userStore.checkLogin()) {
     const value = !recommended.value;
     const result = await store.updateBoardRecommended(board.id, loginUser.memNo, value);
     if (result.data.data?.id) recommended.value = true;

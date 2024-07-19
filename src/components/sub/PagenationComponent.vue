@@ -45,7 +45,8 @@ function updateShowPages(pages, page) {
 
 function getPage(page) {
   const path = router.currentRoute.value.path;
-  router.push({path: path, query: {page: page}, force: true});
+  // router.push({path: path, query: {page: page}, force: true});
+  window.location.href=`${path}?page=${page}`;
 }
 
 function goPrevPage() {
@@ -115,14 +116,14 @@ function goNextPage() {
   margin: 2rem 0;
 }
 
-.pagenation-box ul.pagenation-page-list a {
+.pagenation-box ul.pagenation-page-list li {
   padding: 0 0.2rem;
   margin: 0 0.3rem;
   cursor: pointer;
   color: #000000;
 }
 
-.pagenation-box ul.pagenation-page-list a.current-page {
+.pagenation-box ul.pagenation-page-list li.current-page {
   color: #2553a7;
   font-weight: bold;
 }

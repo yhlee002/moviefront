@@ -62,7 +62,9 @@ function goBoardPage(id) {
 
 <template>
   <div id="userComments">
-    <!--    <h4>작성한 댓글 목록</h4>-->
+    <div style="display: flex; justify-content: end; width: 100%; margin: 1rem 0;">
+      <router-link :to="`/admin/notices?memNo=${memNo}`">더보기</router-link>
+    </div>
     <table id="userCommentsTable">
       <thead>
       <tr>
@@ -75,7 +77,7 @@ function goBoardPage(id) {
       </thead>
       <tbody>
       <tr v-for="comment in comments" :key="comment.id">
-        <td class="userdetail-comment-checkbox" style="display: flex; justify-content: center;">
+        <td class="userdetail-comment-checkbox" style="text-align: center;">
           <input :value="comment.id" type="checkbox"/>
         </td>
         <td>{{ comment.id }}</td>

@@ -122,12 +122,15 @@
     align-items: center;
 }
 
-.nav > .user-box > .user-image-box > img.profile_image {
+img.profile_image {
     width: 3em;
     height: 3em;
     border-radius: 3rem;
     line-height: 1.5em;
-    margin-right:1rem;
+}
+
+.nav > .user-box > .user-image-box > img.profile_image {
+    margin-right: 0.4rem;
 }
 
 .nav > .user-box .userbox-text {

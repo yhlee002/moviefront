@@ -66,6 +66,25 @@ export const useUserStore = defineStore('user', {
         clearState() {
             this.user = userDefault;
         },
+        checkLogin() {
+          const user = this.user;
+          if (!user.memNo) {
+              Swal.fire({
+                  text: '로그인 후 이용 가능합니다. 로그인하시겠습니까?',
+                  icon: 'question',
+                  confirmButtonText: '확인',
+                  cancelButtonText: '취소',
+                  showCancelButton: true
+              }).then(async result => {
+                  if (result.isConfirmed) {
+                      router.push(`/sign-in`)
+                  }
+              })
+              return false;
+          } else {
+              return true;
+          }
+        },
         async getUser(memNo) {
           return (await axios.get(`/api/members/${memNo}`)).data;
         },
@@ -107,6 +126,27 @@ export const useUserStore = defineStore('user', {
         },
         async getOauthUserInfoFromSession() {
             return (await axios.get('/api/members/oauth2/userinfo')).data;
+        },
+        /**
+         * 회원 검색
+         * @param page
+         * @param size
+         * @param option identifier | name
+         * @param keyword
+         */
+        async findUserByKeyword(page, size, option, keyword) {
+            const params = {
+                page: page - 1,
+                size: size,
+            }
+
+            if (option && keyword) {
+                params[option] = keyword;
+            }
+
+            return (await axios.get('/api/members/search', {
+                params: params
+            })).data;
         },
         resetProfile() {
             this.profile.id = null;
@@ -253,23 +293,14 @@ export const useUserStore = defineStore('user', {
             }))
         },
         async deleteUser(memNo) {
-            return (await axios.delete(`/api/members/flag?memNo=${memNo}`)).data;
-        },
-        async deleteUsers(memNoList) {
-            return (await axios.post(`/api/members/flag/batch-delete`, {
-                memNoList: memNoList
-            })).data;
-        },
-        // 영구 삭제
-        async deleteUserPermanently(memNo) {
             return (await axios.delete(`/api/members?memNo=${memNo}`)
                     .catch(e => console.error(e))
             ).data;
         },
-        async deleteUsersPermanently(memNoList) {
+        async deleteUsers(memNoList) {
             return (await axios.post(`/api/members/batch-delete`, {
                 memNoList: memNoList
             })).data;
-        }
+        },
     }
 }, {persist: true})

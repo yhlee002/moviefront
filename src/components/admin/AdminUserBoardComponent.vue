@@ -62,7 +62,9 @@ function goBoardPage(id) {
 
 <template>
   <div id="userBoards">
-    <!--    <h4>작성한 글 목록</h4>-->
+    <div style="display: flex; justify-content: end; width: 100%; margin: 1rem 0;">
+      <router-link :to="`/admin/notices?memNo=${memNo}`">더보기</router-link>
+    </div>
     <table id="userBoardsTable">
       <thead>
       <tr>
@@ -74,7 +76,7 @@ function goBoardPage(id) {
       </thead>
       <tbody>
       <tr v-for="board in boards" :key="board.id">
-        <td class="userdetail-board-checkbox" style="display: flex; justify-content: center;">
+        <td class="userdetail-board-checkbox" style="text-align: center;">
           <input :value="board.id" type="checkbox"/>
         </td>
         <td>{{ board.id }}</td>

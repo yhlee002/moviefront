@@ -299,19 +299,11 @@ input[readonly] {
 }
 
 /* Profile Image */
-div.admin_no_image {
-    background-image: url("@/assets/images/icons/icons8-female-user-100.png") !important;
+img.admin_no_image,
+img.user_no_image {
     background-position: center !important;
     background-repeat: no-repeat !important;
-    /*background-size: 2rem !important;*/
     background-size: 100% !important;
     width: 2rem;
     height: 2rem;
-}
-
-div.user_no_image {
-    background-image: url("@/assets/images/icons/icons8-customer-100.png") !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-size: 100% !important;
 }

@@ -10,7 +10,7 @@ const boardStore = useBoardStore();
 const props = defineProps(['memNo']);
 
 const boards = ref([]);
-const result = await boardStore.getRecommendedBoardByMemNo(props.memNo, 1, 10);
+const result = await boardStore.getRecommendedBoardByUser(props.memNo, 1, 10);
 const data = result.data;
 if (data.data) {
   boards.value = data.data.boardImpList;
@@ -23,6 +23,9 @@ function goBoardPage(id) {
 
 <template>
   <div id="userRecommendedBoards">
+    <div style="display: flex; justify-content: end; width: 100%; margin: 1rem 0;">
+      <router-link :to="`/admin/notices?memNo=${memNo}`">더보기</router-link>
+    </div>
     <table id="userRecommendedBoardsTable">
       <thead>
       <tr>
