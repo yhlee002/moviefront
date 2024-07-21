@@ -65,29 +65,38 @@ const searchCondition = ref('identifier');
 const keyword = ref('');
 const modalShow = ref(false);
 
-await getUserList(searchCondition.value, keyword.value);
+list.value = await getUserList(searchOption.value, searchCondition.value, keyword.value);
 
-async function getUserList(option, keyword) {
-  list.value = [];
-  const result = await userStore.findUserByKeyword(page.value, 10, option, keyword);
+function updateList(value) {
+  list.value = value;
+}
+
+async function getUserList(options, searchType, keyword) {
+  let list = [];
+  const result = await userStore.findUserByKeyword(page.value, 10, options, searchType, keyword);
   if (result.data?.memberList) {
-    list.value = result.data.memberList;
+    list = result.data.memberList;
   }
+
+  return list;
 }
 
 watch(searchOption, async (newVal, oldVal) => {
   changeModalShow(false);
-  await getUserList();
-  changeSearchOptions(newVal);
+
+  const list = await getUserList(newVal, searchCondition.value, keyword.value);
+  const columns = getSortingColumns(sorting.value);
+
+  sortingResult(columns, list);
 }, {deep: true});
 
-function changeSearchOptions(options, list) {
-  for (let key in options) {
-    if (options[key] !== 'ALL') {
-      list.value = list.value.filter(item => item[key] === options[key]);
-    }
-  }
-}
+// function changeSearchOptions(options, list) {
+//   for (let key in options) {
+//     if (options[key] !== 'ALL') {
+//       list.value = list.filter(item => item[key] === options[key]);
+//     }
+//   }
+// }
 
 function changeSortingType(name) {
   const current = sorting.value[name];
@@ -118,9 +127,10 @@ function getSortingColumns(sortingObj) {
 
 function sortingResult(columns, list) {
   if (Object.keys(columns).length === 0) {
-    list.value = list.value.slice();
+    updateList(list);
   } else {
-    multiSort(list.value, columns);
+    multiSort(list, columns);
+    updateList(list);
   }
 }
 
@@ -176,13 +186,11 @@ function enterEvent() {
   }
 }
 
-async function search(option, keyword) {
-  await getUserList(option, keyword);
-
-  changeSearchOptions(searchOption.value);
-
+async function search(searchCondition, keyword) {
+  const list = await getUserList(searchOption.value, searchCondition, keyword);
   const columns = getSortingColumns(searchOption.value);
-  sortingResult(columns);
+
+  sortingResult(columns, list);
 }
 
 function changeModalShow(value) {
@@ -223,6 +231,8 @@ function deleteMultiUserInfo() {
           text: '삭제에 실패하였습니다.',
           icon: 'error'
         });
+      } else {
+        list.value = await getUserList(searchOption.value, searchCondition.value, keyword.value);
       }
     }
   })
@@ -269,7 +279,7 @@ function changeMultiUserRole() {
         });
       } else {
         // 회원 정보 목록 다시 조회
-        await userStore.getUsers(1, 10, null);
+        await getUserList(searchOption.value, searchCondition.value, keyword.value);
 
         Swal.fire({
           text: '권한 변경에 성공했습니다.',
@@ -286,18 +296,18 @@ function changeMultiUserRole() {
   })
 }
 
-function providerToKorean(provider) {
+function providerDesc(provider) {
   return provider === 'naver' ? '네이버' :
       provider === 'kakao' ? '카카오' :
           provider === 'none' ? '없음' : '';
 }
 
-function roleToKorean(role) {
+function roleDesc(role) {
   return role === 'ROLE_ADMIN' ? '관리자' :
       role === 'ROLE_USER' ? '일반회원' : '';
 }
 
-function certificationToKorean(certification) {
+function certificationDesc(certification) {
   return certification === 'Y' ? '인증됨' :
       certification === 'N' ? '인증안됨' : '';
 }
@@ -351,6 +361,7 @@ function certificationToKorean(certification) {
                   <select id="searchUserOption" v-model="searchCondition">
                     <option value="identifier">아이디</option>
                     <option value="name">이름</option>
+                    <option value="phone">휴대전화</option>
                   </select>
                   <input id="searchMemberInput" v-model="keyword" @keydown="enterEvent" placeholder="검색"/>
                 </div>
@@ -401,10 +412,10 @@ function certificationToKorean(certification) {
                 </td>
                 <td>{{ member.memNo }}</td>
                 <td>{{ member.identifier }}</td>
-                <td>{{ providerToKorean(member.provider) }}</td>
+                <td>{{ providerDesc(member.provider) }}</td>
                 <td>{{ member.name }}</td>
-                <td>{{ roleToKorean(member.role) }}</td>
-                <td>{{ certificationToKorean(member.certification) }}</td>
+                <td>{{ roleDesc(member.role) }}</td>
+                <td>{{ certificationDesc(member.certification) }}</td>
                 <td>{{ member.regDate.slice(0, 10).replaceAll('-', '.') }}</td>
               </tr>
               <tr v-if="list.length === 0">

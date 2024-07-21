@@ -131,17 +131,24 @@ export const useUserStore = defineStore('user', {
          * 회원 검색
          * @param page
          * @param size
-         * @param option identifier | name
+         * @param options role, certification, provider
+         * @param searchType identifier | name | phone
          * @param keyword
          */
-        async findUserByKeyword(page, size, option, keyword) {
+        async findUserByKeyword(page, size, options, searchType, keyword) {
             const params = {
                 page: page - 1,
                 size: size,
             }
 
-            if (option && keyword) {
-                params[option] = keyword;
+            for (let key in options) {
+                if (options[key] !== 'ALL') {
+                    params[key] = options[key];
+                }
+            }
+
+            if (searchType && keyword) {
+                params[searchType] = keyword;
             }
 
             return (await axios.get('/api/members/search', {
