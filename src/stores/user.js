@@ -78,9 +78,10 @@ export const useUserStore = defineStore('user', {
               }).then(async result => {
                   if (result.isConfirmed) {
                       router.push(`/sign-in`)
+                  } else {
+                      return false;
                   }
               })
-              return false;
           } else {
               return true;
           }

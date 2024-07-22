@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 import UserCard from "@/components/sub/UserCardComponent.vue";
 import CommentItem from "@/components/sub/CommentItemComponent.vue";
 import {ref, watch} from "vue";
+import RegDateReformateComponent from "@/components/sub/RegDateReformateComponent.vue";
 
 const props = defineProps(['category']);
 const router = useRouter();
@@ -25,12 +26,15 @@ const loginUser = userStore.user;
 
 const recommended = ref(false);
 const recommendedCnt = ref(0);
+const comments = ref([]);
+
 if (props.category === 'boards') {
   // 로그인 유저가 해당 글을 추천했는지 조회
   getRecommendedByCurrentUser();
   getRecommendedCount();
   // 댓글 조회
-  await commentStore.getCommentsByBoard(board.id, commentStore.currentPage);
+  commentStore.currentPage = 0;
+  await loadComments();
 }
 
 watch(recommended, async (newVal) => {
@@ -49,26 +53,12 @@ async function getRecommendedCount() {
   recommendedCnt.value = result.data.data;
 }
 
-const regDate = new Date(board.regDate);
-const now = new Date();
-
-let writeTime
-const millisecond = now - regDate;
-if (millisecond / 1000 < 60) {
-  writeTime = Math.floor(millisecond / 1000) + '초'; // n초
-
-} else if (millisecond / (60 * 1000) < 60) {
-  writeTime = Math.floor(millisecond / (60 * 1000)) + '분';
-} else if (millisecond / (60 * 60 * 1000) < 24) {
-  writeTime = Math.floor(millisecond / (60 * 60 * 1000)) + '시간';
-} else if (millisecond / (24 * 60 * 60 * 1000) < 30) {
-  writeTime = Math.floor(millisecond / (24 * 60 * 60 * 1000)) + '일';
-} else if (millisecond / (30 * 24 * 60 * 60 * 1000) < 365) {
-  writeTime = Math.floor(millisecond / (30 * 24 * 60 * 60 * 1000)) + '달';
-} else if (millisecond / (365 * 30 * 24 * 60 * 60 * 1000) < 365) {
-  writeTime = Math.floor(millisecond / (30 * 24 * 60 * 60 * 1000)) + '년';
+async function loadComments() {
+  commentStore.currentPage += 1;
+  await commentStore.getCommentsByBoard(board.id, commentStore.currentPage);
+  // comments.value 에다가 commentStore.comments 요소 모두 더해주기
+  comments.value = comments.value.concat(commentStore.comments);
 }
-writeTime += '전';
 
 async function submitComment() {
   if (userStore.checkLogin()) {
@@ -78,7 +68,7 @@ async function submitComment() {
       const result = await commentStore.saveComment(board.id, userStore.user.memNo, value);
       if (result.data) {
         input.innerHTML = '';
-        await commentStore.getCommentsByBoard(board.id, commentStore.currentPage, 20);
+        comments.value.unshift(result.data);
       }
     } else {
       Swal.fire({
@@ -144,7 +134,7 @@ async function go(path) {
                   profileImage: board.writerProfileImage, role: board.writerRole}"></UserCard>
 
               <div class="board-regdt-box">
-                <p id="writeTime">{{ writeTime }}</p>
+                <RegDateReformateComponent id="writeTime" :regDate="board.regDate"></RegDateReformateComponent>
               </div>
 
               <div class="board-view-box">
@@ -181,14 +171,12 @@ async function go(path) {
 
                 <li v-if="board.writerId === loginUser.memNo">
                   <button @click="modifyBoard">
-                    <!--                    <img src="@/assets/images/icons/icons8-pencil-48.png" alt="수정"/>-->
                     수정
                   </button>
                 </li>
 
                 <li v-if="board.writerId === loginUser.memNo">
                   <button @click="deleteBoard">
-                    <!--                    <img src="@/assets/images/icons/icons8-trash-48.png" alt="삭제"/>-->
                     삭제
                   </button>
                 </li>
@@ -217,13 +205,16 @@ async function go(path) {
 
             <!-- Comments -->
             <div class="comment-box">
-              <div v-if="commentStore.comments.length === 0">
+              <div v-if="comments.length === 0">
                 <div
                     style="border: 0.1rem solid #f2f2f2; border-radius: 2px; display: flex; justify-content: center; align-items: center;">
                   <p style="margin: 1rem 0;">작성된 댓글이 없습니다.</p>
                 </div>
               </div>
-              <CommentItem v-for="comment in commentStore.comments" :key="comment" :comment="comment"></CommentItem>
+              <CommentItem v-for="comment in comments" :key="comment" :comment="comment"></CommentItem>
+              <div style="display: flex; justify-content: center;">
+                <button id="loadCommentsBtn" v-if="comments.length < commentStore.totalElements" @click="loadComments()" type="button">댓글 더보기</button>
+              </div>
             </div>
           </div>
 
@@ -413,5 +404,15 @@ async function go(path) {
 
 .board-options li button span {
   margin: 0 0.2rem;
+}
+
+#loadCommentsBtn {
+  width: fit-content;
+  height: fit-content;
+  padding: 0.5rem 0.5rem;
+  background-color: transparent;
+  border-radius: 0.5rem;
+  border: 1px solid #f2f2f2;
+  align-items: center;
 }
 </style>

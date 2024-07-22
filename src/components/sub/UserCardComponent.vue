@@ -3,17 +3,18 @@ import {useUserStore} from "@/stores/user.js";
 import UserImageComponent from "@/components/icon/UserImageComponent.vue";
 
 const userStore = useUserStore();
-const props = defineProps(['member', 'imageOnly']);
+const props = defineProps(['member', 'imageOnly', 'imageSize']);
 
 let member = props.member ?? userStore.defaultUser;
 let imageOnly = props.imageOnly ?? false;
+let imageSize = props.imageSize ? props.imageSize : '3rem';
 
 member.profileImage = member.profileImage ?? '';
 </script>
 
 <template>
   <div class="writer-box">
-    <UserImageComponent :profileImage="member.profileImage" :role="member.role"></UserImageComponent>
+    <UserImageComponent :profileImage="member.profileImage" :role="member.role" :width="imageSize" :height="imageSize"></UserImageComponent>
     <div id="writerData" v-if="!imageOnly">
       <p id="writerName">{{ member.name }}</p>
 <!--      <img id="writerRole" v-if="member.role === 'ROLE_USER'" src="@/assets/images/icons/icons8-check-48.png">-->
