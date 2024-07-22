@@ -1,12 +1,14 @@
 <script setup>
 import NoProfileImageComponent from "@/components/icon/NoProfileImageComponent.vue";
 
-const props = defineProps(['profileImage', 'role', 'width', 'height'])
+const props = defineProps(['profileImage', 'role', 'width', 'height']);
+
+console.log('props', props);
 </script>
 
 <template>
   <div v-if="profileImage" id="writerProfileImage">
-    <img v-if="profileImage && role !== 'ROLE_ADMIN'" :src="profileImage"
+    <img v-if="role !== 'ROLE_ADMIN'" :src="profileImage"
          :style="{width: width, height: height}"
          class="profile_image" alt="프로필 이미지"/>
   </div>

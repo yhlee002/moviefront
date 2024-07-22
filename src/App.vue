@@ -12,7 +12,13 @@ const {modalOpen, datas, open} = storeToRefs(modalStore);
 
 <template>
   <div id="app">
-    <HeaderComponent></HeaderComponent>
+    <Suspense>
+      <HeaderComponent></HeaderComponent>
+      <template #fallback>
+        Loading...
+      </template>
+    </Suspense>
+
     <div class="main-block">
       <Suspense>
         <RouterView/>

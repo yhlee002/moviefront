@@ -5,7 +5,9 @@ import NoProfileImageComponent from "@/components/icon/NoProfileImageComponent.v
 import UserImageComponent from "@/components/icon/UserImageComponent.vue";
 
 const userStore = useUserStore();
-userStore.getCurrentUser();
+await userStore.getCurrentUser();
+// const user = userStore.user;
+
 
 const logoutUrl = `http://${import.meta.env.VITE_APP_HOST}:8080/api/members/logout`;
 
@@ -46,15 +48,15 @@ async function logout() {
             <!-- profile image -->
             <UserImageComponent :profileImage="userStore.profileImage" :role="userStore.role"></UserImageComponent>
             <span class="userbox-text" v-if="userStore.user != null">{{ userStore.user.name }}
-          <span v-if="userStore.user.role ==='ROLE_ADMIN'" style="color: #c6c6c6; font-size: 0.8rem">(관리자)</span>
-          </span>
+              <span v-if="userStore.user.role ==='ROLE_ADMIN'" style="color: #c6c6c6; font-size: 0.8rem">(관리자)</span>
+            </span>
             <br>
             <span class="userbox-text">
-            <router-link to="/mypage" v-if="userStore.isAuthenticated" style="margin-right: 3px">내정보</router-link>
-        </span>
-        <span>
-          <span style="cursor: pointer;" @click="logout()">로그아웃</span>
-        </span>
+              <router-link to="/mypage" v-if="userStore.isAuthenticated" style="margin-right: 3px">내정보</router-link>
+            </span>
+            <span>
+              <span style="cursor: pointer;" @click="logout()">로그아웃</span>
+            </span>
             <form id="logout" :action="logoutUrl" method="POST"></form>
           </div>
         </div>
