@@ -22,6 +22,14 @@ const {modalOpen, datas, open} = storeToRefs(modalStore);
 
             <!-- Nav -->
             <nav class="nav">
+              <ul class="menus">
+                <li>
+                  <router-link to="/notices">공지사항</router-link>
+                </li>
+                <li>
+                  <router-link to="/boards">감상 후기</router-link>
+                </li>
+              </ul>
             </nav>
           </div>
         </header>
