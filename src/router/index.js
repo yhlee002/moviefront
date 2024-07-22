@@ -10,10 +10,15 @@ import SignIn from "@/components/login/SignInComponent.vue";
 import SignUp from "@/components/login/SignUpComponent.vue";
 import Editor from "@/components/board/EditorComponent.vue";
 import UserProfile from "@/components/UserProfileComponent.vue";
-import AdminUser from "@/components/admin/AdminUserComponent.vue";
-import AdminUserDetailContainer from "@/components/admin/AdminUserDetailContainer.vue";
+import AdminUser from "@/components/admin/user/AdminUserComponent.vue";
+import AdminUserDetailContainer from "@/components/admin/user/AdminUserDetailContainer.vue";
 import AdminCommentImp from "@/components/admin/AdminCommentImpComponent.vue";
 import AdminCommentMov from "@/components/admin/AdminCommentMovComponent.vue";
+import AdminUserBoardContainer from "@/components/admin/user/AdminUserBoardContainer.vue";
+import AdminUserNoticeContainer from "@/components/admin/user/AdminUserNoticeContainer.vue";
+import AdminUserLoginLogContainer from "@/components/admin/user/AdminUserLoginLogContainer.vue";
+import AdminUserCommentImpContainer from "@/components/admin/user/AdminUserCommentImpContainer.vue";
+import AdminUserBoardRecommendedContainer from "@/components/admin/user/AdminUserBoardRecommendedContainer.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,16 +35,46 @@ const router = createRouter({
                     children: []
                 },
                 {
-                    path: '/users',
+                    path: '/admin/users',
                     name: 'users',
                     component: AdminUser,
                     props: route => ({page: route.query.page})
                 },
                 {
-                    path: '/users/:id',
+                    path: '/admin/users/:id',
                     name: 'userDetail',
                     component: AdminUserDetailContainer,
                     // props: true
+                },
+                {
+                    path: '/admin/users/notices',
+                    name: 'userNotices',
+                    component: AdminUserNoticeContainer,
+                    props: route => ({page: route.query.page, memNo: route.query.memNo})
+                },
+                {
+                    path: '/admin/users/boards',
+                    name: 'userBoards',
+                    component: AdminUserBoardContainer,
+                    props: route => ({page: route.query.page, memNo: route.query.memNo})
+                },
+                {
+                    path: '/admin/users/recommended-boards',
+                    name: 'userRecommendedBoards',
+                    component: AdminUserBoardRecommendedContainer,
+                    props: route => ({page: route.query.page, memNo: route.query.memNo})
+                },
+                {
+                    path: '/admin/users/imp-comments',
+                    name: 'userCommentImps',
+                    component: AdminUserCommentImpContainer,
+                    props: route => ({page: route.query.page, memNo: route.query.memNo})
+                },
+                {
+                    path: '/admin/users/loginlogs',
+                    name: 'userLoginLogs',
+                    component: AdminUserLoginLogContainer,
+                    props: route => ({page: route.query.page, memNo: route.query.memNo})
                 },
                 {
                     path: '/admin/movie-comments',

@@ -1,17 +1,17 @@
 <script setup>
 import '@/assets/css/admin/user.css';
-import {ref, watch} from "vue";
-import Swal from "sweetalert2";
-import {useUserStore} from "@/stores/user.js";
-import {useRouter} from "vue-router";
-import AdminUserLoginLogsComponent from "@/components/admin/AdminUserLoginLogsComponent.vue";
-import AdminUserBoardComponent from "@/components/admin/AdminUserBoardComponent.vue";
-import AdminUserCommentComponent from "@/components/admin/AdminUserCommentComponent.vue";
-import AdminUserNoticeComponent from "@/components/admin/AdminUserNoticeComponent.vue";
-import {useBoardStore} from "@/stores/board";
-import {useCommentStore} from "@/stores/comment";
+import AdminUserLoginLogsComponent from "@/components/admin/user/sub/AdminUserLoginLogsComponent.vue";
+import AdminUserBoardComponent from "@/components/admin/user/sub/AdminUserBoardComponent.vue";
+import AdminUserCommentComponent from "@/components/admin/user/sub/AdminUserCommentImpComponent.vue";
+import AdminUserNoticeComponent from "@/components/admin/user/sub/AdminUserNoticeComponent.vue";
 import UserImageComponent from "@/components/icon/UserImageComponent.vue";
-import AdminUserBoardRecommendedComponent from "@/components/admin/AdminUserBoardRecommendedComponent.vue";
+import AdminUserBoardRecommendedComponent from "@/components/admin/user/sub/AdminUserBoardRecommendedComponent.vue";
+import Swal from "sweetalert2";
+import {ref, watch} from "vue";
+import {useRouter} from "vue-router";
+import {useUserStore} from "@/stores/user.js";
+import {useBoardStore} from "@/stores/board.js";
+import {useCommentStore} from "@/stores/comment.js";
 
 const router = useRouter();
 let id = ref(router.currentRoute.value.params.id);
@@ -231,24 +231,39 @@ function modifyUserInfo() {
 
     <div id="userDetailTabContents">
       <div id="userDetailTab0" class="user-detail-tab">
+        <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
+          <router-link :to="`/admin/users/notices?memNo=${member.memNo}`">더보기</router-link>
+        </div>
         <AdminUserNoticeComponent :memNo="id"></AdminUserNoticeComponent>
       </div>
 
       <div id="userDetailTab1" class="user-detail-tab active">
+        <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
+          <router-link :to="`/admin/users/boards?memNo=${member.memNo}`">더보기</router-link>
+        </div>
         <!-- 작성한 글 -->
         <AdminUserBoardComponent :memNo="id"></AdminUserBoardComponent>
       </div>
 
       <div id="userDetailTab2" class="user-detail-tab">
+        <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
+          <router-link :to="`/admin/users/recommended-boards?memNo=${member.memNo}`">더보기</router-link>
+        </div>
         <AdminUserBoardRecommendedComponent :memNo="id"></AdminUserBoardRecommendedComponent>
       </div>
 
       <div id="userDetailTab3" class="user-detail-tab">
+        <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
+          <router-link :to="`/admin/users/imp-comments?memNo=${member.memNo}`">더보기</router-link>
+        </div>
         <!-- 작성한 댓글 -->
         <AdminUserCommentComponent :memNo="id"></AdminUserCommentComponent>
       </div>
 
       <div id="userDetailTab4" class="user-detail-tab">
+        <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
+          <router-link :to="`/admin/users/loginlogs?memNo=${member.memNo}`">더보기</router-link>
+        </div>
         <!-- 로그인 기록 -->
         <AdminUserLoginLogsComponent :memNo="id"></AdminUserLoginLogsComponent>
       </div>
@@ -308,5 +323,6 @@ function modifyUserInfo() {
 
 #userDetailTabContents .user-detail-tab.active {
   display: flex;
+  flex-direction: column;
 }
 </style>

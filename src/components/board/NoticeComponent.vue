@@ -7,7 +7,7 @@ import {useRouter} from "vue-router";
 import {useUserStore} from "@/stores/user.js";
 import {ref, watch} from "vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
-import {useBoardStore} from "@/stores/board";
+import {useBoardStore} from "@/stores/board.js";
 
 const props = defineProps(['page']);
 

@@ -4,7 +4,7 @@ import UserCard from "@/components/sub/UserCardComponent.vue";
 import Swal from 'sweetalert2';
 import {ref} from "vue";
 import {useUserStore} from "@/stores/user.js";
-import {useCommentStore} from "@/stores/comment";
+import {useCommentStore} from "@/stores/comment.js";
 import emitter from '@/eventBus/emitter.js';
 
 const props = defineProps(['comment', 'editMode']);

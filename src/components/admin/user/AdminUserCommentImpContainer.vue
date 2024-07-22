@@ -1,5 +1,5 @@
 <script setup>
-import AdminUserDetail from "@/components/admin/AdminUserDetailComponent.vue";
+import AdminUserComment from "@/components/admin/user/sub/AdminUserCommentImpComponent.vue";
 
 const props = defineProps(['memNo']);
 </script>
@@ -10,10 +10,10 @@ const props = defineProps(['memNo']);
       <div class="inner-block">
         <div class="content">
           <div class="block-title-box">
-            <h2 class="block-title">회원정보 상세 조회</h2>
+            <h2 class="block-title">회원이 작성한 댓글</h2>
           </div>
 
-          <AdminUserDetail :memNo="memNo"></AdminUserDetail>
+          <AdminUserComment :memNo="memNo"></AdminUserComment>
         </div>
       </div>
     </div>

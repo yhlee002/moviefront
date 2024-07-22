@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import {computed, ref, watch} from "vue";
 import SortingComponent from "@/components/icon/SortingComponent.vue";
 import PagenationComponent from "@/components/sub/PagenationComponent.vue";
-import AdminUserDetailComponent from "@/components/admin/AdminUserDetailComponent.vue";
+import AdminUserDetailComponent from "@/components/admin/user/AdminUserDetailComponent.vue";
 import Pagenation from "@/components/sub/PagenationComponent.vue";
 const props = defineProps(['page'])
 const userStore = useUserStore();

@@ -8,7 +8,7 @@
       <div class="inner-block">
         <div class="content">
           <div class="block-title-box">
-            <h2 class="block-title">관리자 페이지 > 공지사항</h2>
+            <h2 class="block-title">관리자 페이지 > 게시글 댓글 조회</h2>
           </div>
 
 

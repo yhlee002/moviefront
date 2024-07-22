@@ -23,9 +23,6 @@ function goBoardPage(id) {
 
 <template>
   <div id="userRecommendedBoards">
-    <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
-      <router-link :to="`/admin/notices?memNo=${memNo}`">더보기</router-link>
-    </div>
     <table id="userRecommendedBoardsTable">
       <thead>
       <tr>

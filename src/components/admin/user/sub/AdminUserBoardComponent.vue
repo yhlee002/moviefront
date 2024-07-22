@@ -1,19 +1,19 @@
 <script setup>
+import {useBoardStore} from "@/stores/board.js";
 import Swal from "sweetalert2";
 import {ref} from "vue";
-import {useNoticeStore} from "@/stores/notice";
 import {useRouter} from "vue-router";
 
 const router = useRouter()
 
-const noticeStore = useNoticeStore();
+const boardStore = useBoardStore();
 const props = defineProps(['memNo']);
 
-await noticeStore.getBoardsByMemNo(props.memNo, 1, 10);
-const boards = ref(noticeStore.boardList);
+await boardStore.getBoardsByMemNo(props.memNo, 1, 10);
+const boards = ref(boardStore.boardList);
 
 async function deleteBoards() {
-  const inputs = document.querySelectorAll('.userdetail-notice-checkbox > input[type=checkbox]:checked');
+  const inputs = document.querySelectorAll('.userdetail-board-checkbox > input[type=checkbox]:checked');
 
   const ids = [];
   for (let input of inputs) {
@@ -36,15 +36,15 @@ async function deleteBoards() {
     showCancelButton: true
   }).then(async result => {
     if (result.isConfirmed) {
-      const result = await noticeStore.deleteBoards(ids);
+      const result = await boardStore.deleteBoards(ids);
       if (result.data) {
         Swal.fire({
           text: '성공적으로 삭제되었습니다.',
           icon: 'success'
         })
 
-        await noticeStore.getBoardsByMemNo(props.memNo, noticeStore.currentPage, 10);
-        boards.value = noticeStore.boardList;
+        await boardStore.getBoardsByMemNo(props.memNo, boardStore.currentPage, 10);
+        boards.value = boardStore.boardList;
       } else {
         Swal.fire({
           text: '삭제에 실패했습니다.',
@@ -56,17 +56,13 @@ async function deleteBoards() {
 }
 
 function goBoardPage(id) {
-  router.push(`/notices/${id}`)
+  router.push(`/boards/${id}`)
 }
-
 </script>
 
 <template>
-  <div id="userNotices">
-    <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
-      <router-link :to="`/admin/notices?memNo=${memNo}`">더보기</router-link>
-    </div>
-    <table id="userNoticesTable">
+  <div id="userBoards">
+    <table id="userBoardsTable">
       <thead>
       <tr>
         <th style="width: 3rem;"></th>
@@ -77,7 +73,7 @@ function goBoardPage(id) {
       </thead>
       <tbody>
       <tr v-for="board in boards" :key="board.id">
-        <td class="userdetail-notice-checkbox" style="text-align: center;">
+        <td class="userdetail-board-checkbox" style="text-align: center;">
           <input :value="board.id" type="checkbox"/>
         </td>
         <td>{{ board.id }}</td>
@@ -99,7 +95,7 @@ function goBoardPage(id) {
 </template>
 
 <style scoped>
-#userNotices, #userNoticesTable {
+#userBoards, #userBoardsTable {
   width: 100%;
 }
 </style>

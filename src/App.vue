@@ -1,7 +1,7 @@
 <script setup>
 import {RouterView} from 'vue-router'
-import HeaderComponent from './components/fragment/HeaderComponent.vue'
-import FooterComponent from './components/fragment/FooterComponent.vue'
+import HeaderComponent from '@/components/fragment/HeaderComponent.vue'
+import FooterComponent from '@/components/fragment/FooterComponent.vue'
 import BasicModal from '@/components/BasicModal.vue';
 import {useModalStore} from '@/stores/modal.js';
 import {storeToRefs} from "pinia";

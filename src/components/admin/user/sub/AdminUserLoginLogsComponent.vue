@@ -11,9 +11,6 @@ const logs = logStore.logs;
 
 <template>
   <div id="loginLogs">
-    <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
-      <router-link :to="`/admin/notices?memNo=${memNo}`">더보기</router-link>
-    </div>
     <table id="loginLogsTable">
       <thead>
       <tr>

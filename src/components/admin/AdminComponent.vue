@@ -88,7 +88,7 @@ commentStore.getComments(1, 10, null);
         <div class="block-title">
           <h3>회원 관리</h3>
           <small>
-            <router-link to="/users">더보기</router-link>
+            <router-link to="/admin/users">더보기</router-link>
           </small>
         </div>
         <div class="block-content">
