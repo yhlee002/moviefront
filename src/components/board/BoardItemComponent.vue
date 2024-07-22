@@ -28,6 +28,9 @@ const recommendedCnt = ref(0);
 if (props.category === 'boards') {
   // 로그인 유저가 해당 글을 추천했는지 조회
   getRecommendedByCurrentUser();
+  getRecommendedCount();
+  // 댓글 조회
+  await commentStore.getCommentsByBoard(board.id, commentStore.currentPage);
 }
 
 watch(recommended, async (newVal) => {
@@ -67,17 +70,14 @@ if (millisecond / 1000 < 60) {
 }
 writeTime += '전';
 
-// get comments
-await commentStore.getCommentsByBoard(board.id, commentStore.currentPage);
-
 async function submitComment() {
   if (userStore.checkLogin()) {
     const input = document.getElementById('commentInput');
-    const value = input.value;
+    const value = input.innerHTML;
     if (value) {
       const result = await commentStore.saveComment(board.id, userStore.user.memNo, value);
       if (result.data) {
-        input.value = '';
+        input.innerHTML = '';
         await commentStore.getCommentsByBoard(board.id, commentStore.currentPage, 20);
       }
     } else {

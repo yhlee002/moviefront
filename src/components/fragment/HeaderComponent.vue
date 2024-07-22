@@ -2,6 +2,7 @@
 import {useUserStore} from '@/stores/user.js';
 import Logo from "@/components/fragment/LogoComponent.vue";
 import NoProfileImageComponent from "@/components/icon/NoProfileImageComponent.vue";
+import UserImageComponent from "@/components/icon/UserImageComponent.vue";
 
 const userStore = useUserStore();
 userStore.getCurrentUser();
@@ -44,9 +45,10 @@ async function logout() {
 
           <div class="user-image-box" v-if="userStore.isAuthenticated">
             <!-- profile image -->
-            <img class="profile_image" v-if="userStore.profileImage"
-                 :src="userStore.profileImage" alt="user profile image"/>
-            <NoProfileImageComponent v-if="!userStore.profileImage" :role="userStore.isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'"></NoProfileImageComponent>
+<!--            <img class="profile_image" v-if="userStore.profileImage"-->
+<!--                 :src="userStore.profileImage" alt="user profile image"/>-->
+<!--            <NoProfileImageComponent v-if="!userStore.profileImage" :role="userStore.isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'"></NoProfileImageComponent>-->
+            <UserImageComponent :profileImage="userStore.profileImage" :role="userStore.role"></UserImageComponent>
             <span class="userbox-text" v-if="userStore.user != null">{{ userStore.user.name }}
           <span v-if="userStore.user.role ==='ROLE_ADMIN'" style="color: #c6c6c6; font-size: 0.8rem">(관리자)</span>
           </span>

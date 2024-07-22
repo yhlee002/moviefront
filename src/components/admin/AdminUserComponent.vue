@@ -90,13 +90,16 @@ watch(searchOption, async (newVal, oldVal) => {
   sortingResult(columns, list);
 }, {deep: true});
 
-// function changeSearchOptions(options, list) {
-//   for (let key in options) {
-//     if (options[key] !== 'ALL') {
-//       list.value = list.filter(item => item[key] === options[key]);
-//     }
-//   }
-// }
+watch(searchCondition, async (newVal, oldVal) => {
+  if (!keyword.value) return;
+
+  changeModalShow(false);
+
+  const list = await getUserList(newVal, searchCondition.value, keyword.value);
+  const columns = getSortingColumns(sorting.value);
+
+  sortingResult(columns, list);
+})
 
 function changeSortingType(name) {
   const current = sorting.value[name];
