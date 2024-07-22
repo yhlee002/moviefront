@@ -58,8 +58,6 @@ watch(orderBy, async (newVal, oldVal) => {
 // }, {immediate: true});
 
 watch(pageNum, async (newPage) => {
-      console.info('props.page watch 발동');
-
       boardStore.currentPage = newPage;
       await boardStore.getBoards(newPage, 10, null, null, orderBy.value);
 

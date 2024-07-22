@@ -10,7 +10,6 @@ userStore.getCurrentUser();
 const logoutUrl = `http://${import.meta.env.VITE_APP_HOST}:8080/api/members/logout`;
 
 async function logout() {
-  // const result = await userStore.logout();
   const form = document.getElementById('logout');
   form.submit();
 }
@@ -45,9 +44,6 @@ async function logout() {
 
           <div class="user-image-box" v-if="userStore.isAuthenticated">
             <!-- profile image -->
-<!--            <img class="profile_image" v-if="userStore.profileImage"-->
-<!--                 :src="userStore.profileImage" alt="user profile image"/>-->
-<!--            <NoProfileImageComponent v-if="!userStore.profileImage" :role="userStore.isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'"></NoProfileImageComponent>-->
             <UserImageComponent :profileImage="userStore.profileImage" :role="userStore.role"></UserImageComponent>
             <span class="userbox-text" v-if="userStore.user != null">{{ userStore.user.name }}
           <span v-if="userStore.user.role ==='ROLE_ADMIN'" style="color: #c6c6c6; font-size: 0.8rem">(관리자)</span>

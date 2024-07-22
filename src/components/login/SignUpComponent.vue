@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import {useModalStore} from "@/stores/modal.js";
 import {ref} from "vue";
 import {useRouter} from "vue-router";
-import emitter from '@/eventBus/emitter';
+import emitter from '@/eventBus/emitter.js';
 import Logo from "@/components/fragment/LogoComponent.vue";
 
 const router = useRouter();
