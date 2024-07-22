@@ -5,6 +5,7 @@ import FooterComponent from '@/components/fragment/FooterComponent.vue'
 import BasicModal from '@/components/BasicModal.vue';
 import {useModalStore} from '@/stores/modal.js';
 import {storeToRefs} from "pinia";
+import Logo from "@/components/fragment/LogoComponent.vue";
 
 const modalStore = useModalStore();
 const {modalOpen, datas, open} = storeToRefs(modalStore);
@@ -15,7 +16,15 @@ const {modalOpen, datas, open} = storeToRefs(modalStore);
     <Suspense>
       <HeaderComponent></HeaderComponent>
       <template #fallback>
-        Loading...
+        <header id="header">
+          <div id="header-main">
+            <Logo></Logo>
+
+            <!-- Nav -->
+            <nav class="nav">
+            </nav>
+          </div>
+        </header>
       </template>
     </Suspense>
 
