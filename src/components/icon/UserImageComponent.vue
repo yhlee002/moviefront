@@ -2,8 +2,6 @@
 import NoProfileImageComponent from "@/components/icon/NoProfileImageComponent.vue";
 
 const props = defineProps(['profileImage', 'role', 'width', 'height']);
-
-console.log('props', props);
 </script>
 
 <template>
