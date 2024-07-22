@@ -5,10 +5,11 @@ import {useNoticeStore} from "@/stores/notice.js";
 import {useCommentStore} from "@/stores/comment.js";
 import {useBoardStore} from "@/stores/board.js";
 
+import {ref, watch} from "vue";
+import emitter from '@/eventBus/emitter.js';
 import Swal from 'sweetalert2'
 import UserCard from "@/components/sub/UserCardComponent.vue";
 import CommentItem from "@/components/sub/CommentItemComponent.vue";
-import {ref, watch} from "vue";
 import RegDateReformateComponent from "@/components/sub/RegDateReformateComponent.vue";
 
 const props = defineProps(['category']);
@@ -27,6 +28,12 @@ const loginUser = userStore.user;
 const recommended = ref(false);
 const recommendedCnt = ref(0);
 const comments = ref([]);
+
+emitter.on('deleteComment', param => {
+  const deleted = comments.value.find(c => c.id === param.id);
+  const idx = comments.value.indexOf(deleted);
+  comments.value.splice(idx, 1);
+})
 
 if (props.category === 'boards') {
   // 로그인 유저가 해당 글을 추천했는지 조회

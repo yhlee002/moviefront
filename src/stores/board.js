@@ -182,25 +182,12 @@ export const useBoardStore = defineStore('board', {
                     return e.response;
                 }));
         },
-        async deleteBoard(boardId) {
-            return (await axios.delete(`/api/imps/flag?boardId=${boardId}`)
-                .catch(e => {
-                    console.error(e);
-                    return e.response;
-                }));
-        },
-        async deleteBoards(boardIds) {
-            return (await axios.post(`/api/imps/flag/batch-delete`, {
-                ids: boardIds
-            })).data;
-        },
-        // 영구 삭제
-        async deleteBoardPermanently(commentId) {
+        async deleteBoard(commentId) {
             return (await axios.delete(`/api/imps?commentId=${commentId}`)
                     .catch(e => console.error(e))
             ).data;
         },
-        async deleteBoardsPermanently(commentIds) {
+        async deleteBoards(commentIds) {
             return (await axios.post(`/api/imps/batch-delete`, {
                 ids: commentIds
             })).data;

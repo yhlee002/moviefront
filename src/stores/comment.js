@@ -104,22 +104,11 @@ export const useCommentStore = defineStore('comment', {
             ).data;
         },
         async deleteComment(commentId) {
-            return (await axios.delete(`/api/comments/imps/flag?commentId=${commentId}`)
+            return (await axios.delete(`/api/comments/imps?id=${commentId}`)
                     .catch(e => console.error(e))
             ).data;
         },
         async deleteComments(commentIds) {
-            return (await axios.post(`/api/comments/imps/flag/batch-delete`, {
-                ids: commentIds
-            })).data;
-        },
-        // 영구 삭제
-        async deleteCommentPermanently(commentId) {
-            return (await axios.delete(`/api/comments/imps?commentId=${commentId}`)
-                    .catch(e => console.error(e))
-            ).data;
-        },
-        async deleteCommentsPermanently(commentIds) {
             return (await axios.post(`/api/comments/batch-delete`, {
                 ids: commentIds
             })).data;

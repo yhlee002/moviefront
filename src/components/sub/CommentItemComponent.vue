@@ -1,32 +1,41 @@
 <script setup>
+import RegDateReformateComponent from "@/components/sub/RegDateReformateComponent.vue";
 import UserCard from "@/components/sub/UserCardComponent.vue";
 import Swal from 'sweetalert2';
-import {useUserStore} from "@/stores/user";
-import RegDateReformateComponent from "@/components/sub/RegDateReformateComponent.vue";
 import {ref} from "vue";
+import {useUserStore} from "@/stores/user.js";
+import {useCommentStore} from "@/stores/comment";
+import emitter from '@/eventBus/emitter.js';
 
-const props = defineProps(['comment']);
-const comment = props.comment;
-const modifyMode = ref(false);
+const props = defineProps(['comment', 'editMode']);
+const item = ref(Object.assign({}, props.comment));
+const editMode = ref(props.editMode) || ref(false);
 
+const commentStore = useCommentStore();
 const userStore = useUserStore();
 await userStore.getCurrentUser();
 const loginUser = userStore.user;
 
-function changeCommentUpdateForm() {
-  const inputs = document.getElementsByClassName(`board_item_comments`);
-  inputs.contenteditable = false;
+emitter.on('changeCommentUpdateForm', param => {
+  if (param.current !== item.value.id) {
+    editMode.value = false;
+  }
+})
 
-  const input = document.getElementById(`comment_${comment.id}`);
-  input.contenteditable = true;
+function changeCommentUpdateForm() {
+  emitter.emit('changeCommentUpdateForm', {
+    current: item.value.id
+  });
+
+  editMode.value = true;
 }
 
 async function updateComment() {
-  const value = document.getElementById(`comment_${comment.id}`).innerHTML;
+  const value = document.getElementById(`comment_${item.value.id}`).innerHTML;
 
   if (value) {
-    await commentStore.updateComment(comment.id, value);
-    const input = document.getElementById(`comment_${comment.id}`);
+    await commentStore.updateComment(item.value.id, value);
+    const input = document.getElementById(`comment_${item.value.id}`);
     input.contenteditable = false;
   } else {
     Swal.fire({
@@ -36,15 +45,27 @@ async function updateComment() {
   }
 }
 
+function cancelUpdate() {
+  const comment = document.getElementById(`comment_${item.value.id}`);
+  comment.innerHTML = item.value.content;
+
+  editMode.value = false;
+}
+
 function deleteComment() {
   Swal.fire({
     text: '댓글을 삭제하시겠습니까?',
     icon: 'question',
     confirmButtonText: '확인',
-    cancelButtonText: '취소'
+    cancelButtonText: '취소',
+    showCancelButton: true
   }).then(async result => {
     if (result.isConfirmed) {
-      await commentStore.deleteComment(comment.id);
+      await commentStore.deleteComment(item.value.id);
+
+      emitter.emit('deleteComment', {
+        id: item.value.id
+      })
     }
   })
 }
@@ -52,36 +73,37 @@ function deleteComment() {
 </script>
 
 <template>
-  <div class="board_item_comment comment-item-box" :id="comment.id">
+  <div class="board_item_comment comment-item-box" :id="item.id">
     <div class="comment-box-group">
       <!-- Writer & RegDate -->
       <div class="comment-writer-box">
-        <UserCard :member="{memNo: comment.writerId, name: comment.writerName,
-      profileImage: comment.writerProfileImage, role: comment.writerRole}" imageSize="2rem"></UserCard>
-        <RegDateReformateComponent :regDate="comment.regDate"></RegDateReformateComponent>
+        <UserCard :member="{memNo: item.writerId, name: item.writerName,
+      profileImage: item.writerProfileImage, role: item.writerRole}" imageSize="2rem"></UserCard>
+        <RegDateReformateComponent :regDate="item.regDate"></RegDateReformateComponent>
 
         <!-- Comment Options -->
         <ul class="comment-option-box">
-          <li>
-            <button v-if="loginUser.memNo === comment.writerId && !modifyMode"
-                    type="button" @click="changeCommentUpdateForm">수정</button>
+          <li v-if="loginUser.memNo === item.writerId && !editMode">
+            <button type="button" @click="changeCommentUpdateForm">수정</button>
           </li>
-          <li>
-            <button v-if="loginUser.memNo === comment.writerId && !modifyMode"
-                    type="button" @click="deleteComment">삭제</button>
+          <li v-if="loginUser.memNo === item.writerId && !editMode">
+            <button type="button" @click="deleteComment">삭제</button>
           </li>
-          <li>
-            <button v-if="loginUser.memNo === comment.writerId && modifyMode"
-                    type="button" @click="updateComment">완료</button>
+          <li v-if="loginUser.memNo === item.writerId && editMode">
+            <button type="button" @click="updateComment">완료</button>
+          </li>
+          <li v-if="loginUser.memNo === item.writerId && editMode">
+            <button type="button" @click="cancelUpdate">취소</button>
           </li>
         </ul>
       </div>
-
     </div>
 
     <!-- Comment Content -->
     <div class="comment-item-content">
-      <div :id="`comment_${comment.id}`" v-html="comment.content" readonly contenteditable="false"></div>
+      <div :id="`comment_${item.id}`" v-html="item.content"
+           :class="editMode ? 'edit-item' : ''"
+           :contenteditable="editMode"></div>
     </div>
 
   </div>
@@ -115,14 +137,21 @@ function deleteComment() {
 
 .comment-item-content {
   width: 100%;
-  padding: 1rem 1rem 1.5rem 1rem;
+  /* padding: 1rem 1rem 1.5rem 1rem; */
 }
 
-.comment-item-content textarea {
+.comment-item-content div.edit-item {
+  border: 0.1rem solid #dfdfdf;
+  border-radius: 0.1rem;
+}
+
+.comment-item-content div {
   display: flex;
   align-items: center;
   align-content: center;
-  width: calc(100% - 2rem);
+  /* width: calc(100% - 2rem); */
+  width: 100%;
+  padding: 1rem 1rem 1.5rem 1rem;
 }
 
 .comment-option-box {
