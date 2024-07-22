@@ -98,6 +98,7 @@ export const useCommentStore = defineStore('comment', {
         },
         async updateComment(commentId, content) {
             return (await axios.patch('/api/comments/imps', {
+                    id: commentId,
                     content: content
                 })
                     .catch(e => console.error(e))

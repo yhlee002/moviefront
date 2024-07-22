@@ -34,9 +34,17 @@ async function updateComment() {
   const value = document.getElementById(`comment_${item.value.id}`).innerHTML;
 
   if (value) {
-    await commentStore.updateComment(item.value.id, value);
-    const input = document.getElementById(`comment_${item.value.id}`);
-    input.contenteditable = false;
+    const result = await commentStore.updateComment(item.value.id, value);
+
+    if (result.data) {
+      editMode.value = false;
+    } else {
+      Swal.fire({
+        text: '댓글 수정중 오류가 발생했습니다.',
+        icon: 'error'
+      })
+    }
+
   } else {
     Swal.fire({
       text: '댓글 내용을 입력해주세요.',

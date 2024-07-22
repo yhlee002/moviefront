@@ -6,15 +6,14 @@ import SearchMovie from "@/components/SearchMovieComponent.vue";
 import Notice from "@/components/board/NoticeComponent.vue";
 import BoardItem from "@/components/board/BoardItemComponent.vue";
 import Board from "@/components/board/BoardComponent.vue";
-import User from "@/components/UserComponent.vue";
 import SignIn from "@/components/login/SignInComponent.vue";
 import SignUp from "@/components/login/SignUpComponent.vue";
 import Editor from "@/components/board/EditorComponent.vue";
 import UserProfile from "@/components/UserProfileComponent.vue";
 import AdminUser from "@/components/admin/AdminUserComponent.vue";
 import AdminUserDetailContainer from "@/components/admin/AdminUserDetailContainer.vue";
-import AdminBoard from "@/components/admin/AdminBoardComponent.vue";
-import AdminNotice from "@/components/admin/AdminNoticeComponent.vue";
+import AdminCommentImp from "@/components/admin/AdminCommentImpComponent.vue";
+import AdminCommentMov from "@/components/admin/AdminCommentMovComponent.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,29 +30,41 @@ const router = createRouter({
                     children: []
                 },
                 {
-                    path: '/admin/users',
+                    path: '/users',
                     name: 'users',
                     component: AdminUser,
                     props: route => ({page: route.query.page})
                 },
                 {
-                    path: '/admin/users/:id',
+                    path: '/users/:id',
                     name: 'userDetail',
                     component: AdminUserDetailContainer,
                     // props: true
                 },
                 {
-                    path: '/admin/boards',
-                    name: 'adminBoards',
-                    component: AdminBoard,
+                    path: '/admin/movie-comments',
+                    name: 'adminMovieComments',
+                    component: AdminCommentMov,
                     props: route => ({page: route.query.page, memNo: route.query.memNo})
                 },
                 {
-                    path: '/admin/notices',
-                    name: 'adminNotices',
-                    component: AdminNotice,
+                    path: '/admin/imp-comments',
+                    name: 'adminImpComments',
+                    component: AdminCommentImp,
                     props: route => ({page: route.query.page, memNo: route.query.memNo})
                 },
+                // {
+                //     path: '/admin/boards',
+                //     name: 'adminBoards',
+                //     component: AdminBoard,
+                //     props: route => ({page: route.query.page, memNo: route.query.memNo})
+                // },
+                // {
+                //     path: '/admin/notices',
+                //     name: 'adminNotices',
+                //     component: AdminNotice,
+                //     props: route => ({page: route.query.page, memNo: route.query.memNo})
+                // },
                 {
                     path: '/search',
                     name: 'searchMovie',
@@ -96,15 +107,8 @@ const router = createRouter({
                     props: route => ({id: route.query.id, category: route.query.category})
                 },
                 {
-                    path: '/users/:id',
-                    name: 'userPopup',
-                    component: User,
-                    props: true
-                },
-                {
                     path: '/sign-in',
-                    name: 'sign-in',
-                    component: SignIn,
+                    name: 'sign-in', component: SignIn,
                 },
                 {
                     path: '/sign-up',

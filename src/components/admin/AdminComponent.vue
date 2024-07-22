@@ -27,7 +27,7 @@ commentStore.getComments(1, 10, null);
         <div class="block-title" style="display: flex; justify-content: space-between; align-content: center;">
           <h3>공지사항 게시글 관리</h3>
           <small>
-            <router-link to="/admin/notices">더보기</router-link>
+            <router-link to="/notices">더보기</router-link>
           </small>
         </div>
         <div class="block-content">
@@ -41,7 +41,7 @@ commentStore.getComments(1, 10, null);
         <div class="block-title">
           <h3>감상 후기 게시글 관리</h3>
           <small>
-            <router-link to="/admin/board">더보기</router-link>
+            <router-link to="/boards">더보기</router-link>
           </small>
         </div>
         <div class="block-content">
@@ -58,7 +58,7 @@ commentStore.getComments(1, 10, null);
         <div class="block-title">
           <h3>영화 후기 관리</h3>
           <small>
-            <router-link to="/admin/movie-comment">더보기</router-link>
+            <router-link to="/admin/movie-comments">더보기</router-link>
           </small>
         </div>
         <div class="block-content">
@@ -71,7 +71,7 @@ commentStore.getComments(1, 10, null);
         <div class="block-title">
           <h3>감상 후기 게시글 댓글 관리</h3>
           <small>
-            <router-link to="/admin/imp-comment">더보기</router-link>
+            <router-link to="/admin/imp-comments">더보기</router-link>
           </small>
         </div>
         <div class="block-content">
@@ -88,7 +88,7 @@ commentStore.getComments(1, 10, null);
         <div class="block-title">
           <h3>회원 관리</h3>
           <small>
-            <router-link to="/admin/users">더보기</router-link>
+            <router-link to="/users">더보기</router-link>
           </small>
         </div>
         <div class="block-content">
