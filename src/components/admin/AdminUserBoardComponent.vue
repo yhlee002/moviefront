@@ -62,7 +62,7 @@ function goBoardPage(id) {
 
 <template>
   <div id="userBoards">
-    <div style="display: flex; justify-content: end; width: 100%; margin: 1rem 0;">
+    <div style="display: flex; justify-content: end; width: 100%; margin: 0.5rem 0;">
       <router-link :to="`/admin/notices?memNo=${memNo}`">더보기</router-link>
     </div>
     <table id="userBoardsTable">
