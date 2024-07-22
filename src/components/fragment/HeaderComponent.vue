@@ -46,7 +46,7 @@ async function logout() {
             <!-- profile image -->
             <img class="profile_image" v-if="userStore.profileImage"
                  :src="userStore.profileImage" alt="user profile image"/>
-            <NoProfileImageComponent :role="userStore.isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'"></NoProfileImageComponent>
+            <NoProfileImageComponent v-if="userStore.profileImage" :role="userStore.isAdmin ? 'ROLE_ADMIN' : 'ROLE_USER'"></NoProfileImageComponent>
             <span class="userbox-text" v-if="userStore.user != null">{{ userStore.user.name }}
           <span v-if="userStore.user.role ==='ROLE_ADMIN'" style="color: #c6c6c6; font-size: 0.8rem">(관리자)</span>
           </span>
