@@ -8,8 +8,7 @@ console.log('props', props);
 
 <template>
   <div v-if="profileImage" id="writerProfileImage">
-    <img v-if="role !== 'ROLE_ADMIN'" :src="profileImage"
-         :style="{width: width, height: height}"
+    <img :src="profileImage" :style="{width: width, height: height}"
          class="profile_image" alt="프로필 이미지"/>
   </div>
   <div v-if="!profileImage" id="writerProfileImage">
