@@ -205,7 +205,7 @@ function showUserDetail(memNo) {
   if (currentMember.value.memNo !== memNo) {
     if (!modalShow.value) changeModalShow();
 
-    const user = userStore.users.find(u => u.memNo === memNo);
+    const user = list.value.find(u => u.memNo === memNo);
     currentMember.value = user;
     updateCnt.value += 1;
   } else {
