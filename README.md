@@ -7,6 +7,8 @@
 ### 접속 경로
 [MovieSite](http://3.38.19.101)
 
+### 백엔드 코드 레파지토리
+[movieApi](https://github.com/yhlee002/movieApi)
 
 ## 개발환경
 개발 언어 및 프레임워크 : JavaScript/Vue.js 3
